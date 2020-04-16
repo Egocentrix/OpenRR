@@ -17,6 +17,7 @@ CaveMap::CaveMap(int width, int height)
 CaveMap::~CaveMap()
 {
     delete[] tiles;
+    delete[] discovered;
 }
 
 int CaveMap::linearindex(int x, int y)

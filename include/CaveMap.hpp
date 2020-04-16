@@ -10,8 +10,8 @@ private:
     Tile *tiles;
     bool *discovered;
 
-    const int width;
-    const int height;
+    int width;
+    int height;
 
     bool checkbounds(int i);
     bool checkbounds(int x, int y);
