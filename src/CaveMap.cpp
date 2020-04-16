@@ -98,4 +98,9 @@ void CaveMap::draw(sf::RenderTarget &target)
             target.draw(rect);
         }
     }
+    sf::RectangleShape border(sf::Vector2f(50 * width, 50 * height));
+    border.setOutlineColor(sf::Color::White);
+    border.setFillColor(sf::Color::Transparent);
+    border.setOutlineThickness(-1.f);
+    target.draw(border);
 }

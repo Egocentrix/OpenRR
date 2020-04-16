@@ -3,7 +3,7 @@
 Game::Game()
     : window(sf::VideoMode(800, 600), "Hello, world!"),
       view(sf::FloatRect(0, 0, 800, 600)),
-      map(10, 5)
+      map(10, 10)
 {
 }
 
