@@ -1,4 +1,5 @@
 #include <cmath>
+#include <fstream>
 
 #include "CaveMap.hpp"
 
@@ -18,6 +19,39 @@ CaveMap::~CaveMap()
 {
     delete[] tiles;
     delete[] discovered;
+}
+
+void CaveMap::load(const std::string &filename)
+{
+    std::ifstream infile;
+    infile.open(filename, std::ios::binary | std::ios::in);
+
+    infile.read((char *)&width, sizeof(int));
+    infile.read((char *)&height, sizeof(int));
+
+    delete[] tiles;
+    tiles = new Tile[width * height];
+    infile.read((char *)tiles, sizeof(Tile) * width * height);
+
+    delete[] discovered;
+    discovered = new bool[width * height];
+    infile.read((char *)discovered, sizeof(bool) * width * height);
+
+    infile.close();
+}
+
+void CaveMap::save(const std::string &filename)
+{
+    std::ofstream outfile;
+    outfile.open(filename, std::ios::binary | std::ios::out);
+
+    outfile.write((char *)&width, sizeof(int));
+    outfile.write((char *)&height, sizeof(int));
+
+    outfile.write((char *)tiles, sizeof(Tile) * width * height);
+    outfile.write((char *)discovered, sizeof(bool) * width * height);
+
+    outfile.close();
 }
 
 int CaveMap::linearindex(int x, int y)

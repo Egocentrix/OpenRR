@@ -5,6 +5,7 @@ Game::Game()
       view(sf::FloatRect(0, 0, 800, 600)),
       map(10, 10)
 {
+    map.load("testmap.dat");
 }
 
 Game::~Game()
@@ -20,6 +21,8 @@ void Game::play()
         handleInput(dt);
         draw();
     }
+
+    map.save("testmap.dat");
 }
 
 void Game::draw()
