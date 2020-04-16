@@ -1,5 +1,6 @@
 set(SRC main.cpp
         CaveMap.cpp
+        Game.cpp
         Tile.cpp)
 
 add_executable(OpenRR ${SRC})
