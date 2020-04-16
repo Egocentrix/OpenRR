@@ -12,7 +12,7 @@ private:
 
     const int width;
     const int height;
-    
+
     bool checkbounds(int i);
     bool checkbounds(int x, int y);
 
@@ -24,9 +24,9 @@ public:
     CaveMap(int width, int height);
     ~CaveMap();
 
-    Tile& getTile(int x, int y) { return tiles[linearindex(x,y)]; }
+    Tile &getTile(int x, int y) { return tiles[linearindex(x, y)]; }
 
     void drill(int x, int y);
 
-    void draw(sf::RenderTarget& target);
+    void draw(sf::RenderTarget &target);
 };
