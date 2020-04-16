@@ -25,6 +25,7 @@ public:
     ~CaveMap();
 
     Tile &getTile(int x, int y) { return tiles[linearindex(x, y)]; }
+    bool isDiscovered(int x, int y) { return discovered[linearindex(x, y)]; }
 
     void drill(int x, int y);
 

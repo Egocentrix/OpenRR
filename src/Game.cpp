@@ -49,9 +49,11 @@ void Game::handleInput(float dt)
         {
             if (e.mouseButton.button == sf::Mouse::Left)
             {
-                sf::Vector2f pos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-                map.drill(pos.x / 50, pos.y / 50);
+                sf::Vector2f tile = window.mapPixelToCoords(sf::Mouse::getPosition(window)) / 50.f;
+                if (map.isDiscovered(tile.x, tile.y))
+                {
+                    map.drill(tile.x, tile.y);
+                }
             }
         }
     }
