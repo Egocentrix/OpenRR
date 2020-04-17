@@ -26,16 +26,20 @@ void CaveMap::load(const std::string &filename)
     std::ifstream infile;
     infile.open(filename, std::ios::binary | std::ios::in);
 
-    infile.read((char *)&width, sizeof(int));
-    infile.read((char *)&height, sizeof(int));
+    if (infile.is_open())
+    {
+        infile.read((char *)&width, sizeof(int));
+        infile.read((char *)&height, sizeof(int));
 
-    delete[] tiles;
-    tiles = new Tile[width * height];
-    infile.read((char *)tiles, sizeof(Tile) * width * height);
+        delete[] tiles;
+        delete[] discovered;
 
-    delete[] discovered;
-    discovered = new bool[width * height];
-    infile.read((char *)discovered, sizeof(bool) * width * height);
+        tiles = new Tile[width * height];
+        infile.read((char *)tiles, sizeof(Tile) * width * height);
+
+        discovered = new bool[width * height];
+        infile.read((char *)discovered, sizeof(bool) * width * height);
+    }
 
     infile.close();
 }
