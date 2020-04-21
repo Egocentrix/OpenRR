@@ -4,6 +4,7 @@
 
 #include "CaveMapInterface.hpp"
 #include "GameState.hpp"
+#include "Menu.hpp"
 
 // The main state where the game is played
 class GameStatePlay : public GameState
@@ -18,6 +19,7 @@ public:
 
 private:
     std::unique_ptr<CaveMapInterface> map;
+    Menu menu;
     sf::View view;
     float zoomlevel{1};
 };

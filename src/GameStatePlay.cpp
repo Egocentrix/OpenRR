@@ -27,6 +27,7 @@ void GameStatePlay::draw()
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
     map->draw(game->window);
+    menu.draw(game->window);
     game->window.display();
 }
 
@@ -52,23 +53,28 @@ void GameStatePlay::handleInput(float dt)
             view.setSize(currentsize.x, currentsize.x / ratio);
         }
 
-        else if (e.type == sf::Event::MouseButtonPressed &&
-                 e.mouseButton.button == sf::Mouse::Left)
+        else if (e.type == sf::Event::MouseButtonPressed)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
             auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
             GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
-
-            std::cout << map->describeTile(coord) << ",\tavailable Commands:";
-            for (auto &&c : map->availableCommands(coord))
+            if (e.mouseButton.button == sf::Mouse::Left)
             {
-                std::cout << " " << c->describe() << ",";
-                if (c->describe() == "Drill")
+                std::cout << map->describeTile(coord) << ",\tavailable Commands:";
+                for (auto &&c : map->availableCommands(coord))
                 {
-                    c->execute();
+                    std::cout << " " << c->describe() << ",";
+                    if (c->describe() == "Drill")
+                    {
+                        c->execute();
+                    }
                 }
+                std::cout << std::endl;
             }
-            std::cout << std::endl;
+            else if (e.mouseButton.button == sf::Mouse::Right)
+            {
+                menu.setLocation(mouseposition.x, mouseposition.y);
+            }
         }
 
         else if (e.type == sf::Event::MouseWheelScrolled)
