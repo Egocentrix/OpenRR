@@ -10,6 +10,8 @@ public:
     Menu(/* args */);
     ~Menu();
 
+    bool visible;
+
     void addItem(const std::string &name);
     void setLocation(float x, float y);
 

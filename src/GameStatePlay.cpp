@@ -60,20 +60,29 @@ void GameStatePlay::handleInput(float dt)
             GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
             if (e.mouseButton.button == sf::Mouse::Left)
             {
-                std::cout << map->describeTile(coord) << ",\tavailable Commands:";
-                for (auto &&c : map->availableCommands(coord))
+                if (menu.visible)
                 {
-                    std::cout << " " << c->describe() << ",";
-                    if (c->describe() == "Drill")
+                    menu.visible = false;
+                }
+                else
+                {
+                    for (auto &&c : map->availableCommands(coord))
                     {
-                        c->execute();
+                        if (c->describe() == "Drill") c->execute();
                     }
                 }
-                std::cout << std::endl;
             }
             else if (e.mouseButton.button == sf::Mouse::Right)
             {
                 menu.setLocation(mouseposition.x, mouseposition.y);
+                menu.visible = true;
+
+                std::cout << map->describeTile(coord) << ",\tavailable Commands:";
+                for (auto &&c : map->availableCommands(coord))
+                {
+                    std::cout << " " << c->describe() << ",";
+                }
+                std::cout << std::endl;
             }
         }
 
