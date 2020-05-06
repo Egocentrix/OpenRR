@@ -2,23 +2,20 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "CaveMap.hpp"
+#include "GameStatePlay.hpp"
 
 class Game
 {
 private:
-    CaveMap map;
-
-    sf::RenderWindow window;
-    sf::View view;
     sf::Clock clock;
 
-    void draw();
-    void handleInput(float dt);
+    GameStatePlay *state;
 
 public:
     Game();
     ~Game();
+
+    sf::RenderWindow window;
 
     void play();
 };
