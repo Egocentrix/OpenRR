@@ -1,15 +1,17 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 #include "Tile.hpp"
 
+// Container for tile objects, and functions for manipulating them. 
 class CaveMap
 {
 private:
-    Tile *tiles;
-    bool *discovered;
+    std::vector<Tile> tiles;
+    std::vector<char> discovered; // char, because vector<bool> is an ugly special case
 
     int width;
     int height;

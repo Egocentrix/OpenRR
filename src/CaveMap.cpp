@@ -4,12 +4,12 @@
 #include "CaveMap.hpp"
 
 CaveMap::CaveMap(int width, int height)
-    : width(width), height(height), tiles(new Tile[width * height]), discovered(new bool[width * height])
+    : width(width), height(height)
 {
     for (int i = 0; i < width * height; i++)
     {
-        tiles[i] = Tile(TileType::Wall);
-        discovered[i] = false;
+        tiles.push_back(Tile(TileType::Wall));
+        discovered.push_back(false);
     }
     tiles[linearindex(width / 2, height / 2)] = Tile(TileType::Floor);
     discover(width / 2, height / 2);
@@ -17,8 +17,6 @@ CaveMap::CaveMap(int width, int height)
 
 CaveMap::~CaveMap()
 {
-    delete[] tiles;
-    delete[] discovered;
 }
 
 void CaveMap::load(const std::string &filename)
@@ -31,14 +29,14 @@ void CaveMap::load(const std::string &filename)
         infile.read((char *)&width, sizeof(int));
         infile.read((char *)&height, sizeof(int));
 
-        delete[] tiles;
-        delete[] discovered;
+        tiles.clear();
+        discovered.clear();
 
-        tiles = new Tile[width * height];
-        infile.read((char *)tiles, sizeof(Tile) * width * height);
+        tiles.resize(width * height);
+        infile.read((char *)tiles.data(), sizeof(Tile) * width * height);
 
-        discovered = new bool[width * height];
-        infile.read((char *)discovered, sizeof(bool) * width * height);
+        discovered.resize(width * height);
+        infile.read((char *)discovered.data(), sizeof(char) * width * height);
     }
 
     infile.close();
@@ -52,8 +50,8 @@ void CaveMap::save(const std::string &filename)
     outfile.write((char *)&width, sizeof(int));
     outfile.write((char *)&height, sizeof(int));
 
-    outfile.write((char *)tiles, sizeof(Tile) * width * height);
-    outfile.write((char *)discovered, sizeof(bool) * width * height);
+    outfile.write((char *)tiles.data(), sizeof(Tile) * width * height);
+    outfile.write((char *)discovered.data(), sizeof(char) * width * height);
 
     outfile.close();
 }
