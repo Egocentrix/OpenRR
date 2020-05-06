@@ -3,6 +3,7 @@
 #include "CaveMap.hpp"
 #include "GameState.hpp"
 
+// The main state where the game is played
 class GameStatePlay : public GameState
 {
 private:

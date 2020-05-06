@@ -2,10 +2,12 @@
 
 class Game;
 
+// Base class for game states (abstract)
 class GameState
 {
 public:
-    virtual ~GameState() { }
+    // Abstract base destructor requires definition for some reason
+    virtual ~GameState() { } 
     
     Game* game;
 
