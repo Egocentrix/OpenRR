@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stack>
 #include <SFML/Graphics.hpp>
 
 #include "GameStatePlay.hpp"
@@ -9,7 +10,9 @@ class Game
 private:
     sf::Clock clock;
 
-    GameStatePlay *state;
+    std::stack<GameState *> states;
+
+    void popState();
 
 public:
     Game();

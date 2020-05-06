@@ -3,12 +3,21 @@
 Game::Game()
     : window(sf::VideoMode(800, 600), "Hello, world!")
 {
-    state = new GameStatePlay(this);
+    states.push(new GameStatePlay(this));
 }
 
 Game::~Game()
 {
-    delete state;
+    while (!states.empty())
+    {
+        popState();
+    }
+}
+
+void Game::popState()
+{
+    delete states.top();
+    states.pop();
 }
 
 void Game::play()
@@ -17,7 +26,7 @@ void Game::play()
     {
         float dt = clock.restart().asSeconds();
 
-        state->handleInput(dt);
-        state->draw();
+        states.top()->handleInput(dt);
+        states.top()->draw();
     }
 }
