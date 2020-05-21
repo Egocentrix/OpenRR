@@ -18,7 +18,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
-    map.draw(game->window);
+    map.draw(game->window, game->texmgr);
     game->window.display();
 }
 

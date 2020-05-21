@@ -105,16 +105,18 @@ void CaveMap::discover(int x, int y)
     }
 }
 
-void CaveMap::draw(sf::RenderTarget &target)
+void CaveMap::draw(sf::RenderTarget &target, const std::map<std::string, sf::Texture> &textures)
 {
+    float tilesize = 50;
+    int texsize = 128;
+
+    sf::Sprite sprite;
+    sprite.setScale(tilesize / texsize, tilesize / texsize);
+
     for (int x = 0; x < width; x++)
     {
         for (int y = 0; y < height; y++)
         {
-            sf::RectangleShape rect(sf::Vector2f(50, 50));
-            rect.setOutlineColor(sf::Color::White);
-            rect.setOutlineThickness(-2.f);
-
             if (!discovered[linearindex(x, y)])
             {
                 continue;
@@ -123,18 +125,18 @@ void CaveMap::draw(sf::RenderTarget &target)
             switch (tiles[linearindex(x, y)].getType())
             {
             case TileType::Floor:
-                rect.setFillColor(sf::Color::Blue);
+                sprite.setTexture(textures.at("floor"));
                 break;
             case TileType::Wall:
-                rect.setFillColor(sf::Color::Red);
+                sprite.setTexture(textures.at("wall"));
                 break;
             }
 
-            rect.setPosition(50 * x, 50 * y);
-            target.draw(rect);
+            sprite.setPosition(tilesize * x, tilesize * y);
+            target.draw(sprite);
         }
     }
-    sf::RectangleShape border(sf::Vector2f(50 * width, 50 * height));
+    sf::RectangleShape border(sf::Vector2f(tilesize * width, tilesize * height));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(-1.f);

@@ -35,5 +35,5 @@ public:
 
     void drill(int x, int y);
 
-    void draw(sf::RenderTarget &target);
+    void draw(sf::RenderTarget &target, const std::map<std::string, sf::Texture> &textures);
 };
