@@ -3,6 +3,9 @@
 Game::Game()
     : window(sf::VideoMode(800, 600), "Hello, world!")
 {
+    loadtexture("wad/rr0/World/WorldTextures/RockSplit/ROCK00.BMP", "floor");
+    loadtexture("wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP", "wall");
+
     states.push(new GameStatePlay(this));
 }
 
@@ -29,4 +32,11 @@ void Game::play()
         states.top()->handleInput(dt);
         states.top()->draw();
     }
+}
+
+void Game::loadtexture(const std::string &filename, const std::string &key)
+{
+    sf::Texture tex;
+    tex.loadFromFile(filename);
+    texmgr[key] = tex;
 }
