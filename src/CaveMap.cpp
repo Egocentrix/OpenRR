@@ -105,7 +105,7 @@ void CaveMap::discover(int x, int y)
     }
 }
 
-void CaveMap::draw(sf::RenderTarget &target, const std::map<std::string, sf::Texture> &textures)
+void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
 {
     float tilesize = 50;
     int texsize = 128;
@@ -125,10 +125,10 @@ void CaveMap::draw(sf::RenderTarget &target, const std::map<std::string, sf::Tex
             switch (tiles[linearindex(x, y)].getType())
             {
             case TileType::Floor:
-                sprite.setTexture(textures.at("floor"));
+                sprite.setTexture(textures.getRef("floor"));
                 break;
             case TileType::Wall:
-                sprite.setTexture(textures.at("wall"));
+                sprite.setTexture(textures.getRef("wall"));
                 break;
             }
 

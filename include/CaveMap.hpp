@@ -4,9 +4,10 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "TextureManager.hpp"
 #include "Tile.hpp"
 
-// Container for tile objects, and functions for manipulating them. 
+// Container for tile objects, and functions for manipulating them.
 class CaveMap
 {
 private:
@@ -35,5 +36,5 @@ public:
 
     void drill(int x, int y);
 
-    void draw(sf::RenderTarget &target, const std::map<std::string, sf::Texture> &textures);
+    void draw(sf::RenderTarget &target, TextureManager &textures);
 };

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <stack>
-#include <map>
 #include <SFML/Graphics.hpp>
 
 #include "GameStatePlay.hpp"
+#include "TextureManager.hpp"
 
 // Contains global game data. State-specific data is contained by the gamestate object.
 class Game
@@ -20,9 +20,7 @@ public:
     Game();
     ~Game();
 
-    std::map<std::string, sf::Texture> texmgr;
-    void loadtexture(const std::string &filename, const std::string &key);
-
+    TextureManager texmgr;
     sf::RenderWindow window;
 
     void play();
