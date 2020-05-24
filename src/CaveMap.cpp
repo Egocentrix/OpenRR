@@ -9,7 +9,6 @@ CaveMap::CaveMap(int width, int height)
     for (int i = 0; i < width * height; i++)
     {
         tiles.push_back(Tile(TileType::Wall));
-        discovered.push_back(false);
     }
     tiles[linearindex(width / 2, height / 2)] = Tile(TileType::Floor);
     discover(width / 2, height / 2);
@@ -30,13 +29,9 @@ void CaveMap::load(const std::string &filename)
         infile.read((char *)&height, sizeof(int));
 
         tiles.clear();
-        discovered.clear();
 
         tiles.resize(width * height);
         infile.read((char *)tiles.data(), sizeof(Tile) * width * height);
-
-        discovered.resize(width * height);
-        infile.read((char *)discovered.data(), sizeof(char) * width * height);
     }
 
     infile.close();
@@ -51,7 +46,6 @@ void CaveMap::save(const std::string &filename)
     outfile.write((char *)&height, sizeof(int));
 
     outfile.write((char *)tiles.data(), sizeof(Tile) * width * height);
-    outfile.write((char *)discovered.data(), sizeof(char) * width * height);
 
     outfile.close();
 }
@@ -78,8 +72,7 @@ void CaveMap::drill(int x, int y)
         return;
     }
 
-    getTile(x, y) = Tile(TileType::Floor);
-    discovered[linearindex(x, y)] = false;
+    getTile(x, y) = Tile(TileType::Floor); // Visibility defaults to false
     discover(x, y);
 }
 

@@ -12,7 +12,6 @@ class CaveMap
 {
 private:
     std::vector<Tile> tiles;
-    std::vector<char> discovered; // char, because vector<bool> is an ugly special case
 
     int width;
     int height;
@@ -32,7 +31,6 @@ public:
     void save(const std::string &filename);
 
     Tile &getTile(int x, int y) { return tiles[linearindex(x, y)]; }
-    bool isDiscovered(int x, int y) { return discovered[linearindex(x, y)]; }
 
     void drill(int x, int y);
 
