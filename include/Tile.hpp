@@ -15,5 +15,7 @@ public:
     Tile() {}
     Tile(TileType type);
 
+    bool discovered;
+
     TileType getType() { return type; }
 };

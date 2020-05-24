@@ -85,13 +85,19 @@ void CaveMap::drill(int x, int y)
 
 void CaveMap::discover(int x, int y)
 {
-    if (discovered[linearindex(x, y)] || !checkbounds(x, y))
+    if (!checkbounds(x, y))
     {
         return;
     }
-    discovered[linearindex(x, y)] = true;
 
-    if (getTile(x, y).getType() == TileType::Wall)
+    Tile &current = getTile(x, y);
+    if (current.discovered)
+    {
+        return;
+    }
+
+    current.discovered = true;
+    if (current.getType() == TileType::Wall)
     {
         return;
     }
@@ -117,7 +123,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     {
         for (int y = 0; y < height; y++)
         {
-            if (!discovered[linearindex(x, y)])
+            if (!tiles[linearindex(x, y)].discovered)
             {
                 continue;
             }

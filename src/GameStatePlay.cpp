@@ -42,7 +42,7 @@ void GameStatePlay::handleInput(float dt)
             if (e.mouseButton.button == sf::Mouse::Left)
             {
                 sf::Vector2f tile = game->window.mapPixelToCoords(sf::Mouse::getPosition(game->window)) / 50.f;
-                if (map.isDiscovered(tile.x, tile.y))
+                if (map.getTile(tile.x, tile.y).discovered)
                 {
                     map.drill(tile.x, tile.y);
                 }
