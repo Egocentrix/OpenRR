@@ -116,12 +116,14 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     {
         for (int y = 0; y < height; y++)
         {
-            if (!tiles[linearindex(x, y)].discovered)
+            Tile &current = getTile(x,y);
+            
+            if (!current.discovered)
             {
                 continue;
             }
 
-            switch (tiles[linearindex(x, y)].getType())
+            switch (current.getType())
             {
             case TileType::Floor:
                 sprite.setTexture(textures.getRef("floor"));
