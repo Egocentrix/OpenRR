@@ -100,6 +100,10 @@ void CaveMap::discover(int x, int y)
 
     for (int i = 0; i < 8; i++)
     {
+        if (!isStable(x + dx[i], y + dy[i]))
+        {
+            drill(x + dx[i], y + dy[i]);
+        }
         discover(x + dx[i], y + dy[i]);
     }
 }
@@ -116,8 +120,8 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     {
         for (int y = 0; y < height; y++)
         {
-            Tile &current = getTile(x,y);
-            
+            Tile &current = getTile(x, y);
+
             if (!current.discovered)
             {
                 continue;
@@ -142,4 +146,24 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(-1.f);
     target.draw(border);
+}
+
+bool CaveMap::isStable(int x, int y)
+{
+    if (!getTile(x, y).getType() == TileType::Wall)
+    {
+        return true;
+    }
+
+    int supportingwalls = 0;
+
+    int dx[] = {0, -1, 1, 0};
+    int dy[] = {-1, 0, 0, 1};
+
+    for (int i = 0; i < 4; i++)
+    {
+        supportingwalls += getTile(x + dx[i], y + dy[i]).getType() == TileType::Wall;
+    }
+
+    return supportingwalls >= 2;
 }

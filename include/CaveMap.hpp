@@ -23,6 +23,8 @@ private:
 
     void discover(int x, int y);
 
+    bool isStable(int x, int y);
+
 public:
     CaveMap(int width, int height);
     ~CaveMap();
