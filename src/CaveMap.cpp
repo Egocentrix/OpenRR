@@ -65,8 +65,18 @@ bool CaveMap::checkbounds(int x, int y)
     return x >= 0 && x < width && y >= 0 && y < height;
 }
 
+bool CaveMap::isBorder(int x, int y)
+{
+    return x == 0 || x == width - 1 || y == 0 || y == height - 1;
+}
+
 void CaveMap::drill(int x, int y)
 {
+    if (isBorder(x, y))
+    {
+        return;
+    }
+
     if (getTile(x, y).getType() != TileType::Wall)
     {
         return;

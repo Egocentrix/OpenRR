@@ -18,6 +18,7 @@ private:
 
     bool checkbounds(int i);
     bool checkbounds(int x, int y);
+    bool isBorder(int x, int y);
 
     int linearindex(int x, int y);
 
