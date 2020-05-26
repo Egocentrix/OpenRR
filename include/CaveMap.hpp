@@ -26,6 +26,8 @@ private:
 
     bool isStable(int x, int y);
 
+    int countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals = false);
+
 public:
     CaveMap(int width, int height);
     ~CaveMap();

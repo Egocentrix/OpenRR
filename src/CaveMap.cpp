@@ -165,15 +165,29 @@ bool CaveMap::isStable(int x, int y)
         return true;
     }
 
-    int supportingwalls = 0;
-
-    int dx[] = {0, -1, 1, 0};
-    int dy[] = {-1, 0, 0, 1};
-
-    for (int i = 0; i < 4; i++)
-    {
-        supportingwalls += getTile(x + dx[i], y + dy[i]).getType() == TileType::Wall;
-    }
+    int supportingwalls = countNeighborsOfType(x, y, {TileType::Wall}, false);
 
     return supportingwalls >= 2;
+}
+
+int CaveMap::countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals)
+{
+    int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
+    int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
+
+    int result = 0;
+
+    for (int i = 0; i < (diagonals ? 8 : 4); i++)
+    {
+        for (auto &type : whitelist)
+        {
+            if (getTile(x + dx[i], y + dy[i]).getType() == type)
+            {
+                result += 1;
+                break;
+            }
+        }
+    }
+
+    return result;
 }
