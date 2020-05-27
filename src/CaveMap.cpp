@@ -77,6 +77,11 @@ void CaveMap::drill(int x, int y)
         return;
     }
 
+    if (!getTile(x,y).clickable)
+    {
+        return;
+    }
+
     if (getTile(x, y).getType() != TileType::Wall)
     {
         return;
@@ -105,16 +110,23 @@ void CaveMap::discover(int x, int y)
         return;
     }
 
-    int dx[] = {-1, 0, 1, -1, 1, -1, 0, 1};
-    int dy[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
+    int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
 
     for (int i = 0; i < 8; i++)
     {
-        if (!isStable(x + dx[i], y + dy[i]))
+        int currentx = x + dx[i], currenty = y + dy[i];
+
+        if (i < 4) // non-diagonal neighbors
         {
-            drill(x + dx[i], y + dy[i]);
+            getTile(currentx, currenty).clickable = true;
         }
-        discover(x + dx[i], y + dy[i]);
+
+        if (!isStable(currentx, currenty))
+        {
+            drill(currentx, currenty);
+        }
+        discover(currentx, currenty);
     }
 }
 

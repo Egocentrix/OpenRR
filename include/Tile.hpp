@@ -16,6 +16,7 @@ public:
     Tile(TileType type);
 
     bool discovered;
+    bool clickable;
 
     TileType getType() { return type; }
 };
