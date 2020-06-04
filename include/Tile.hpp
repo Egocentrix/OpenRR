@@ -19,6 +19,7 @@ public:
     bool discovered{false};
     bool clickable{false};
     std::shared_ptr<sf::Texture> texture;
+    int rotation{0};
 
 private:
     TileType type_;
