@@ -1,5 +1,6 @@
 #include <cmath>
 #include <fstream>
+#include <iostream>
 
 #include "CaveMap.hpp"
 
@@ -50,9 +51,19 @@ void CaveMap::save(const std::string &filename)
     outfile.close();
 }
 
+Tile &CaveMap::getTile(int x, int y)
+{
+    if (checkbounds(x, y) == false)
+    {
+        std::cerr << "Tried to access out of bounds tile" << std::endl;
+    }
+
+    return tiles[linearindex(x, y)];
+}
+
 int CaveMap::linearindex(int x, int y)
 {
-    return checkbounds(x, y) ? x + width * y : 0;
+    return x + width * y;
 }
 
 bool CaveMap::checkbounds(int i)
@@ -77,7 +88,7 @@ void CaveMap::drill(int x, int y)
         return;
     }
 
-    if (!getTile(x,y).clickable)
+    if (!getTile(x, y).clickable)
     {
         return;
     }
@@ -116,6 +127,11 @@ void CaveMap::discover(int x, int y)
     for (int i = 0; i < 8; i++)
     {
         int currentx = x + dx[i], currenty = y + dy[i];
+
+        if (!checkbounds(currentx, currenty))
+        {
+            continue;
+        }
 
         if (i < 4) // non-diagonal neighbors
         {
@@ -172,6 +188,11 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
 
 bool CaveMap::isStable(int x, int y)
 {
+    if (isBorder(x, y))
+    {
+        return true;
+    }
+
     if (!getTile(x, y).getType() == TileType::Wall)
     {
         return true;
