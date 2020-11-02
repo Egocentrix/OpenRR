@@ -7,8 +7,8 @@ Game::Game()
     texmgr.loadTexture("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
     texmgr.loadTexture("wall_incorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
     texmgr.loadTexture("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK35.BMP");
-
-    states.push(new GameStatePlay(this));
+    
+    states.push(std::make_unique<GameStatePlay>(this));
 }
 
 Game::~Game()
@@ -21,7 +21,6 @@ Game::~Game()
 
 void Game::popState()
 {
-    delete states.top();
     states.pop();
 }
 

@@ -12,7 +12,7 @@ class Game
 private:
     sf::Clock clock;
 
-    std::stack<GameState *> states;
+    std::stack<std::unique_ptr<GameState>> states;
 
     void popState();
 
