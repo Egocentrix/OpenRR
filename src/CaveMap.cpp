@@ -47,8 +47,6 @@ void CaveMap::save(const std::string &filename)
     outfile << tiles.getWidth() << " ";
     outfile << tiles.getHeight() << " ";
 
-    std::cout << sizeof(Tile);
-
     for (const auto &tile : tiles)
     {
         outfile << tile.getType() << " ";
@@ -164,7 +162,10 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
                 break;
             }
 
-            sprite.setTexture(*current.texture);
+            if (current.texture != nullptr)
+            {
+                sprite.setTexture(*current.texture);
+            }
             sprite.setPosition(tilesize * x, tilesize * y);
             target.draw(sprite);
         }
