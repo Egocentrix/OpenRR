@@ -157,13 +157,14 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
             switch (current.getType())
             {
             case TileType::Floor:
-                sprite.setTexture(*floortex);
+                current.texture = textures.getTexture("floor");
                 break;
             case TileType::Wall:
-                sprite.setTexture(*walltex);
+                current.texture = textures.getTexture("wall");
                 break;
             }
 
+            sprite.setTexture(*current.texture);
             sprite.setPosition(tilesize * x, tilesize * y);
             target.draw(sprite);
         }

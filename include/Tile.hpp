@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <SFML/Graphics/Texture.hpp>
+
 enum TileType
 {
     Floor,
@@ -15,6 +18,7 @@ public:
 
     bool discovered{false};
     bool clickable{false};
+    std::shared_ptr<sf::Texture> texture;
 
 private:
     TileType type_;
