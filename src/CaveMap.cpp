@@ -140,6 +140,9 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     sf::Sprite sprite;
     sprite.setScale(tilesize / texsize, tilesize / texsize);
 
+    auto floortex = textures.getTexture("floor");
+    auto walltex = textures.getTexture("wall");
+
     for (int x = 0; x < tiles.getWidth(); x++)
     {
         for (int y = 0; y < tiles.getHeight(); y++)
@@ -154,10 +157,10 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
             switch (current.getType())
             {
             case TileType::Floor:
-                sprite.setTexture(textures.getRef("floor"));
+                sprite.setTexture(*floortex);
                 break;
             case TileType::Wall:
-                sprite.setTexture(textures.getRef("wall"));
+                sprite.setTexture(*walltex);
                 break;
             }
 

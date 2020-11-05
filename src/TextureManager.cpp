@@ -1,13 +1,32 @@
 #include "TextureManager.hpp"
 
-void TextureManager::loadTexture(const std::string &key, const std::string &filename)
+#include <iostream>
+
+void TextureManager::registerTexture(const std::string &key, const std::string &filename)
 {
-    sf::Texture tex;
-    tex.loadFromFile(filename);
-    textures[key] = tex;
+    filenames[key] = filename;
 }
 
-sf::Texture &TextureManager::getRef(const std::string &key)
+std::shared_ptr<sf::Texture> TextureManager::getTexture(const std::string &key)
 {
-    return textures.at(key);
+    // Texture exist and is still valid
+    if (textures.count(key) != 0)
+    {
+        if (!textures.at(key).expired())
+        {
+            return textures.at(key).lock();
+        }
+    }
+
+    // Otherwise, load from disk
+    std::cout << "loading from file: " << filenames.at(key) << "\n";
+    auto tex = std::make_unique<sf::Texture>();
+    if (tex->loadFromFile(filenames.at(key)))
+    {
+        std::shared_ptr<sf::Texture> shared(tex.release());
+        textures[key] = shared;
+        return shared;
+    }
+
+    return nullptr;
 }
