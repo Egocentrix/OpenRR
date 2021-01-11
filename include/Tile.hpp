@@ -12,11 +12,10 @@ private:
     TileType type;
 
 public:
-    Tile() {}
     Tile(TileType type);
 
-    bool discovered;
-    bool clickable;
+    bool discovered{false};
+    bool clickable{false};
 
-    TileType getType() { return type; }
+    TileType getType() const { return type; }
 };
