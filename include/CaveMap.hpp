@@ -22,12 +22,11 @@ private:
 
 public:
     CaveMap(int width, int height);
-    ~CaveMap();
 
     void load(const std::string &filename);
     void save(const std::string &filename);
 
-    Tile &getTile(int x, int y); 
+    Tile &getTile(int x, int y);
 
     void drill(int x, int y);
 

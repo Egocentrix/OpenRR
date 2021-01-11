@@ -15,40 +15,46 @@ CaveMap::CaveMap(int width, int height)
     discover(width / 2, height / 2);
 }
 
-CaveMap::~CaveMap()
-{
-}
-
 void CaveMap::load(const std::string &filename)
 {
-    // std::ifstream infile;
-    // infile.open(filename, std::ios::binary | std::ios::in);
+    std::ifstream infile(filename);
+    if (!infile.is_open())
+    {
+        return;
+    }
 
-    // if (infile.is_open())
-    // {
-    //     infile.read((char *)&width, sizeof(int));
-    //     infile.read((char *)&height, sizeof(int));
+    int width, height;
+    infile >> width >> height;
 
-    //     tiles.clear();
+    tiles.resize(width, height);
+    for (int i = 0; i < width * height; i++)
+    {
+        int type;
+        infile >> type;
+        Tile tile{static_cast<TileType>(type)};
+        infile >> tile.discovered;
+        infile >> tile.clickable;
 
-    //     tiles.resize(width * height);
-    //     infile.read((char *)tiles.data(), sizeof(Tile) * width * height);
-    // }
-
-    // infile.close();
+        tiles.addElement(tile);
+    }
+    return;
 }
 
 void CaveMap::save(const std::string &filename)
 {
-    // std::ofstream outfile;
-    // outfile.open(filename, std::ios::binary | std::ios::out);
+    std::ofstream outfile(filename);
+    outfile << tiles.getWidth() << " ";
+    outfile << tiles.getHeight() << " ";
 
-    // outfile.write((char *)&width, sizeof(int));
-    // outfile.write((char *)&height, sizeof(int));
+    std::cout << sizeof(Tile);
 
-    // outfile.write((char *)tiles.data(), sizeof(Tile) * width * height);
-
-    // outfile.close();
+    for (const auto &tile : tiles)
+    {
+        outfile << tile.getType() << " ";
+        outfile << tile.discovered << " ";
+        outfile << tile.clickable << " ";
+    }
+    return;
 }
 
 Tile &CaveMap::getTile(int x, int y)
