@@ -2,6 +2,12 @@
 
 #include <vector>
 
+struct GridCoordinate
+{
+    int x;
+    int y;
+};
+
 template <class T>
 class Grid2D
 {
@@ -27,7 +33,7 @@ public:
     typename std::vector<T>::iterator begin() { return elements.begin(); }
     typename std::vector<T>::iterator end() { return elements.end(); }
 
-    std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true);
+    std::vector<GridCoordinate> neighboursOf(int x, int y, bool includeDiagonals = true) const;
 };
 
 #include "Grid2D.tpp"

@@ -19,7 +19,7 @@ int Grid2D<T>::linearIndex(int x, int y) const
 }
 
 template <class T>
-Grid2D<T>::Grid2D(int x, int y) : width(x), height(y)
+Grid2D<T>::Grid2D(int x, int y) : width{x}, height{y}
 {
     for (int i = 0; i < width * height; ++i)
     {
@@ -32,16 +32,15 @@ T &Grid2D<T>::getElement(int x, int y)
 {
     if (!isInBounds(x, y))
     {
-        return elements[0];
+        return elements.at(0);
     }
-
-    return elements[linearIndex(x, y)];
+    return elements.at(linearIndex(x, y));
 }
 
 template <class T>
-std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
+std::vector<GridCoordinate> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals) const
 {
-    std::vector<T *> neighbours{};
+    std::vector<GridCoordinate> neighbours{};
 
     int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
     int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
@@ -53,7 +52,7 @@ std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
 
         if (isInBounds(currentx, currenty))
         {
-            neighbours.emplace_back(&elements[linearIndex(currentx, currenty)]);
+            neighbours.emplace_back(GridCoordinate{currentx, currenty});
         }
     }
 
