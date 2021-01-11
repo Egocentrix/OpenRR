@@ -172,7 +172,7 @@ int CaveMap::countNeighborsOfType(int x, int y, std::vector<TileType> whitelist,
 {
     int result = 0;
 
-    for (auto &coord : tiles.neighboursOf(x, y))
+    for (auto &coord : tiles.neighboursOf(x, y, diagonals))
     {
         for (auto &type : whitelist)
         {
