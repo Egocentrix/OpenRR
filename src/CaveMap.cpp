@@ -1,6 +1,6 @@
-#include <cmath>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 #include "CaveMap.hpp"
 
@@ -102,12 +102,12 @@ void CaveMap::discover(int x, int y)
         return;
     }
 
-    for (auto coord : tiles.neighboursOf(x, y, false))
+    for (auto tile : tiles.neighboursOf(x, y, false))
     {
-        tiles.getElement(coord.x, coord.y).clickable = true;
+        tile->clickable = true;
     }
 
-    for (auto coord : tiles.neighboursOf(x, y, true))
+    for (auto coord : tiles.neighbourCoordinates(x, y, true))
     {
         if (!isStable(coord.x, coord.y))
         {
@@ -176,18 +176,12 @@ bool CaveMap::isStable(int x, int y)
 
 int CaveMap::countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals)
 {
-    int result = 0;
-
-    for (auto &coord : tiles.neighboursOf(x, y, diagonals))
+    int result{0};
+    for (auto tile : tiles.neighboursOf(x, y, diagonals))
     {
-        for (auto &type : whitelist)
-        {
-            if (tiles.getElement(coord.x, coord.y).getType() == type)
-            {
-                result += 1;
-                break;
-            }
-        }
+        result += std::any_of(whitelist.begin(), whitelist.end(), [tile](TileType type) -> bool {
+            return type == tile->getType();
+        });
     }
 
     return result;
