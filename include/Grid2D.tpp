@@ -50,7 +50,7 @@ T &Grid2D<T>::getElement(int x, int y)
 }
 
 template <class T>
-std::vector<GridCoordinate> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals) const
+std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(int x, int y, bool includeDiagonals) const
 {
     std::vector<GridCoordinate> neighbours{};
 
@@ -69,4 +69,16 @@ std::vector<GridCoordinate> Grid2D<T>::neighboursOf(int x, int y, bool includeDi
     }
 
     return (neighbours);
+}
+
+template <class T>
+std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
+{
+    std::vector<T *> neighbours{};
+
+    for (auto coords : neighbourCoordinates(x, y, includeDiagonals))
+    {
+        neighbours.push_back(&elements[linearIndex(coords.x, coords.y)]);
+    }
+    return neighbours;
 }

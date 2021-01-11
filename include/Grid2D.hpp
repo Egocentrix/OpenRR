@@ -24,7 +24,7 @@ public:
     Grid2D(int width, int height);
 
     void resize(int width, int height);
-    void addElement(const T& elem);
+    void addElement(const T &elem);
 
     int getWidth() const { return width; }
     int getHeight() const { return height; }
@@ -38,7 +38,8 @@ public:
     typename std::vector<T>::iterator begin() { return elements.begin(); }
     typename std::vector<T>::iterator end() { return elements.end(); }
 
-    std::vector<GridCoordinate> neighboursOf(int x, int y, bool includeDiagonals = true) const;
+    std::vector<GridCoordinate> neighbourCoordinates(int x, int y, bool includeDiagonals = true) const;
+    std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true);
 };
 
 #include "Grid2D.tpp"
