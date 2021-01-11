@@ -19,12 +19,24 @@ int Grid2D<T>::linearIndex(int x, int y) const
 }
 
 template <class T>
-Grid2D<T>::Grid2D(int x, int y) : width{x}, height{y}
+Grid2D<T>::Grid2D(int width, int height)
 {
-    for (int i = 0; i < width * height; ++i)
-    {
-        elements.emplace_back();
-    }
+    resize(width, height);
+}
+
+template <class T>
+void Grid2D<T>::resize(int newwidth, int newheight)
+{
+    elements.clear();
+    elements.reserve(newwidth * newheight);
+    width = newwidth;
+    height = newheight;
+}
+
+template <class T>
+void Grid2D<T>::addElement(const T &elem)
+{
+    elements.push_back(elem);
 }
 
 template <class T>

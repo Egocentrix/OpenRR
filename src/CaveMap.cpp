@@ -5,13 +5,13 @@
 #include "CaveMap.hpp"
 
 CaveMap::CaveMap(int width, int height)
-    : width(width), height(height)
+    : tiles{width, height}
 {
     for (int i = 0; i < width * height; i++)
     {
-        tiles.push_back(Tile(TileType::Wall));
+        tiles.addElement(Tile(TileType::Wall));
     }
-    tiles[linearindex(width / 2, height / 2)] = Tile(TileType::Floor);
+    tiles.getElement(width / 2, height / 2) = Tile(TileType::Floor);
     discover(width / 2, height / 2);
 }
 
@@ -21,69 +21,44 @@ CaveMap::~CaveMap()
 
 void CaveMap::load(const std::string &filename)
 {
-    std::ifstream infile;
-    infile.open(filename, std::ios::binary | std::ios::in);
+    // std::ifstream infile;
+    // infile.open(filename, std::ios::binary | std::ios::in);
 
-    if (infile.is_open())
-    {
-        infile.read((char *)&width, sizeof(int));
-        infile.read((char *)&height, sizeof(int));
+    // if (infile.is_open())
+    // {
+    //     infile.read((char *)&width, sizeof(int));
+    //     infile.read((char *)&height, sizeof(int));
 
-        tiles.clear();
+    //     tiles.clear();
 
-        tiles.resize(width * height);
-        infile.read((char *)tiles.data(), sizeof(Tile) * width * height);
-    }
+    //     tiles.resize(width * height);
+    //     infile.read((char *)tiles.data(), sizeof(Tile) * width * height);
+    // }
 
-    infile.close();
+    // infile.close();
 }
 
 void CaveMap::save(const std::string &filename)
 {
-    std::ofstream outfile;
-    outfile.open(filename, std::ios::binary | std::ios::out);
+    // std::ofstream outfile;
+    // outfile.open(filename, std::ios::binary | std::ios::out);
 
-    outfile.write((char *)&width, sizeof(int));
-    outfile.write((char *)&height, sizeof(int));
+    // outfile.write((char *)&width, sizeof(int));
+    // outfile.write((char *)&height, sizeof(int));
 
-    outfile.write((char *)tiles.data(), sizeof(Tile) * width * height);
+    // outfile.write((char *)tiles.data(), sizeof(Tile) * width * height);
 
-    outfile.close();
+    // outfile.close();
 }
 
 Tile &CaveMap::getTile(int x, int y)
 {
-    if (checkbounds(x, y) == false)
-    {
-        std::cerr << "Tried to access out of bounds tile" << std::endl;
-    }
-
-    return tiles[linearindex(x, y)];
-}
-
-int CaveMap::linearindex(int x, int y)
-{
-    return x + width * y;
-}
-
-bool CaveMap::checkbounds(int i)
-{
-    return i >= 0 && i < width * height;
-}
-
-bool CaveMap::checkbounds(int x, int y)
-{
-    return x >= 0 && x < width && y >= 0 && y < height;
-}
-
-bool CaveMap::isBorder(int x, int y)
-{
-    return x == 0 || x == width - 1 || y == 0 || y == height - 1;
+    return tiles.getElement(x, y);
 }
 
 void CaveMap::drill(int x, int y)
 {
-    if (isBorder(x, y))
+    if (tiles.isEdgeElement(x, y))
     {
         return;
     }
@@ -104,12 +79,12 @@ void CaveMap::drill(int x, int y)
 
 void CaveMap::discover(int x, int y)
 {
-    if (!checkbounds(x, y))
+    if (!tiles.isInBounds(x, y))
     {
         return;
     }
 
-    Tile &current = getTile(x, y);
+    Tile &current = tiles.getElement(x, y);
     if (current.discovered)
     {
         return;
@@ -121,28 +96,18 @@ void CaveMap::discover(int x, int y)
         return;
     }
 
-    int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
-    int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
-
-    for (int i = 0; i < 8; i++)
+    for (auto coord : tiles.neighboursOf(x, y, false))
     {
-        int currentx = x + dx[i], currenty = y + dy[i];
+        tiles.getElement(coord.x, coord.y).clickable = true;
+    }
 
-        if (!checkbounds(currentx, currenty))
+    for (auto coord : tiles.neighboursOf(x, y, true))
+    {
+        if (!isStable(coord.x, coord.y))
         {
-            continue;
+            drill(coord.x, coord.y);
         }
-
-        if (i < 4) // non-diagonal neighbors
-        {
-            getTile(currentx, currenty).clickable = true;
-        }
-
-        if (!isStable(currentx, currenty))
-        {
-            drill(currentx, currenty);
-        }
-        discover(currentx, currenty);
+        discover(coord.x, coord.y);
     }
 }
 
@@ -154,11 +119,11 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     sf::Sprite sprite;
     sprite.setScale(tilesize / texsize, tilesize / texsize);
 
-    for (int x = 0; x < width; x++)
+    for (int x = 0; x < tiles.getWidth(); x++)
     {
-        for (int y = 0; y < height; y++)
+        for (int y = 0; y < tiles.getHeight(); y++)
         {
-            Tile &current = getTile(x, y);
+            Tile &current = tiles.getElement(x, y);
 
             if (!current.discovered)
             {
@@ -179,7 +144,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
             target.draw(sprite);
         }
     }
-    sf::RectangleShape border(sf::Vector2f(tilesize * width, tilesize * height));
+    sf::RectangleShape border(sf::Vector2f(tilesize * tiles.getWidth(), tilesize * tiles.getHeight()));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(-1.f);
@@ -188,7 +153,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
 
 bool CaveMap::isStable(int x, int y)
 {
-    if (isBorder(x, y))
+    if (tiles.isEdgeElement(x, y))
     {
         return true;
     }
@@ -205,16 +170,13 @@ bool CaveMap::isStable(int x, int y)
 
 int CaveMap::countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals)
 {
-    int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
-    int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
-
     int result = 0;
 
-    for (int i = 0; i < (diagonals ? 8 : 4); i++)
+    for (auto &coord : tiles.neighboursOf(x, y))
     {
         for (auto &type : whitelist)
         {
-            if (getTile(x + dx[i], y + dy[i]).getType() == type)
+            if (tiles.getElement(coord.x, coord.y).getType() == type)
             {
                 result += 1;
                 break;

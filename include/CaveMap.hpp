@@ -4,6 +4,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "Grid2D.hpp"
 #include "TextureManager.hpp"
 #include "Tile.hpp"
 
@@ -11,16 +12,7 @@
 class CaveMap
 {
 private:
-    std::vector<Tile> tiles;
-
-    int width;
-    int height;
-
-    bool checkbounds(int i);
-    bool checkbounds(int x, int y);
-    bool isBorder(int x, int y);
-
-    int linearindex(int x, int y);
+    Grid2D<Tile> tiles;
 
     void discover(int x, int y);
 
