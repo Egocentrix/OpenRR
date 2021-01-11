@@ -7,15 +7,33 @@ bool Grid2D<T>::isInBounds(int x, int y) const
 }
 
 template <class T>
+bool Grid2D<T>::isInBounds(GridCoordinate coord) const
+{
+    return isInBounds(coord.x, coord.y);
+}
+
+template <class T>
 bool Grid2D<T>::isEdgeElement(int x, int y) const
 {
     return x == 0 || x == width - 1 || y == 0 || y == height - 1;
 }
 
 template <class T>
+bool Grid2D<T>::isEdgeElement(GridCoordinate coord) const
+{
+    return isEdgeElement(coord.x, coord.y);
+}
+
+template <class T>
 int Grid2D<T>::linearIndex(int x, int y) const
 {
     return x + width * y;
+}
+
+template <class T>
+int Grid2D<T>::linearIndex(GridCoordinate coord) const
+{
+    return linearIndex(coord.x, coord.y);
 }
 
 template <class T>
@@ -50,7 +68,19 @@ T &Grid2D<T>::getElement(int x, int y)
 }
 
 template <class T>
+T &Grid2D<T>::getElement(GridCoordinate coord)
+{
+    return getElement(coord.x, coord.y);
+}
+
+template <class T>
 std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(int x, int y, bool includeDiagonals) const
+{
+    return neighbourCoordinates(GridCoordinate{x, y}, includeDiagonals);
+}
+
+template <class T>
+std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate current, bool includeDiagonals) const
 {
     std::vector<GridCoordinate> neighbours{};
 
@@ -59,26 +89,31 @@ std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(int x, int y, bool i
 
     for (int i = 0; i < (includeDiagonals ? 8 : 4); i++)
     {
-        int currentx = x + dx[i];
-        int currenty = y + dy[i];
+        GridCoordinate neighbour = {current.x + dx[i], current.y + dy[i]};
 
-        if (isInBounds(currentx, currenty))
+        if (isInBounds(neighbour))
         {
-            neighbours.emplace_back(GridCoordinate{currentx, currenty});
+            neighbours.push_back(neighbour);
         }
     }
 
-    return (neighbours);
+    return neighbours;
 }
 
 template <class T>
 std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
 {
+    return neighboursOf(GridCoordinate{x,y}, includeDiagonals);
+}
+
+template <class T>
+std::vector<T *> Grid2D<T>::neighboursOf(GridCoordinate current, bool includeDiagonals)
+{
     std::vector<T *> neighbours{};
 
-    for (auto coords : neighbourCoordinates(x, y, includeDiagonals))
+    for (auto coord : neighbourCoordinates(current, includeDiagonals))
     {
-        neighbours.push_back(&elements[linearIndex(coords.x, coords.y)]);
+        neighbours.push_back(&elements[linearIndex(coord)]);
     }
     return neighbours;
 }

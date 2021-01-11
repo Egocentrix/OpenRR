@@ -18,6 +18,7 @@ private:
     int height{0};
 
     int linearIndex(int x, int y) const;
+    int linearIndex(GridCoordinate coord) const;
 
 public:
     Grid2D() = default;
@@ -30,16 +31,21 @@ public:
     int getHeight() const { return height; }
 
     bool isEdgeElement(int x, int y) const;
+    bool isEdgeElement(GridCoordinate coord) const;
     bool isInBounds(int x, int y) const;
+    bool isInBounds(GridCoordinate coord) const;
 
     T &getElement(int x, int y);
+    T &getElement(GridCoordinate coord);
 
     // Enable range based for loops by forwarding the iterators
     typename std::vector<T>::iterator begin() { return elements.begin(); }
     typename std::vector<T>::iterator end() { return elements.end(); }
 
     std::vector<GridCoordinate> neighbourCoordinates(int x, int y, bool includeDiagonals = true) const;
+    std::vector<GridCoordinate> neighbourCoordinates(GridCoordinate coord, bool includeDiagonals = true) const;
     std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true);
+    std::vector<T *> neighboursOf(GridCoordinate coord, bool includeDiagonals = true);
 };
 
 #include "Grid2D.tpp"
