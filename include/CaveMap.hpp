@@ -11,14 +11,6 @@
 // Container for tile objects, and functions for manipulating them.
 class CaveMap
 {
-private:
-    Grid2D<Tile> tiles;
-
-    void discover(GridCoordinate coord);
-
-    bool isStable(GridCoordinate coord);
-    int countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = false);
-
 public:
     CaveMap(int width, int height);
 
@@ -32,4 +24,12 @@ public:
     void drill(GridCoordinate coord);
 
     void draw(sf::RenderTarget &target, TextureManager &textures);
+
+private:
+    void discover(GridCoordinate coord);
+
+    bool isStable(GridCoordinate coord);
+    int countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
+
+    Grid2D<Tile> tiles;
 };
