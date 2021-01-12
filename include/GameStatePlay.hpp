@@ -10,8 +10,8 @@ public:
     GameStatePlay(Game *parent);
     ~GameStatePlay();
 
-    virtual void draw();
-    virtual void handleInput(float dt);
+    virtual void draw() override;
+    virtual void handleInput(float dt) override;
 
 private:
     CaveMap map;

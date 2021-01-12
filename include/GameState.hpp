@@ -11,5 +11,5 @@ public:
 
     virtual ~GameState() = default;
 
-    Game *game;
+    Game *game{nullptr};
 };

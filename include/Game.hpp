@@ -9,19 +9,18 @@
 // Contains global game data. State-specific data is contained by the gamestate object.
 class Game
 {
-private:
-    sf::Clock clock;
-
-    std::stack<std::unique_ptr<GameState>> states;
-
-    void popState();
-
 public:
     Game();
     ~Game();
 
-    TextureManager texmgr;
+    void play();
+
+    TextureManager texmgr{};
     sf::RenderWindow window;
 
-    void play();
+private:
+    void popState();
+
+    sf::Clock clock{};
+    std::stack<std::unique_ptr<GameState>> states{};
 };
