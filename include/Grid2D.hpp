@@ -11,15 +11,6 @@ struct GridCoordinate
 template <class T>
 class Grid2D
 {
-private:
-    std::vector<T> elements{};
-
-    int width{0};
-    int height{0};
-
-    int linearIndex(int x, int y) const;
-    int linearIndex(GridCoordinate coord) const;
-
 public:
     Grid2D() = default;
     Grid2D(int width, int height);
@@ -27,8 +18,8 @@ public:
     void resize(int width, int height);
     void addElement(const T &elem);
 
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
+    int getWidth() const { return width_; }
+    int getHeight() const { return height_; }
 
     bool isEdgeElement(int x, int y) const;
     bool isEdgeElement(GridCoordinate coord) const;
@@ -46,6 +37,15 @@ public:
     std::vector<GridCoordinate> neighbourCoordinates(GridCoordinate coord, bool includeDiagonals = true) const;
     std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true);
     std::vector<T *> neighboursOf(GridCoordinate coord, bool includeDiagonals = true);
+
+private:
+    int linearIndex(int x, int y) const;
+    int linearIndex(GridCoordinate coord) const;
+
+    std::vector<T> elements{};
+
+    int width_{0};
+    int height_{0};
 };
 
 #include "Grid2D.tpp"

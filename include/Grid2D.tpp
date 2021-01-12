@@ -3,7 +3,7 @@
 template <class T>
 bool Grid2D<T>::isInBounds(int x, int y) const
 {
-    return x >= 0 && x < width && y >= 0 && y < height;
+    return x >= 0 && x < width_ && y >= 0 && y < height_;
 }
 
 template <class T>
@@ -15,7 +15,7 @@ bool Grid2D<T>::isInBounds(GridCoordinate coord) const
 template <class T>
 bool Grid2D<T>::isEdgeElement(int x, int y) const
 {
-    return x == 0 || x == width - 1 || y == 0 || y == height - 1;
+    return x == 0 || x == width_ - 1 || y == 0 || y == height_ - 1;
 }
 
 template <class T>
@@ -27,7 +27,7 @@ bool Grid2D<T>::isEdgeElement(GridCoordinate coord) const
 template <class T>
 int Grid2D<T>::linearIndex(int x, int y) const
 {
-    return x + width * y;
+    return x + width_ * y;
 }
 
 template <class T>
@@ -47,8 +47,8 @@ void Grid2D<T>::resize(int newwidth, int newheight)
 {
     elements.clear();
     elements.reserve(newwidth * newheight);
-    width = newwidth;
-    height = newheight;
+    width_ = newwidth;
+    height_ = newheight;
 }
 
 template <class T>

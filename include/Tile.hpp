@@ -8,14 +8,14 @@ enum TileType
 
 class Tile
 {
-private:
-    TileType type;
-
 public:
     Tile(TileType type);
+
+    TileType getType() const { return type_; }
 
     bool discovered{false};
     bool clickable{false};
 
-    TileType getType() const { return type; }
+private:
+    TileType type_;
 };

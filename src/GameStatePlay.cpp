@@ -1,11 +1,11 @@
 #include "GameStatePlay.hpp"
 #include "Game.hpp"
 
-GameStatePlay::GameStatePlay(Game *game)
-    : view(sf::FloatRect(0, 0, 800, 600)),
-      map(10, 10)
+GameStatePlay::GameStatePlay(Game *parent)
+    : map(10, 10),
+      view(sf::FloatRect(0, 0, 800, 600))
 {
-    this->game = game;
+    this->game = parent;
     map.load("testmap.dat");
 }
 

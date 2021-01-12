@@ -1,7 +1,7 @@
 #include "Tile.hpp"
 
 Tile::Tile(TileType type)
-    : type(type)
+    : type_(type)
 {
     return;
 }
