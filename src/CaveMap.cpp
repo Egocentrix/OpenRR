@@ -11,8 +11,9 @@ CaveMap::CaveMap(int width, int height)
     {
         tiles.addElement(Tile(TileType::Wall));
     }
-    tiles.getElement(width / 2, height / 2) = Tile(TileType::Floor);
-    discover(width / 2, height / 2);
+    GridCoordinate center{width / 2, height / 2};
+    tiles.getElement(center) = Tile(TileType::Floor);
+    discover(center);
 }
 
 void CaveMap::load(const std::string &filename)
@@ -62,59 +63,78 @@ Tile &CaveMap::getTile(int x, int y)
     return tiles.getElement(x, y);
 }
 
+Tile &CaveMap::getTile(GridCoordinate coord)
+{
+    return getTile(coord.x, coord.y);
+}
+
 void CaveMap::drill(int x, int y)
 {
-    if (tiles.isEdgeElement(x, y))
+    drill(GridCoordinate{x, y});
+}
+
+void CaveMap::drill(GridCoordinate coord)
+{
+    if (tiles.isEdgeElement(coord))
     {
         return;
     }
 
-    if (!getTile(x, y).clickable)
+    Tile &tile = tiles.getElement(coord);
+
+    if (!tile.clickable)
     {
         return;
     }
 
-    if (getTile(x, y).getType() != TileType::Wall)
+    if (tile.getType() != TileType::Wall)
     {
         return;
     }
 
-    getTile(x, y) = Tile(TileType::Floor); // Visibility defaults to false
-    discover(x, y);
+    tile = Tile(TileType::Floor); // Visibility defaults to false
+    discover(coord);
+    return;
 }
 
 void CaveMap::discover(int x, int y)
 {
-    if (!tiles.isInBounds(x, y))
+    discover(GridCoordinate{x, y});
+}
+
+void CaveMap::discover(GridCoordinate currentCoords)
+{
+    if (!tiles.isInBounds(currentCoords))
     {
         return;
     }
 
-    Tile &current = tiles.getElement(x, y);
-    if (current.discovered)
+    Tile &currentTile = tiles.getElement(currentCoords);
+    if (currentTile.discovered)
+    {
+        return;
+    }
+    currentTile.discovered = true;
+
+    if (currentTile.getType() != TileType::Floor)
     {
         return;
     }
 
-    current.discovered = true;
-    if (current.getType() == TileType::Wall)
+    for (auto t : tiles.neighboursOf(currentCoords, false))
     {
-        return;
+        t->clickable = true;
     }
 
-    for (auto tile : tiles.neighboursOf(x, y, false))
+    for (auto tc : tiles.neighbourCoordinates(currentCoords, true))
     {
-        tile->clickable = true;
-    }
-
-    for (auto coord : tiles.neighbourCoordinates(x, y, true))
-    {
-        if (!isStable(coord.x, coord.y))
+        if (!isStable(tc))
         {
-            drill(coord.x, coord.y);
+            drill(tc);
         }
-        discover(coord.x, coord.y);
+        discover(tc);
     }
+    return;
 }
 
 void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
@@ -159,25 +179,34 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
 
 bool CaveMap::isStable(int x, int y)
 {
-    if (tiles.isEdgeElement(x, y))
-    {
-        return true;
-    }
-
-    if (!getTile(x, y).getType() == TileType::Wall)
-    {
-        return true;
-    }
-
-    int supportingwalls = countNeighborsOfType(x, y, {TileType::Wall}, false);
-
-    return supportingwalls >= 2;
+    return isStable(GridCoordinate{x, y});
 }
 
-int CaveMap::countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals)
+bool CaveMap::isStable(GridCoordinate coord)
+{
+    if (tiles.isEdgeElement(coord))
+    {
+        return true;
+    }
+
+    if (getTile(coord).getType() != TileType::Wall)
+    {
+        return true;
+    }
+
+    int supportingWalls = countNeighborsOfType(coord, {TileType::Wall}, false);
+    return supportingWalls >= 2;
+}
+
+int CaveMap::countNeighborsOfType(int x, int y, const std::vector<TileType> &whitelist, bool diagonals)
+{
+    return countNeighborsOfType(GridCoordinate{x, y}, whitelist, diagonals);
+}
+
+int CaveMap::countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
 {
     int result{0};
-    for (auto tile : tiles.neighboursOf(x, y, diagonals))
+    for (auto tile : tiles.neighboursOf(coord, diagonals))
     {
         result += std::any_of(whitelist.begin(), whitelist.end(), [tile](TileType type) -> bool {
             return type == tile->getType();

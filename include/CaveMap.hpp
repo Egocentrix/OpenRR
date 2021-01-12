@@ -20,8 +20,8 @@ private:
     bool isStable(int x, int y);
     bool isStable(GridCoordinate coord);
 
-    int countNeighborsOfType(int x, int y, std::vector<TileType> whitelist, bool diagonals = false);
-    int countNeighborsOfType(GridCoordinate coord, std::vector<TileType> whitelist, bool diagonals = false);
+    int countNeighborsOfType(int x, int y, const std::vector<TileType> &whitelist, bool diagonals = false);
+    int countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = false);
 
 public:
     CaveMap(int width, int height);
