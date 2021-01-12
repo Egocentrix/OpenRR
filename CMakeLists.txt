@@ -4,6 +4,7 @@ project(OpenRR VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+add_compile_options(-Wall -Wextra -Wpedantic -Wshadow)
 add_subdirectory(src)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
