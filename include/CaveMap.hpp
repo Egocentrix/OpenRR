@@ -14,13 +14,9 @@ class CaveMap
 private:
     Grid2D<Tile> tiles;
 
-    void discover(int x, int y);
     void discover(GridCoordinate coord);
 
-    bool isStable(int x, int y);
     bool isStable(GridCoordinate coord);
-
-    int countNeighborsOfType(int x, int y, const std::vector<TileType> &whitelist, bool diagonals = false);
     int countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = false);
 
 public:

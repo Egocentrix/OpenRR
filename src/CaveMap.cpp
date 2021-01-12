@@ -97,11 +97,6 @@ void CaveMap::drill(GridCoordinate coord)
     return;
 }
 
-void CaveMap::discover(int x, int y)
-{
-    discover(GridCoordinate{x, y});
-}
-
 void CaveMap::discover(GridCoordinate currentCoords)
 {
     if (!tiles.isInBounds(currentCoords))
@@ -177,11 +172,6 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     target.draw(border);
 }
 
-bool CaveMap::isStable(int x, int y)
-{
-    return isStable(GridCoordinate{x, y});
-}
-
 bool CaveMap::isStable(GridCoordinate coord)
 {
     if (tiles.isEdgeElement(coord))
@@ -196,11 +186,6 @@ bool CaveMap::isStable(GridCoordinate coord)
 
     int supportingWalls = countNeighborsOfType(coord, {TileType::Wall}, false);
     return supportingWalls >= 2;
-}
-
-int CaveMap::countNeighborsOfType(int x, int y, const std::vector<TileType> &whitelist, bool diagonals)
-{
-    return countNeighborsOfType(GridCoordinate{x, y}, whitelist, diagonals);
 }
 
 int CaveMap::countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
