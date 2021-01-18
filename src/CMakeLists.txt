@@ -7,6 +7,6 @@ set(SRC main.cpp
 
 add_executable(OpenRR ${SRC})
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
+target_include_directories(OpenRR PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-target_link_libraries(OpenRR sfml-graphics sfml-window sfml-system)
+target_link_libraries(OpenRR PRIVATE sfml-graphics sfml-window sfml-system)
