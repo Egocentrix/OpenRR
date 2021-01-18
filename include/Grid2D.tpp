@@ -84,10 +84,11 @@ std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate curre
 {
     std::vector<GridCoordinate> neighbours{};
 
-    int dx[] = {0, -1, 1, 0, -1, -1, 1, 1};
-    int dy[] = {-1, 0, 0, 1, -1, 1, -1, 1};
+    // Starting North, clockwise
+    int dx[] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dy[] = {-1, -1, 0, 1, 1, 1, 0, -1};
 
-    for (int i = 0; i < (includeDiagonals ? 8 : 4); i++)
+    for (int i = 0; i < 8; i += (includeDiagonals ? 1 : 2))
     {
         GridCoordinate neighbour = {current.x + dx[i], current.y + dy[i]};
 
@@ -103,7 +104,7 @@ std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate curre
 template <class T>
 std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
 {
-    return neighboursOf(GridCoordinate{x,y}, includeDiagonals);
+    return neighboursOf(GridCoordinate{x, y}, includeDiagonals);
 }
 
 template <class T>
