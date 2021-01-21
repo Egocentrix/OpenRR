@@ -3,7 +3,7 @@
 
 GameStatePlay::GameStatePlay(Game *parent)
     : map(10, 10),
-      view(sf::FloatRect(0, 0, 800, 600))
+      view(parent->window.getView())
 {
     this->game = parent;
     map.load("testmap.dat");
@@ -37,15 +37,14 @@ void GameStatePlay::handleInput(float dt)
             view.setSize(e.size.width, e.size.height);
         }
 
-        if (e.type == sf::Event::MouseButtonPressed)
+        if (e.type == sf::Event::MouseButtonPressed &&
+            e.mouseButton.button == sf::Mouse::Left)
         {
-            if (e.mouseButton.button == sf::Mouse::Left)
+            auto mouseposition{sf::Mouse::getPosition(game->window)};
+            auto tile{game->window.mapPixelToCoords(mouseposition) / 50.f};
+            if (map.getTile(tile.x, tile.y).discovered)
             {
-                sf::Vector2f tile = game->window.mapPixelToCoords(sf::Mouse::getPosition(game->window)) / 50.f;
-                if (map.getTile(tile.x, tile.y).discovered)
-                {
-                    map.drill(tile.x, tile.y);
-                }
+                map.drill(tile.x, tile.y);
             }
         }
     }
