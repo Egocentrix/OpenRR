@@ -186,8 +186,14 @@ bool CaveMap::isStable(GridCoordinate coord)
         return true;
     }
 
-    int supportingWalls = countNeighborsOfType(coord, {TileType::Wall}, false);
-    return supportingWalls >= 2;
+    auto neighbours = tiles.neighboursOf(coord, false);
+    bool isWall[4];
+    for (size_t i = 0; i < 4; ++i)
+    {
+        isWall[i] = neighbours[i]->getType() == TileType::Wall;
+    }
+
+    return (isWall[0] || isWall[2]) && (isWall[1] || isWall[3]);
 }
 
 int CaveMap::countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
