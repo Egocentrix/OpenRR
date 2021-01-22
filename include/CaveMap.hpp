@@ -27,9 +27,10 @@ public:
 
 private:
     void discover(GridCoordinate coord);
+    void updateTexture(GridCoordinate coord, TextureManager &textures);
 
     bool isStable(GridCoordinate coord);
-    int countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
-
+    std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
+    
     Grid2D<Tile> tiles;
 };

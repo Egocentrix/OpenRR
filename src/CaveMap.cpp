@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 
 #include "CaveMap.hpp"
 
@@ -136,6 +137,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     int texsize = 128;
 
     sf::Sprite sprite;
+    sprite.setOrigin(texsize / 2, texsize / 2);
     sprite.setScale(tilesize / texsize, tilesize / texsize);
 
     for (int x = 0; x < tiles.getWidth(); x++)
@@ -149,21 +151,14 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
                 continue;
             }
 
-            switch (current.getType())
-            {
-            case TileType::Floor:
-                current.texture = textures.getTexture("floor");
-                break;
-            case TileType::Wall:
-                current.texture = textures.getTexture("wall");
-                break;
-            }
+            updateTexture({x, y}, textures);
 
             if (current.texture != nullptr)
             {
                 sprite.setTexture(*current.texture);
             }
-            sprite.setPosition(tilesize * x, tilesize * y);
+            sprite.setPosition(tilesize * (x + 0.5), tilesize * (y + 0.5));
+            sprite.setRotation(current.rotation * 90);
             target.draw(sprite);
         }
     }
@@ -172,6 +167,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(-1.f);
     target.draw(border);
+    return;
 }
 
 bool CaveMap::isStable(GridCoordinate coord)
@@ -186,25 +182,60 @@ bool CaveMap::isStable(GridCoordinate coord)
         return true;
     }
 
-    auto neighbours = tiles.neighboursOf(coord, false);
-    bool isWall[4];
-    for (size_t i = 0; i < 4; ++i)
-    {
-        isWall[i] = neighbours[i]->getType() == TileType::Wall;
-    }
-
+    std::vector<bool> isWall = neighbourIsOfType(coord, {TileType::Wall}, false);
     return (isWall[0] || isWall[2]) && (isWall[1] || isWall[3]);
 }
 
-int CaveMap::countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
+std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
 {
-    int result{0};
-    for (auto tile : tiles.neighboursOf(coord, diagonals))
-    {
-        result += std::any_of(whitelist.begin(), whitelist.end(), [tile](TileType type) -> bool {
-            return type == tile->getType();
+    std::vector<bool> isMatch(diagonals ? 8 : 4);
+    auto neighbours = tiles.neighboursOf(coord, diagonals, true);
+    std::transform(neighbours.begin(), neighbours.end(), isMatch.begin(), [&](Tile *t) {
+        return std::any_of(whitelist.begin(), whitelist.end(), [t](TileType type) {
+            return t->getType() == type;
         });
+    });
+    return isMatch;
+}
+
+void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
+{
+    Tile &tile = getTile(coord);
+
+    if (tile.getType() == TileType::Floor)
+    {
+        tile.texture = textures.getTexture("floor");
+        tile.rotation = 0;
+        return;
     }
 
-    return result;
+    auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
+    int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
+
+    if (numFloorNeighbours == 0)
+    {
+        tile.texture = textures.getTexture("wall_incorner");
+        isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
+        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+        tile.rotation = (index/2 + 3) % 4;
+    }
+    else if (numFloorNeighbours == 1)
+    {
+        tile.texture = textures.getTexture("wall");
+        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+        tile.rotation = (index + 2) % 4;
+    }
+    else if (numFloorNeighbours == 2)
+    {
+        tile.texture = textures.getTexture("wall_outcorner");
+        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+        if (isFloor[0] && isFloor[3])
+        {
+            index = 3;
+        }
+        tile.rotation = (index + 3) % 4;
+    }
+    // 3+ floor neighbours means unstable, no need to calculate texture
+
+    return;
 }

@@ -6,7 +6,7 @@ GameStatePlay::GameStatePlay(Game *parent)
       view(parent->window.getView())
 {
     this->game = parent;
-    map.load("testmap.dat");
+    map.load("testmap.dat");    
 }
 
 GameStatePlay::~GameStatePlay()

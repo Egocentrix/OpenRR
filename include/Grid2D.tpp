@@ -74,13 +74,13 @@ T &Grid2D<T>::getElement(GridCoordinate coord)
 }
 
 template <class T>
-std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(int x, int y, bool includeDiagonals) const
+std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(int x, int y, bool includeDiagonals, bool includeInvalid) const
 {
-    return neighbourCoordinates(GridCoordinate{x, y}, includeDiagonals);
+    return neighbourCoordinates(GridCoordinate{x, y}, includeDiagonals, includeInvalid);
 }
 
 template <class T>
-std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate current, bool includeDiagonals) const
+std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate current, bool includeDiagonals, bool includeInvalid) const
 {
     std::vector<GridCoordinate> neighbours{};
 
@@ -92,29 +92,28 @@ std::vector<GridCoordinate> Grid2D<T>::neighbourCoordinates(GridCoordinate curre
     {
         GridCoordinate neighbour = {current.x + dx[i], current.y + dy[i]};
 
-        if (isInBounds(neighbour))
+        if (includeInvalid || isInBounds(neighbour)) //only check bounds if !includeInvalid
         {
             neighbours.push_back(neighbour);
         }
     }
-
     return neighbours;
 }
 
 template <class T>
-std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals)
+std::vector<T *> Grid2D<T>::neighboursOf(int x, int y, bool includeDiagonals, bool includeInvalid)
 {
-    return neighboursOf(GridCoordinate{x, y}, includeDiagonals);
+    return neighboursOf(GridCoordinate{x, y}, includeDiagonals, includeInvalid);
 }
 
 template <class T>
-std::vector<T *> Grid2D<T>::neighboursOf(GridCoordinate current, bool includeDiagonals)
+std::vector<T *> Grid2D<T>::neighboursOf(GridCoordinate current, bool includeDiagonals, bool includeInvalid)
 {
     std::vector<T *> neighbours{};
 
-    for (auto coord : neighbourCoordinates(current, includeDiagonals))
+    for (auto coord : neighbourCoordinates(current, includeDiagonals, includeInvalid))
     {
-        neighbours.push_back(&elements[linearIndex(coord)]);
+        neighbours.push_back(&getElement(coord));
     }
     return neighbours;
 }
