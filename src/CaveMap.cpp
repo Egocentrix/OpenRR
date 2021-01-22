@@ -188,7 +188,7 @@ bool CaveMap::isStable(GridCoordinate coord)
 std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
 {
     std::vector<bool> isMatch(diagonals ? 8 : 4);
-    auto neighbours = tiles.neighboursOf(coord, diagonals);
+    auto neighbours = tiles.neighboursOf(coord, diagonals, true);
     std::transform(neighbours.begin(), neighbours.end(), isMatch.begin(), [&](Tile *t) {
         return std::any_of(whitelist.begin(), whitelist.end(), [t](TileType type) {
             return t->getType() == type;
@@ -230,7 +230,9 @@ void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
     if (numFloorNeighbours == 0)
     {
         tile.texture = textures.getTexture("wall_incorner");
-        tile.rotation = 0;
+        isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
+        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+        tile.rotation = (index/2 + 3) % 4;
     }
     else if (numFloorNeighbours == 1)
     {
