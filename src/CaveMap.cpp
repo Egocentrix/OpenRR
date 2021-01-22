@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 
 #include "CaveMap.hpp"
 
@@ -197,16 +198,6 @@ std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::ve
     return isMatch;
 }
 
-int CaveMap::countNeighborsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
-{
-    int result{0};
-    for (auto n : neighbourIsOfType(coord, whitelist, diagonals))
-    {
-        result += n;
-    }
-    return result;
-}
-
 void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
 {
     Tile &tile = getTile(coord);
@@ -218,14 +209,8 @@ void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
         return;
     }
 
-
     auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
-    int numFloorNeighbours{0};
-
-    for (auto n : isFloor)
-    {
-        numFloorNeighbours += n;
-    }
+    int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
 
     if (numFloorNeighbours == 0)
     {
