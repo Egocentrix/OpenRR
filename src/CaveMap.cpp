@@ -136,7 +136,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
     int texsize = 128;
 
     sf::Sprite sprite;
-    sprite.setOrigin(texsize/2, texsize/2);
+    sprite.setOrigin(texsize / 2, texsize / 2);
     sprite.setScale(tilesize / texsize, tilesize / texsize);
 
     for (int x = 0; x < tiles.getWidth(); x++)
@@ -156,7 +156,7 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
             {
                 sprite.setTexture(*current.texture);
             }
-            sprite.setPosition(tilesize * (x+0.5), tilesize * (y+0.5));
+            sprite.setPosition(tilesize * (x + 0.5), tilesize * (y + 0.5));
             sprite.setRotation(current.rotation * 90);
             target.draw(sprite);
         }
@@ -241,7 +241,12 @@ void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
     else if (numFloorNeighbours == 2)
     {
         tile.texture = textures.getTexture("wall_outcorner");
-        tile.rotation = 0;
+        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+        if (isFloor[0] && isFloor[3])
+        {
+            index = 3;
+        }
+        tile.rotation = (index + 3) % 4;
     }
     // 3+ floor neighbours means unstable, no need to calculate texture
 
