@@ -33,10 +33,10 @@ public:
     typename std::vector<T>::iterator begin() { return elements.begin(); }
     typename std::vector<T>::iterator end() { return elements.end(); }
 
-    std::vector<GridCoordinate> neighbourCoordinates(int x, int y, bool includeDiagonals = true) const;
-    std::vector<GridCoordinate> neighbourCoordinates(GridCoordinate coord, bool includeDiagonals = true) const;
-    std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true);
-    std::vector<T *> neighboursOf(GridCoordinate coord, bool includeDiagonals = true);
+    std::vector<GridCoordinate> neighbourCoordinates(int x, int y, bool includeDiagonals = true, bool includeInvalid = false) const;
+    std::vector<GridCoordinate> neighbourCoordinates(GridCoordinate coord, bool includeDiagonals = true, bool includeInvalid = false) const;
+    std::vector<T *> neighboursOf(int x, int y, bool includeDiagonals = true, bool includeInvalid = false);
+    std::vector<T *> neighboursOf(GridCoordinate coord, bool includeDiagonals = true, bool includeInvalid = false);
 
 private:
     int linearIndex(int x, int y) const;
