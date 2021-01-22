@@ -29,6 +29,7 @@ void Game::play()
     while (window.isOpen())
     {
         float dt = clock.restart().asSeconds();
+        fpscounter.tick();
 
         states.top()->handleInput(dt);
         states.top()->draw();

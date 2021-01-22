@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "GameStatePlay.hpp"
+#include "Helpers.hpp"
 #include "TextureManager.hpp"
 
 // Contains global game data. State-specific data is contained by the gamestate object.
@@ -22,5 +23,6 @@ private:
     void popState();
 
     sf::Clock clock{};
+    FrameCounter fpscounter;
     std::stack<std::unique_ptr<GameState>> states{};
 };

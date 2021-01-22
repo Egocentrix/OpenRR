@@ -2,6 +2,7 @@ set(SRC main.cpp
         CaveMap.cpp
         Game.cpp
         GameStatePlay.cpp
+        Helpers.cpp
         TextureManager.cpp
         Tile.cpp)
 
