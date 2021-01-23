@@ -23,6 +23,6 @@ private:
     void popState();
 
     sf::Clock clock{};
-    FrameCounter fpscounter;
+    FrameCounter fpscounter{3.f};
     std::stack<std::unique_ptr<GameState>> states{};
 };

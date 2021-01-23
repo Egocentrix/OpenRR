@@ -2,12 +2,17 @@
 
 #include "Helpers.hpp"
 
+FrameCounter::FrameCounter(float updateInterval)
+    : updateIntervalSeconds{updateInterval}
+{
+}
+
 void FrameCounter::tick()
 {
     ++ticks;
-    if (clock_.getElapsedTime().asSeconds() > 2)
+    if (clock_.getElapsedTime().asSeconds() > updateIntervalSeconds)
     {
-        std::cout << "FPS: " << ticks << "\tFrametime: " << 2000.f / ticks << " ms \n";
+        std::cout << "FPS: " << int(ticks / updateIntervalSeconds) << "\tFrametime: " << 1000 * updateIntervalSeconds / ticks << " ms \n";
         clock_.restart();
         ticks = 0;
     }
