@@ -104,6 +104,8 @@ void CaveMap::discover(GridCoordinate currentCoords)
     }
 
     Tile &currentTile = tiles.getElement(currentCoords);
+    currentTile.textureneedsupdate = true;
+
     if (currentTile.discovered)
     {
         return;
@@ -151,7 +153,11 @@ void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
                 continue;
             }
 
-            updateTexture({x, y}, textures);
+            if (current.textureneedsupdate) 
+            {
+                updateTexture({x, y}, textures);
+                current.textureneedsupdate = false;
+            }
 
             if (current.texture != nullptr)
             {
