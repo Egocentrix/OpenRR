@@ -5,7 +5,7 @@
 
 #include "GameStatePlay.hpp"
 #include "Helpers.hpp"
-#include "TextureManager.hpp"
+#include "ResourceManager.hpp"
 
 // Contains global game data. State-specific data is contained by the gamestate object.
 class Game
@@ -16,7 +16,7 @@ public:
 
     void play();
 
-    TextureManager texmgr{};
+    std::unique_ptr<ResourceManager<sf::Texture>> texmgr;
     sf::RenderWindow window;
 
 private:

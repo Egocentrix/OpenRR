@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Grid2D.hpp"
-#include "TextureManager.hpp"
+#include "ResourceManager.hpp"
 #include "Tile.hpp"
 
 // Container for tile objects, and functions for manipulating them.
@@ -23,11 +23,11 @@ public:
     void drill(int x, int y);
     void drill(GridCoordinate coord);
 
-    void draw(sf::RenderTarget &target, TextureManager &textures);
+    void draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures);
 
 private:
     void discover(GridCoordinate coord);
-    void updateTexture(GridCoordinate coord, TextureManager &textures);
+    void updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures);
 
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);

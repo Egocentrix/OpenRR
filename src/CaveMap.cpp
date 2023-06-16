@@ -133,7 +133,7 @@ void CaveMap::discover(GridCoordinate currentCoords)
     return;
 }
 
-void CaveMap::draw(sf::RenderTarget &target, TextureManager &textures)
+void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
 {
     float tilesize = 50;
     int texsize = 128;
@@ -204,13 +204,13 @@ std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::ve
     return isMatch;
 }
 
-void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
+void CaveMap::updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures)
 {
     Tile &tile = getTile(coord);
 
     if (tile.getType() == TileType::Floor)
     {
-        tile.texture = textures.getTexture("floor");
+        tile.texture = textures.getResource("floor");
         tile.rotation = 0;
         return;
     }
@@ -220,20 +220,20 @@ void CaveMap::updateTexture(GridCoordinate coord, TextureManager &textures)
 
     if (numFloorNeighbours == 0)
     {
-        tile.texture = textures.getTexture("wall_incorner");
+        tile.texture = textures.getResource("wall_incorner");
         isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
         int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
         tile.rotation = (index/2 + 3) % 4;
     }
     else if (numFloorNeighbours == 1)
     {
-        tile.texture = textures.getTexture("wall");
+        tile.texture = textures.getResource("wall");
         int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
         tile.rotation = (index + 2) % 4;
     }
     else if (numFloorNeighbours == 2)
     {
-        tile.texture = textures.getTexture("wall_outcorner");
+        tile.texture = textures.getResource("wall_outcorner");
         int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
         if (isFloor[0] && isFloor[3])
         {

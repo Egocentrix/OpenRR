@@ -1,14 +1,15 @@
 #pragma once
 
 #include <unordered_map>
-#include <memory>
 #include <SFML/Graphics.hpp>
 
-class TextureManager
+#include "ResourceManager.hpp"
+
+class TextureManager : public ResourceManager<sf::Texture>
 {
 public:
-    void registerTexture(const std::string &key, const std::string &filename);
-    std::shared_ptr<sf::Texture> getTexture(const std::string &key);
+    void registerResource(const std::string &key, const std::string &filename) override;
+    std::shared_ptr<sf::Texture> getResource(const std::string &key) override;
 
 private:
     std::unordered_map<std::string, std::string> filenames;

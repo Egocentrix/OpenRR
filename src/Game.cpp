@@ -1,12 +1,14 @@
 #include "Game.hpp"
+#include "TextureManager.hpp"
 
 Game::Game()
-    : window(sf::VideoMode(800, 600), "Hello, world!")
-{
-    texmgr.registerTexture("floor", "wad/rr0/World/WorldTextures/RockSplit/ROCK00.BMP");
-    texmgr.registerTexture("wall_incorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK35.BMP");
-    texmgr.registerTexture("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
-    texmgr.registerTexture("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
+    : texmgr{std::make_unique<TextureManager>()},
+      window{sf::VideoMode(800, 600), "Hello, world!"}
+{    
+    texmgr->registerResource("floor", "wad/rr0/World/WorldTextures/RockSplit/ROCK00.BMP");
+    texmgr->registerResource("wall_incorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK35.BMP");
+    texmgr->registerResource("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
+    texmgr->registerResource("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
     
     states.push(std::make_unique<GameStatePlay>(this));
 }

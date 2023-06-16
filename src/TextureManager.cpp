@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-void TextureManager::registerTexture(const std::string &key, const std::string &filename)
+void TextureManager::registerResource(const std::string &key, const std::string &filename)
 {
     filenames[key] = filename;
 }
 
-std::shared_ptr<sf::Texture> TextureManager::getTexture(const std::string &key)
+std::shared_ptr<sf::Texture> TextureManager::getResource(const std::string &key)
 {
     // Texture exist and is still valid
     if (textures.count(key) != 0)
