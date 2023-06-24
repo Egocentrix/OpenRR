@@ -25,12 +25,26 @@ public:
 
     void draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures);
 
+    Grid2D<Tile> tiles;
+
 private:
     void discover(GridCoordinate coord);
     void updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures);
 
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
-    
-    Grid2D<Tile> tiles;
+};
+
+class MapRenderer
+{
+public:
+    MapRenderer(sf::RenderTarget &target);
+
+    void draw(CaveMap &map);
+
+    static constexpr float TILESIZE = 50.f;
+    static constexpr float TEXSIZE = 128.f;
+
+private:
+    sf::RenderTarget &target_;
 };

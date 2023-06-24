@@ -135,8 +135,8 @@ void CaveMap::discover(GridCoordinate currentCoords)
 
 void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
 {
-    float tilesize = 50;
-    int texsize = 128;
+    float tilesize = MapRenderer::TILESIZE;
+    int texsize = MapRenderer::TEXSIZE;
 
     sf::Sprite sprite;
     sprite.setOrigin(texsize / 2, texsize / 2);
@@ -243,5 +243,44 @@ void CaveMap::updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &
     }
     // 3+ floor neighbours means unstable, no need to calculate texture
 
+    return;
+}
+
+MapRenderer::MapRenderer(sf::RenderTarget &target)
+: target_{target}
+{
+}
+
+void MapRenderer::draw(CaveMap& map)
+{
+    sf::Sprite sprite;
+    sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
+    sprite.setScale(TILESIZE / TEXSIZE, TILESIZE / TEXSIZE);
+
+    for (int x = 0; x < map.tiles.getWidth(); x++)
+    {
+        for (int y = 0; y < map.tiles.getHeight(); y++)
+        {
+            Tile &current = map.tiles.getElement(x, y);
+
+            if (!current.discovered)
+            {
+                continue;
+            }
+
+            if (current.texture != nullptr)
+            {
+                sprite.setTexture(*current.texture);
+            }
+            sprite.setPosition(TILESIZE * (x + 0.5), TILESIZE * (y + 0.5));
+            sprite.setRotation(current.rotation * 90);
+            target_.draw(sprite);
+        }
+    }
+    sf::RectangleShape border(sf::Vector2f(TILESIZE * map.tiles.getWidth(), TILESIZE * map.tiles.getHeight()));
+    border.setOutlineColor(sf::Color::White);
+    border.setFillColor(sf::Color::Transparent);
+    border.setOutlineThickness(-1.f);
+    target_.draw(border);
     return;
 }
