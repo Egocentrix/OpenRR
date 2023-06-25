@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include "CaveMap.hpp"
+#include "MapRenderer.hpp"
 
 CaveMap::CaveMap(int width, int height)
     : tiles{width, height}
@@ -145,7 +146,7 @@ void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textu
 {
     updateTextures(tiles, textures, false);
     MapRenderer mr{target};
-    mr.draw(tiles);
+    mr.drawTiles(tiles);
     return;
 }
 
@@ -216,45 +217,6 @@ void CaveMap::updateRotation(GridCoordinate coord)
         // 3+ floor neighbours means unstable, no need to calculate texture
     }
     tile.textureneedsupdate = true;
-    return;
-}
-
-MapRenderer::MapRenderer(sf::RenderTarget &target)
-    : target_{target}
-{
-}
-
-void MapRenderer::draw(const Grid2D<Tile> &tiles)
-{
-    sf::Sprite sprite;
-    sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
-    sprite.setScale(TILESIZE / TEXSIZE, TILESIZE / TEXSIZE);
-
-    for (int x = 0; x < tiles.getWidth(); x++)
-    {
-        for (int y = 0; y < tiles.getHeight(); y++)
-        {
-            const Tile &current = tiles.getElement(x, y);
-
-            if (!current.discovered)
-            {
-                continue;
-            }
-
-            if (current.texture != nullptr)
-            {
-                sprite.setTexture(*current.texture);
-            }
-            sprite.setPosition(TILESIZE * (x + 0.5), TILESIZE * (y + 0.5));
-            sprite.setRotation(current.rotation * 90);
-            target_.draw(sprite);
-        }
-    }
-    sf::RectangleShape border(sf::Vector2f(TILESIZE * tiles.getWidth(), TILESIZE * tiles.getHeight()));
-    border.setOutlineColor(sf::Color::White);
-    border.setFillColor(sf::Color::Transparent);
-    border.setOutlineThickness(-1.f);
-    target_.draw(border);
     return;
 }
 

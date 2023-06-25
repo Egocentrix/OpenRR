@@ -12,6 +12,9 @@
 class CaveMap
 {
 public:
+
+    static constexpr float TILESIZE = 50.f;
+
     CaveMap(int width, int height);
 
     void load(const std::string &filename);
@@ -33,20 +36,6 @@ private:
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
 
     Grid2D<Tile> tiles;
-};
-
-class MapRenderer
-{
-public:
-    MapRenderer(sf::RenderTarget &target);
-
-    void draw(const Grid2D<Tile> &tiles);
-
-    static constexpr float TILESIZE = 50.f;
-    static constexpr float TEXSIZE = 128.f;
-
-private:
-    sf::RenderTarget &target_;
 };
 
 void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);

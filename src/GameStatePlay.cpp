@@ -41,7 +41,7 @@ void GameStatePlay::handleInput(float dt)
             e.mouseButton.button == sf::Mouse::Left)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
-            auto tile{game->window.mapPixelToCoords(mouseposition) / MapRenderer::TILESIZE};
+            auto tile{game->window.mapPixelToCoords(mouseposition) / CaveMap::TILESIZE};
             if (map.isVisible(tile.x, tile.y))
             {
                 map.drill(tile.x, tile.y);
