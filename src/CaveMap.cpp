@@ -105,7 +105,6 @@ void CaveMap::discover(GridCoordinate currentCoords)
     }
 
     Tile &currentTile = tiles.getElement(currentCoords);
-    currentTile.textureneedsupdate = true;
     updateRotation(currentCoords);
 
     if (currentTile.discovered)
@@ -142,7 +141,6 @@ void CaveMap::updateAll()
         for (int y = 0; y < tiles.getHeight(); y++)
         {
             updateRotation({x,y});
-            getTile(x,y).textureneedsupdate = true;
         }
     }
     return;
@@ -222,6 +220,7 @@ void CaveMap::updateRotation(GridCoordinate coord)
         }
         // 3+ floor neighbours means unstable, no need to calculate texture
     }
+    tile.textureneedsupdate = true;
     return;
 }
 
