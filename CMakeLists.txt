@@ -8,5 +8,7 @@ add_link_options(-fsanitize=address -fsanitize=leak -fsanitize=undefined)
 
 find_package(SFML 2.4 COMPONENTS graphics window system REQUIRED)
 
+set(OPENRR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+
 add_subdirectory(src)
 
