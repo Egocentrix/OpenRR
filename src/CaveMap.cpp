@@ -227,7 +227,7 @@ MapRenderer::MapRenderer(sf::RenderTarget &target)
 {
 }
 
-void MapRenderer::draw(Grid2D<Tile> &tiles)
+void MapRenderer::draw(const Grid2D<Tile> &tiles)
 {
     sf::Sprite sprite;
     sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
@@ -237,7 +237,7 @@ void MapRenderer::draw(Grid2D<Tile> &tiles)
     {
         for (int y = 0; y < tiles.getHeight(); y++)
         {
-            Tile &current = tiles.getElement(x, y);
+            const Tile &current = tiles.getElement(x, y);
 
             if (!current.discovered)
             {

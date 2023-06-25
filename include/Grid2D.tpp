@@ -60,15 +60,23 @@ void Grid2D<T>::addElement(const T &elem)
 template <class T>
 T &Grid2D<T>::getElement(int x, int y)
 {
-    if (!isInBounds(x, y))
-    {
-        return elements.at(0);
-    }
-    return elements.at(linearIndex(x, y));
+    return isInBounds(x, y) ? elements.at(linearIndex(x, y)) : elements.at(0);
 }
 
 template <class T>
 T &Grid2D<T>::getElement(GridCoordinate coord)
+{
+    return getElement(coord.x, coord.y);
+}
+
+template <class T>
+const T &Grid2D<T>::getElement(int x, int y) const
+{
+    return isInBounds(x, y) ? elements.at(linearIndex(x, y)) : elements.at(0);
+}
+
+template <class T>
+const T &Grid2D<T>::getElement(GridCoordinate coord) const
 {
     return getElement(coord.x, coord.y);
 }

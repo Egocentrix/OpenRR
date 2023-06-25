@@ -40,7 +40,7 @@ class MapRenderer
 public:
     MapRenderer(sf::RenderTarget &target);
 
-    void draw(Grid2D<Tile> &tiles);
+    void draw(const Grid2D<Tile> &tiles);
 
     static constexpr float TILESIZE = 50.f;
     static constexpr float TEXSIZE = 128.f;
