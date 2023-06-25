@@ -149,7 +149,7 @@ void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textu
         }
     }
     MapRenderer mr{target};
-    mr.draw(*this);
+    mr.draw(tiles);
     return;
 }
 
@@ -227,17 +227,17 @@ MapRenderer::MapRenderer(sf::RenderTarget &target)
 {
 }
 
-void MapRenderer::draw(CaveMap &map)
+void MapRenderer::draw(Grid2D<Tile> &tiles)
 {
     sf::Sprite sprite;
     sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
     sprite.setScale(TILESIZE / TEXSIZE, TILESIZE / TEXSIZE);
 
-    for (int x = 0; x < map.tiles.getWidth(); x++)
+    for (int x = 0; x < tiles.getWidth(); x++)
     {
-        for (int y = 0; y < map.tiles.getHeight(); y++)
+        for (int y = 0; y < tiles.getHeight(); y++)
         {
-            Tile &current = map.tiles.getElement(x, y);
+            Tile &current = tiles.getElement(x, y);
 
             if (!current.discovered)
             {
@@ -253,7 +253,7 @@ void MapRenderer::draw(CaveMap &map)
             target_.draw(sprite);
         }
     }
-    sf::RectangleShape border(sf::Vector2f(TILESIZE * map.tiles.getWidth(), TILESIZE * map.tiles.getHeight()));
+    sf::RectangleShape border(sf::Vector2f(TILESIZE * tiles.getWidth(), TILESIZE * tiles.getHeight()));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(-1.f);
@@ -290,9 +290,9 @@ void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
     tile.textureneedsupdate = false;
 }
 
-void updateTextures(CaveMap &map, ResourceManager<sf::Texture> &textures, bool reset)
+void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset)
 {
-    for (Tile &current : map.tiles)
+    for (Tile &current : tiles)
     {
         if (reset || current.textureneedsupdate)
         {
