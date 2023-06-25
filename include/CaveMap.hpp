@@ -29,7 +29,7 @@ public:
 
 private:
     void discover(GridCoordinate coord);
-    void updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures);
+    void updateRotation(GridCoordinate coord);
 
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
@@ -48,3 +48,6 @@ public:
 private:
     sf::RenderTarget &target_;
 };
+
+void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
+void updateTextures(CaveMap &map, ResourceManager<sf::Texture> &textures, bool reset = false);

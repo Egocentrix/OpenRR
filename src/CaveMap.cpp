@@ -153,10 +153,10 @@ void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textu
                 continue;
             }
 
-            if (current.textureneedsupdate) 
+            if (current.textureneedsupdate)
             {
-                updateTexture({x, y}, textures);
-                current.textureneedsupdate = false;
+                updateRotation({x, y});
+                updateTexture(current, textures);
             }
 
             if (current.texture != nullptr)
@@ -204,54 +204,53 @@ std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::ve
     return isMatch;
 }
 
-void CaveMap::updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures)
+void CaveMap::updateRotation(GridCoordinate coord)
 {
     Tile &tile = getTile(coord);
 
     if (tile.getType() == TileType::Floor)
     {
-        tile.texture = textures.getResource("floor");
         tile.rotation = 0;
-        return;
     }
+    else if (tile.getType() == TileType::Wall)
+    {
+        auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
+        int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
 
-    auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
-    int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
-
-    if (numFloorNeighbours == 0)
-    {
-        tile.texture = textures.getResource("wall_incorner");
-        isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        tile.rotation = (index/2 + 3) % 4;
-    }
-    else if (numFloorNeighbours == 1)
-    {
-        tile.texture = textures.getResource("wall");
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        tile.rotation = (index + 2) % 4;
-    }
-    else if (numFloorNeighbours == 2)
-    {
-        tile.texture = textures.getResource("wall_outcorner");
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        if (isFloor[0] && isFloor[3])
+        if (numFloorNeighbours == 0)
         {
-            index = 3;
+            tile.variant = WallVariant::InnerCorner;
+            isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            tile.rotation = (index / 2 + 3) % 4;
         }
-        tile.rotation = (index + 3) % 4;
+        else if (numFloorNeighbours == 1)
+        {
+            tile.variant = WallVariant::Flat;
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            tile.rotation = (index + 2) % 4;
+        }
+        else if (numFloorNeighbours == 2)
+        {
+            tile.variant = WallVariant::OuterCorner;
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            if (isFloor[0] && isFloor[3])
+            {
+                index = 3;
+            }
+            tile.rotation = (index + 3) % 4;
+        }
+        // 3+ floor neighbours means unstable, no need to calculate texture
     }
-    // 3+ floor neighbours means unstable, no need to calculate texture
-
     return;
 }
 
 MapRenderer::MapRenderer(sf::RenderTarget &target)
-: target_{target}
+    : target_{target}
 {
 }
 
-void MapRenderer::draw(CaveMap& map)
+void MapRenderer::draw(CaveMap &map)
 {
     sf::Sprite sprite;
     sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
@@ -283,4 +282,44 @@ void MapRenderer::draw(CaveMap& map)
     border.setOutlineThickness(-1.f);
     target_.draw(border);
     return;
+}
+
+void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
+{
+    std::string texturename;
+    if (tile.getType() == TileType::Floor)
+    {
+        texturename = "floor";
+    }
+    if (tile.getType() == TileType::Wall)
+    {
+        switch (tile.variant)
+        {
+        case WallVariant::Flat:
+            texturename = "wall";
+            break;
+        case WallVariant::InnerCorner:
+            texturename = "wall_incorner";
+            break;
+        case WallVariant::OuterCorner:
+            texturename = "wall_outcorner";
+            break;
+
+        default:
+            break;
+        }
+    }
+    tile.texture = textures.getResource(texturename);
+    tile.textureneedsupdate = false;
+}
+
+void updateTextures(CaveMap &map, ResourceManager<sf::Texture> &textures, bool reset)
+{
+    for (Tile &current : map.tiles)
+    {
+        if (reset || current.textureneedsupdate)
+        {
+            updateTexture(current, textures);
+        }
+    }
 }
