@@ -39,6 +39,7 @@ void CaveMap::load(const std::string &filename)
 
         tiles.addElement(tile);
     }
+    updateAll();
     return;
 }
 
@@ -105,6 +106,7 @@ void CaveMap::discover(GridCoordinate currentCoords)
 
     Tile &currentTile = tiles.getElement(currentCoords);
     currentTile.textureneedsupdate = true;
+    updateRotation(currentCoords);
 
     if (currentTile.discovered)
     {
@@ -133,21 +135,22 @@ void CaveMap::discover(GridCoordinate currentCoords)
     return;
 }
 
-void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
+void CaveMap::updateAll()
 {
     for (int x = 0; x < tiles.getWidth(); x++)
     {
         for (int y = 0; y < tiles.getHeight(); y++)
         {
-            Tile &current = tiles.getElement(x, y);
-
-            if (current.textureneedsupdate)
-            {
-                updateRotation({x, y});
-                updateTexture(current, textures);
-            }
+            updateRotation({x,y});
+            getTile(x,y).textureneedsupdate = true;
         }
     }
+    return;
+}
+
+void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
+{
+    updateTextures(tiles, textures, false);
     MapRenderer mr{target};
     mr.draw(tiles);
     return;

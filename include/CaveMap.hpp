@@ -28,6 +28,7 @@ public:
 private:
     void discover(GridCoordinate coord);
     void updateRotation(GridCoordinate coord);
+    void updateAll();
 
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
