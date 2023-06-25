@@ -9,17 +9,27 @@ enum TileType
     Wall
 };
 
+enum WallVariant
+{
+    Flat,
+    InnerCorner,
+    OuterCorner,
+};
+
 class Tile
 {
 public:
     Tile(TileType type);
 
-    TileType getType() const { return type_; }
+    TileType getType() const;
 
     bool discovered{false};
     bool clickable{false};
-    std::shared_ptr<sf::Texture> texture;
+
+    WallVariant variant{WallVariant::Flat};
     int rotation{0};
+
+    std::shared_ptr<sf::Texture> texture;
     bool textureneedsupdate{true};
 
 private:

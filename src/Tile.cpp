@@ -5,3 +5,7 @@ Tile::Tile(TileType type)
 {
     return;
 }
+
+TileType Tile::getType() const {
+    return type_;
+}
