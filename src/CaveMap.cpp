@@ -135,44 +135,21 @@ void CaveMap::discover(GridCoordinate currentCoords)
 
 void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
 {
-    float tilesize = MapRenderer::TILESIZE;
-    int texsize = MapRenderer::TEXSIZE;
-
-    sf::Sprite sprite;
-    sprite.setOrigin(texsize / 2, texsize / 2);
-    sprite.setScale(tilesize / texsize, tilesize / texsize);
-
     for (int x = 0; x < tiles.getWidth(); x++)
     {
         for (int y = 0; y < tiles.getHeight(); y++)
         {
             Tile &current = tiles.getElement(x, y);
 
-            if (!current.discovered)
-            {
-                continue;
-            }
-
             if (current.textureneedsupdate)
             {
                 updateRotation({x, y});
                 updateTexture(current, textures);
             }
-
-            if (current.texture != nullptr)
-            {
-                sprite.setTexture(*current.texture);
-            }
-            sprite.setPosition(tilesize * (x + 0.5), tilesize * (y + 0.5));
-            sprite.setRotation(current.rotation * 90);
-            target.draw(sprite);
         }
     }
-    sf::RectangleShape border(sf::Vector2f(tilesize * tiles.getWidth(), tilesize * tiles.getHeight()));
-    border.setOutlineColor(sf::Color::White);
-    border.setFillColor(sf::Color::Transparent);
-    border.setOutlineThickness(-1.f);
-    target.draw(border);
+    MapRenderer mr{target};
+    mr.draw(*this);
     return;
 }
 
