@@ -4,6 +4,7 @@
 #include <numeric>
 
 #include "CaveMap.hpp"
+#include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
 
 CaveMap::CaveMap(int width, int height)
@@ -61,7 +62,7 @@ void CaveMap::save(const std::string &filename)
 
 bool CaveMap::isVisible(int x, int y) const
 {
-    return tiles.getElement(x,y).discovered;
+    return tiles.getElement(x, y).discovered;
 }
 
 void CaveMap::drill(int x, int y)
@@ -136,7 +137,7 @@ void CaveMap::updateAll()
     {
         for (int y = 0; y < tiles.getHeight(); y++)
         {
-            updateRotation({x,y});
+            updateRotation({x, y});
         }
     }
     return;
@@ -218,44 +219,4 @@ void CaveMap::updateRotation(GridCoordinate coord)
     }
     tile.textureneedsupdate = true;
     return;
-}
-
-void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
-{
-    std::string texturename;
-    if (tile.getType() == TileType::Floor)
-    {
-        texturename = "floor";
-    }
-    if (tile.getType() == TileType::Wall)
-    {
-        switch (tile.variant)
-        {
-        case WallVariant::Flat:
-            texturename = "wall";
-            break;
-        case WallVariant::InnerCorner:
-            texturename = "wall_incorner";
-            break;
-        case WallVariant::OuterCorner:
-            texturename = "wall_outcorner";
-            break;
-
-        default:
-            break;
-        }
-    }
-    tile.texture = textures.getResource(texturename);
-    tile.textureneedsupdate = false;
-}
-
-void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset)
-{
-    for (Tile &current : tiles)
-    {
-        if (reset || current.textureneedsupdate)
-        {
-            updateTexture(current, textures);
-        }
-    }
 }

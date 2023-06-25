@@ -1,5 +1,6 @@
 add_library(CaveMap STATIC
             CaveMap.cpp
+            CaveMapLogic.cpp
             MapRenderer.cpp
             Tile.cpp)
 

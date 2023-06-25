@@ -38,5 +38,3 @@ private:
     Grid2D<Tile> tiles;
 };
 
-void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
-void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);
