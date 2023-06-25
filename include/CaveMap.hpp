@@ -27,10 +27,28 @@ public:
 
 private:
     void discover(GridCoordinate coord);
-    void updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures);
+    void updateRotation(GridCoordinate coord);
+    void updateAll();
 
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
-    
+
     Grid2D<Tile> tiles;
 };
+
+class MapRenderer
+{
+public:
+    MapRenderer(sf::RenderTarget &target);
+
+    void draw(const Grid2D<Tile> &tiles);
+
+    static constexpr float TILESIZE = 50.f;
+    static constexpr float TEXSIZE = 128.f;
+
+private:
+    sf::RenderTarget &target_;
+};
+
+void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
+void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);

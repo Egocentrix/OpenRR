@@ -39,6 +39,7 @@ void CaveMap::load(const std::string &filename)
 
         tiles.addElement(tile);
     }
+    updateAll();
     return;
 }
 
@@ -105,6 +106,7 @@ void CaveMap::discover(GridCoordinate currentCoords)
 
     Tile &currentTile = tiles.getElement(currentCoords);
     currentTile.textureneedsupdate = true;
+    updateRotation(currentCoords);
 
     if (currentTile.discovered)
     {
@@ -133,46 +135,24 @@ void CaveMap::discover(GridCoordinate currentCoords)
     return;
 }
 
-void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
+void CaveMap::updateAll()
 {
-    float tilesize = 50;
-    int texsize = 128;
-
-    sf::Sprite sprite;
-    sprite.setOrigin(texsize / 2, texsize / 2);
-    sprite.setScale(tilesize / texsize, tilesize / texsize);
-
     for (int x = 0; x < tiles.getWidth(); x++)
     {
         for (int y = 0; y < tiles.getHeight(); y++)
         {
-            Tile &current = tiles.getElement(x, y);
-
-            if (!current.discovered)
-            {
-                continue;
-            }
-
-            if (current.textureneedsupdate) 
-            {
-                updateTexture({x, y}, textures);
-                current.textureneedsupdate = false;
-            }
-
-            if (current.texture != nullptr)
-            {
-                sprite.setTexture(*current.texture);
-            }
-            sprite.setPosition(tilesize * (x + 0.5), tilesize * (y + 0.5));
-            sprite.setRotation(current.rotation * 90);
-            target.draw(sprite);
+            updateRotation({x,y});
+            getTile(x,y).textureneedsupdate = true;
         }
     }
-    sf::RectangleShape border(sf::Vector2f(tilesize * tiles.getWidth(), tilesize * tiles.getHeight()));
-    border.setOutlineColor(sf::Color::White);
-    border.setFillColor(sf::Color::Transparent);
-    border.setOutlineThickness(-1.f);
-    target.draw(border);
+    return;
+}
+
+void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
+{
+    updateTextures(tiles, textures, false);
+    MapRenderer mr{target};
+    mr.draw(tiles);
     return;
 }
 
@@ -204,44 +184,122 @@ std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::ve
     return isMatch;
 }
 
-void CaveMap::updateTexture(GridCoordinate coord, ResourceManager<sf::Texture> &textures)
+void CaveMap::updateRotation(GridCoordinate coord)
 {
     Tile &tile = getTile(coord);
 
     if (tile.getType() == TileType::Floor)
     {
-        tile.texture = textures.getResource("floor");
         tile.rotation = 0;
-        return;
     }
+    else if (tile.getType() == TileType::Wall)
+    {
+        auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
+        int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
 
-    auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
-    int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
-
-    if (numFloorNeighbours == 0)
-    {
-        tile.texture = textures.getResource("wall_incorner");
-        isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        tile.rotation = (index/2 + 3) % 4;
-    }
-    else if (numFloorNeighbours == 1)
-    {
-        tile.texture = textures.getResource("wall");
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        tile.rotation = (index + 2) % 4;
-    }
-    else if (numFloorNeighbours == 2)
-    {
-        tile.texture = textures.getResource("wall_outcorner");
-        int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-        if (isFloor[0] && isFloor[3])
+        if (numFloorNeighbours == 0)
         {
-            index = 3;
+            tile.variant = WallVariant::InnerCorner;
+            isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            tile.rotation = (index / 2 + 3) % 4;
         }
-        tile.rotation = (index + 3) % 4;
+        else if (numFloorNeighbours == 1)
+        {
+            tile.variant = WallVariant::Flat;
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            tile.rotation = (index + 2) % 4;
+        }
+        else if (numFloorNeighbours == 2)
+        {
+            tile.variant = WallVariant::OuterCorner;
+            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
+            if (isFloor[0] && isFloor[3])
+            {
+                index = 3;
+            }
+            tile.rotation = (index + 3) % 4;
+        }
+        // 3+ floor neighbours means unstable, no need to calculate texture
     }
-    // 3+ floor neighbours means unstable, no need to calculate texture
-
     return;
+}
+
+MapRenderer::MapRenderer(sf::RenderTarget &target)
+    : target_{target}
+{
+}
+
+void MapRenderer::draw(const Grid2D<Tile> &tiles)
+{
+    sf::Sprite sprite;
+    sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
+    sprite.setScale(TILESIZE / TEXSIZE, TILESIZE / TEXSIZE);
+
+    for (int x = 0; x < tiles.getWidth(); x++)
+    {
+        for (int y = 0; y < tiles.getHeight(); y++)
+        {
+            const Tile &current = tiles.getElement(x, y);
+
+            if (!current.discovered)
+            {
+                continue;
+            }
+
+            if (current.texture != nullptr)
+            {
+                sprite.setTexture(*current.texture);
+            }
+            sprite.setPosition(TILESIZE * (x + 0.5), TILESIZE * (y + 0.5));
+            sprite.setRotation(current.rotation * 90);
+            target_.draw(sprite);
+        }
+    }
+    sf::RectangleShape border(sf::Vector2f(TILESIZE * tiles.getWidth(), TILESIZE * tiles.getHeight()));
+    border.setOutlineColor(sf::Color::White);
+    border.setFillColor(sf::Color::Transparent);
+    border.setOutlineThickness(-1.f);
+    target_.draw(border);
+    return;
+}
+
+void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
+{
+    std::string texturename;
+    if (tile.getType() == TileType::Floor)
+    {
+        texturename = "floor";
+    }
+    if (tile.getType() == TileType::Wall)
+    {
+        switch (tile.variant)
+        {
+        case WallVariant::Flat:
+            texturename = "wall";
+            break;
+        case WallVariant::InnerCorner:
+            texturename = "wall_incorner";
+            break;
+        case WallVariant::OuterCorner:
+            texturename = "wall_outcorner";
+            break;
+
+        default:
+            break;
+        }
+    }
+    tile.texture = textures.getResource(texturename);
+    tile.textureneedsupdate = false;
+}
+
+void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset)
+{
+    for (Tile &current : tiles)
+    {
+        if (reset || current.textureneedsupdate)
+        {
+            updateTexture(current, textures);
+        }
+    }
 }

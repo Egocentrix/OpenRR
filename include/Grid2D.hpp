@@ -28,6 +28,8 @@ public:
 
     T &getElement(int x, int y);
     T &getElement(GridCoordinate coord);
+    const T &getElement(int x, int y) const;
+    const T &getElement(GridCoordinate coord) const;
 
     // Enable range based for loops by forwarding the iterators
     typename std::vector<T>::iterator begin() { return elements.begin(); }
