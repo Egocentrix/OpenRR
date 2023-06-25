@@ -42,7 +42,7 @@ void GameStatePlay::handleInput(float dt)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
             auto tile{game->window.mapPixelToCoords(mouseposition) / MapRenderer::TILESIZE};
-            if (map.getTile(tile.x, tile.y).discovered)
+            if (map.isVisible(tile.x, tile.y))
             {
                 map.drill(tile.x, tile.y);
             }

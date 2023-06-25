@@ -58,14 +58,9 @@ void CaveMap::save(const std::string &filename)
     return;
 }
 
-Tile &CaveMap::getTile(int x, int y)
+bool CaveMap::isVisible(int x, int y) const
 {
-    return tiles.getElement(x, y);
-}
-
-Tile &CaveMap::getTile(GridCoordinate coord)
-{
-    return getTile(coord.x, coord.y);
+    return tiles.getElement(x,y).discovered;
 }
 
 void CaveMap::drill(int x, int y)
@@ -161,7 +156,7 @@ bool CaveMap::isStable(GridCoordinate coord)
         return true;
     }
 
-    if (getTile(coord).getType() != TileType::Wall)
+    if (tiles.getElement(coord).getType() != TileType::Wall)
     {
         return true;
     }
@@ -184,7 +179,7 @@ std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::ve
 
 void CaveMap::updateRotation(GridCoordinate coord)
 {
-    Tile &tile = getTile(coord);
+    Tile &tile = tiles.getElement(coord);
 
     if (tile.getType() == TileType::Floor)
     {
