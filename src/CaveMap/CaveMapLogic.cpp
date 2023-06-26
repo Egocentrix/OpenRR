@@ -39,3 +39,26 @@ void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, boo
         }
     }
 }
+
+void recursiveDiscover(TileGrid &tiles, GridCoordinate start)
+{
+    if (!tiles.isInBounds(start) || tiles.getElement(start).discovered)
+    {
+        return;
+    }
+
+    Tile &current = tiles.getElement(start);
+    current.discovered = true;
+
+    if (current.getType() == TileType::Floor)
+    {
+        for (auto tc : tiles.neighbourCoordinates(start, false))
+        {
+            tiles.getElement(tc).clickable = true;
+        }
+        for (auto tc : tiles.neighbourCoordinates(start, true))
+        {
+            recursiveDiscover(tiles, tc);
+        }
+    }
+}

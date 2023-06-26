@@ -27,7 +27,6 @@ public:
     void draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures);
 
 private:
-    void discover(GridCoordinate coord);
     void updateRotation(GridCoordinate coord);
     void updateAll();
 

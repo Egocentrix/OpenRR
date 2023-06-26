@@ -16,7 +16,7 @@ CaveMap::CaveMap(int width, int height)
     }
     GridCoordinate center{width / 2, height / 2};
     tiles.getElement(center) = Tile(TileType::Floor);
-    discover(center);
+    recursiveDiscover(tiles, center);
 }
 
 void CaveMap::load(const std::string &filename)
@@ -90,6 +90,7 @@ void CaveMap::drill(GridCoordinate coord)
     }
 
     tile = Tile(TileType::Floor); // Visibility defaults to false
+    updateAll();
     for (auto tc : tiles.neighbourCoordinates(coord, false))
     {
         if (!isStable(tc))
@@ -97,40 +98,7 @@ void CaveMap::drill(GridCoordinate coord)
             drill(tc);
         }
     }
-    discover(coord);
-    return;
-}
-
-void CaveMap::discover(GridCoordinate currentCoords)
-{
-    if (!tiles.isInBounds(currentCoords))
-    {
-        return;
-    }
-
-    Tile &currentTile = tiles.getElement(currentCoords);
-    updateRotation(currentCoords);
-
-    if (currentTile.discovered)
-    {
-        return;
-    }
-    currentTile.discovered = true;
-
-    if (currentTile.getType() != TileType::Floor)
-    {
-        return;
-    }
-
-    for (auto t : tiles.neighboursOf(currentCoords, false))
-    {
-        t->clickable = true;
-    }
-
-    for (auto tc : tiles.neighbourCoordinates(currentCoords, true))
-    {
-        discover(tc);
-    }
+    recursiveDiscover(tiles, coord);
     return;
 }
 
