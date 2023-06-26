@@ -134,20 +134,8 @@ bool CaveMap::isStable(GridCoordinate coord)
         return true;
     }
 
-    std::vector<bool> isWall = neighbourIsOfType(coord, {TileType::Wall}, false);
+    std::vector<bool> isWall = neighbourIsOfType(tiles, coord, TileType::Wall, false);
     return (isWall[0] || isWall[2]) && (isWall[1] || isWall[3]);
-}
-
-std::vector<bool> CaveMap::neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals)
-{
-    std::vector<bool> isMatch(diagonals ? 8 : 4);
-    auto neighbours = tiles.neighboursOf(coord, diagonals, true);
-    std::transform(neighbours.begin(), neighbours.end(), isMatch.begin(), [&](Tile *t) {
-        return std::any_of(whitelist.begin(), whitelist.end(), [t](TileType type) {
-            return t->getType() == type;
-        });
-    });
-    return isMatch;
 }
 
 void CaveMap::updateRotation(GridCoordinate coord)
@@ -160,13 +148,13 @@ void CaveMap::updateRotation(GridCoordinate coord)
     }
     else if (tile.getType() == TileType::Wall)
     {
-        auto isFloor = neighbourIsOfType(coord, {TileType::Floor}, false);
+        auto isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);
         int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
 
         if (numFloorNeighbours == 0)
         {
             tile.variant = WallVariant::InnerCorner;
-            isFloor = neighbourIsOfType(coord, {TileType::Floor}, true);
+            isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, true);
             int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
             tile.rotation = (index / 2 + 3) % 4;
         }

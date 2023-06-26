@@ -62,3 +62,17 @@ void recursiveDiscover(TileGrid &tiles, GridCoordinate start)
         }
     }
 }
+
+std::vector<bool> neighbourIsOfType(const TileGrid &tiles,
+                                    GridCoordinate center,
+                                    TileType type,
+                                    bool includeDiagonals)
+{
+    auto neighbours = tiles.neighbourCoordinates(center, includeDiagonals, true);
+    std::vector<bool> isMatch{};
+    for (auto coord : neighbours)
+    {
+        isMatch.push_back(tiles.getElement(coord).getType() == type);
+    }
+    return isMatch;
+}

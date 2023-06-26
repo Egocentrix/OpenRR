@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include <SFML/Graphics.hpp>
 
 #include "Grid2D.hpp"
@@ -31,7 +30,6 @@ private:
     void updateAll();
 
     bool isStable(GridCoordinate coord);
-    std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
 
     using TileGrid = Grid2D<Tile>;
     TileGrid tiles;

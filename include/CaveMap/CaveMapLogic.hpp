@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Grid2D.hpp"
 #include "Tile.hpp"
 #include "ResourceManager.hpp"
@@ -12,3 +14,8 @@ void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, boo
 
 void recursiveDiscover(TileGrid &tiles, GridCoordinate start);
 void recursiveCollapse(TileGrid &tiles, GridCoordinate start);
+
+std::vector<bool> neighbourIsOfType(const TileGrid &tiles,
+                                    GridCoordinate center,
+                                    TileType type,
+                                    bool includeDiagonals);
