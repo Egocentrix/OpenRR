@@ -63,6 +63,17 @@ void recursiveDiscover(TileGrid &tiles, GridCoordinate start)
     }
 }
 
+bool shouldCollapse(const TileGrid &tiles, GridCoordinate coord)
+{
+    if (tiles.isEdgeElement(coord) || tiles.getElement(coord).getType() == TileType::Floor)
+    {
+        return true;
+    }
+
+    std::vector<bool> isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);
+    return (isFloor[0] && isFloor[2]) || (isFloor[1] && isFloor[3]);
+}
+
 std::vector<bool> neighbourIsOfType(const TileGrid &tiles,
                                     GridCoordinate center,
                                     TileType type,

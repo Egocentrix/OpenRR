@@ -15,6 +15,8 @@ void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, boo
 void recursiveDiscover(TileGrid &tiles, GridCoordinate start);
 void recursiveCollapse(TileGrid &tiles, GridCoordinate start);
 
+bool shouldCollapse(const TileGrid &tiles, GridCoordinate coord);
+
 std::vector<bool> neighbourIsOfType(const TileGrid &tiles,
                                     GridCoordinate center,
                                     TileType type,

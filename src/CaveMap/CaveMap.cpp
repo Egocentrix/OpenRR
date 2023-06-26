@@ -93,7 +93,7 @@ void CaveMap::drill(GridCoordinate coord)
     updateAll();
     for (auto tc : tiles.neighbourCoordinates(coord, false))
     {
-        if (!isStable(tc))
+        if (shouldCollapse(tiles, tc))
         {
             drill(tc);
         }
@@ -120,22 +120,6 @@ void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textu
     MapRenderer mr{target};
     mr.drawTiles(tiles);
     return;
-}
-
-bool CaveMap::isStable(GridCoordinate coord)
-{
-    if (tiles.isEdgeElement(coord))
-    {
-        return true;
-    }
-
-    if (tiles.getElement(coord).getType() != TileType::Wall)
-    {
-        return true;
-    }
-
-    std::vector<bool> isWall = neighbourIsOfType(tiles, coord, TileType::Wall, false);
-    return (isWall[0] || isWall[2]) && (isWall[1] || isWall[3]);
 }
 
 void CaveMap::updateRotation(GridCoordinate coord)

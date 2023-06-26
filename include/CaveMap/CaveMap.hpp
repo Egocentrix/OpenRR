@@ -29,8 +29,6 @@ private:
     void updateRotation(GridCoordinate coord);
     void updateAll();
 
-    bool isStable(GridCoordinate coord);
-
     using TileGrid = Grid2D<Tile>;
     TileGrid tiles;
 };
