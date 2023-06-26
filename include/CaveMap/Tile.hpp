@@ -24,7 +24,7 @@ public:
     TileType getType() const;
 
     bool discovered{false};
-    bool clickable{false};
+    bool reachable{false};
 
     WallVariant variant{WallVariant::Flat};
     int rotation{0};

@@ -37,7 +37,7 @@ void CaveMap::load(const std::string &filename)
         infile >> type;
         Tile tile{static_cast<TileType>(type)};
         infile >> tile.discovered;
-        infile >> tile.clickable;
+        infile >> tile.reachable;
 
         tiles.addElement(tile);
     }
@@ -55,7 +55,7 @@ void CaveMap::save(const std::string &filename)
     {
         outfile << tile.getType() << " ";
         outfile << tile.discovered << " ";
-        outfile << tile.clickable << " ";
+        outfile << tile.reachable << " ";
     }
     return;
 }
@@ -79,7 +79,7 @@ void CaveMap::drill(GridCoordinate coord)
 
     Tile &tile = tiles.getElement(coord);
 
-    if (!tile.clickable)
+    if (!tile.reachable)
     {
         return;
     }

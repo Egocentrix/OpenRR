@@ -54,7 +54,7 @@ void recursiveDiscover(TileGrid &tiles, GridCoordinate start)
     {
         for (auto tc : tiles.neighbourCoordinates(start, false))
         {
-            tiles.getElement(tc).clickable = true;
+            tiles.getElement(tc).reachable = true;
         }
         for (auto tc : tiles.neighbourCoordinates(start, true))
         {
