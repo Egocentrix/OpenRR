@@ -1,17 +1,7 @@
-#include <fstream>
-
 #include "CaveMap.hpp"
 #include "CaveMapLoader.hpp"
 #include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
-
-CaveMap::CaveMap(int width, int height, ResourceManager<sf::Texture> &texturepack)
-    : maploader{std::make_unique<DefaultMapLoader>(width, height)},
-      tileset{texturepack}
-{
-    tiles = maploader->load();
-    updateRotations(tiles);
-}
 
 CaveMap::CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Texture> &texturepack)
     : maploader{std::move(loader)}, tileset{texturepack}
@@ -23,20 +13,6 @@ CaveMap::CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Text
 CaveMap::~CaveMap()
 {
     maploader->save(tiles);
-}
-
-void CaveMap::load(const std::string &filename)
-{
-    FileMapLoader loader{filename};
-    tiles = loader.load();
-    updateRotations(tiles);
-    return;
-}
-
-void CaveMap::save(const std::string &filename)
-{
-    FileMapLoader loader{filename};
-    loader.save(tiles);
 }
 
 bool CaveMap::isVisible(int x, int y) const

@@ -14,13 +14,9 @@ class CaveMap
 public:
     static constexpr float TILESIZE = 50.f;
 
-    CaveMap(int width, int height, ResourceManager<sf::Texture> &texturepack);
     CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Texture> &texturepack);
 
     ~CaveMap();
-
-    void load(const std::string &filename);
-    void save(const std::string &filename);
 
     bool isVisible(int x, int y) const;
 
