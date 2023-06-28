@@ -4,5 +4,8 @@
 #include "Tile.hpp"
 #include "ResourceManager.hpp"
 
+using TileGrid = Grid2D<Tile>;
+
+// Functions for simulating tile appearance
 void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
-void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);
+void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);

@@ -29,7 +29,7 @@ void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
     tile.textureneedsupdate = false;
 }
 
-void updateTextures(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures, bool reset)
+void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, bool reset)
 {
     for (Tile &current : tiles)
     {

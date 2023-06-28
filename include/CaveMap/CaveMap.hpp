@@ -12,7 +12,6 @@
 class CaveMap
 {
 public:
-
     static constexpr float TILESIZE = 50.f;
 
     CaveMap(int width, int height);
@@ -35,6 +34,6 @@ private:
     bool isStable(GridCoordinate coord);
     std::vector<bool> neighbourIsOfType(GridCoordinate coord, const std::vector<TileType> &whitelist, bool diagonals = true);
 
-    Grid2D<Tile> tiles;
+    using TileGrid = Grid2D<Tile>;
+    TileGrid tiles;
 };
-
