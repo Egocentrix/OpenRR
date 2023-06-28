@@ -2,11 +2,11 @@
 #include "Game.hpp"
 
 GameStatePlay::GameStatePlay(Game *parent)
-    : map(10, 10),
-      view(parent->window.getView())
+    : map{10, 10, *(parent->texmgr)},
+      view{parent->window.getView()}
 {
     this->game = parent;
-    map.load("testmap.dat");    
+    map.load("testmap.dat");
 }
 
 GameStatePlay::~GameStatePlay()
@@ -18,7 +18,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
-    map.draw(game->window, *(game->texmgr));
+    map.draw(game->window);
     game->window.display();
 }
 

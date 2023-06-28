@@ -4,8 +4,9 @@
 #include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
 
-CaveMap::CaveMap(int width, int height)
-    : tiles{width, height}
+CaveMap::CaveMap(int width, int height, ResourceManager<sf::Texture> &texturepack)
+    : tiles{width, height},
+      tileset{texturepack}
 {
     for (int i = 0; i < width * height; i++)
     {
@@ -99,11 +100,10 @@ void CaveMap::drill(GridCoordinate coord)
     return;
 }
 
-void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures)
+void CaveMap::draw(sf::RenderTarget &target)
 {
-    updateTextures(tiles, textures, false);
+    updateTextures(tiles, tileset, false);
     MapRenderer mr{target};
     mr.drawTiles(tiles);
     return;
 }
-
