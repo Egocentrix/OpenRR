@@ -8,13 +8,14 @@
 
 using TileGrid = Grid2D<Tile>;
 
-// Functions for simulating tile appearance
+// Functions for updating tile appearance
 void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
 void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);
 
 void updateRotation(TileGrid &tiles, GridCoordinate coord);
 void updateRotations(TileGrid &tiles);
 
+// Functions for simulating cave behaviour
 void recursiveDiscover(TileGrid &tiles, GridCoordinate start);
 void recursiveCollapse(TileGrid &tiles, GridCoordinate start);
 
