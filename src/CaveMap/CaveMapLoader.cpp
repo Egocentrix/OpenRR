@@ -17,6 +17,20 @@ Grid2D<Tile> CaveMapLoader::generateDefaultMap(int width, int height)
     return tiles;
 }
 
+DefaultMapLoader::DefaultMapLoader(int width, int height)
+    : width_{width}, height_{height}
+{
+}
+
+Grid2D<Tile> DefaultMapLoader::load()
+{
+    return generateDefaultMap(width_, height_);
+}
+
+void DefaultMapLoader::save(const Grid2D<Tile> &)
+{
+}
+
 FileMapLoader::FileMapLoader(const std::string &filename)
     : filename_{filename}
 {
