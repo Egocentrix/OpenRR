@@ -26,9 +26,6 @@ public:
     void draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textures);
 
 private:
-    void updateRotation(GridCoordinate coord);
-    void updateAll();
-
     using TileGrid = Grid2D<Tile>;
     TileGrid tiles;
 };

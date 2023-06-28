@@ -1,7 +1,4 @@
 #include <fstream>
-#include <iostream>
-#include <algorithm>
-#include <numeric>
 
 #include "CaveMap.hpp"
 #include "CaveMapLogic.hpp"
@@ -41,7 +38,7 @@ void CaveMap::load(const std::string &filename)
 
         tiles.addElement(tile);
     }
-    updateAll();
+    updateRotations(tiles);
     return;
 }
 
@@ -90,7 +87,6 @@ void CaveMap::drill(GridCoordinate coord)
     }
 
     tile = Tile(TileType::Floor); // Visibility defaults to false
-    updateAll();
     for (auto tc : tiles.neighbourCoordinates(coord, false))
     {
         if (shouldCollapse(tiles, tc))
@@ -99,18 +95,7 @@ void CaveMap::drill(GridCoordinate coord)
         }
     }
     recursiveDiscover(tiles, coord);
-    return;
-}
-
-void CaveMap::updateAll()
-{
-    for (int x = 0; x < tiles.getWidth(); x++)
-    {
-        for (int y = 0; y < tiles.getHeight(); y++)
-        {
-            updateRotation({x, y});
-        }
-    }
+    updateRotations(tiles);
     return;
 }
 
@@ -122,44 +107,3 @@ void CaveMap::draw(sf::RenderTarget &target, ResourceManager<sf::Texture> &textu
     return;
 }
 
-void CaveMap::updateRotation(GridCoordinate coord)
-{
-    Tile &tile = tiles.getElement(coord);
-
-    if (tile.getType() == TileType::Floor)
-    {
-        tile.rotation = 0;
-    }
-    else if (tile.getType() == TileType::Wall)
-    {
-        auto isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);
-        int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
-
-        if (numFloorNeighbours == 0)
-        {
-            tile.variant = WallVariant::InnerCorner;
-            isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, true);
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            tile.rotation = (index / 2 + 3) % 4;
-        }
-        else if (numFloorNeighbours == 1)
-        {
-            tile.variant = WallVariant::Flat;
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            tile.rotation = (index + 2) % 4;
-        }
-        else if (numFloorNeighbours == 2)
-        {
-            tile.variant = WallVariant::OuterCorner;
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            if (isFloor[0] && isFloor[3])
-            {
-                index = 3;
-            }
-            tile.rotation = (index + 3) % 4;
-        }
-        // 3+ floor neighbours means unstable, no need to calculate texture
-    }
-    tile.textureneedsupdate = true;
-    return;
-}
