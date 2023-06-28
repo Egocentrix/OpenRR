@@ -2,6 +2,20 @@
 #include <iostream>
 
 #include "CaveMapLoader.hpp"
+#include "CaveMapLogic.hpp"
+
+Grid2D<Tile> CaveMapLoader::generateDefaultMap(int width, int height)
+{
+    Grid2D<Tile> tiles{width, height};
+    for (int i = 0; i < width * height; i++)
+    {
+        tiles.addElement(Tile(TileType::Wall));
+    }
+    GridCoordinate center{width / 2, height / 2};
+    tiles.getElement(center) = Tile(TileType::Floor);
+    recursiveDiscover(tiles, center);
+    return tiles;
+}
 
 FileMapLoader::FileMapLoader(const std::string &filename)
     : filename_{filename}
@@ -14,7 +28,7 @@ Grid2D<Tile> FileMapLoader::load()
     if (!infile.is_open())
     {
         std::cerr << "could not open file: " << filename_ << std::endl;
-        return Grid2D<Tile>{};
+        return generateDefaultMap();
     }
 
     int width, height;

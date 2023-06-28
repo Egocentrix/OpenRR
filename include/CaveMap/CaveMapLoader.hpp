@@ -12,6 +12,8 @@ public:
     virtual Grid2D<Tile> load() = 0;
     virtual void save(const Grid2D<Tile> &tiles) = 0;
 
+protected:
+    Grid2D<Tile> generateDefaultMap(int width = 10, int height = 10);
 };
 
 class FileMapLoader : public CaveMapLoader
