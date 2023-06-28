@@ -90,6 +90,13 @@ void CaveMap::drill(GridCoordinate coord)
     }
 
     tile = Tile(TileType::Floor); // Visibility defaults to false
+    for (auto tc : tiles.neighbourCoordinates(coord, false))
+    {
+        if (!isStable(tc))
+        {
+            drill(tc);
+        }
+    }
     discover(coord);
     return;
 }
@@ -122,10 +129,6 @@ void CaveMap::discover(GridCoordinate currentCoords)
 
     for (auto tc : tiles.neighbourCoordinates(currentCoords, true))
     {
-        if (!isStable(tc))
-        {
-            drill(tc);
-        }
         discover(tc);
     }
     return;
