@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "CaveMap.hpp"
+#include "CaveMapLoader.hpp"
 #include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
 
@@ -19,43 +20,16 @@ CaveMap::CaveMap(int width, int height, ResourceManager<sf::Texture> &texturepac
 
 void CaveMap::load(const std::string &filename)
 {
-    std::ifstream infile(filename);
-    if (!infile.is_open())
-    {
-        return;
-    }
-
-    int width, height;
-    infile >> width >> height;
-
-    tiles.resize(width, height);
-    for (int i = 0; i < width * height; i++)
-    {
-        int type;
-        infile >> type;
-        Tile tile{static_cast<TileType>(type)};
-        infile >> tile.discovered;
-        infile >> tile.reachable;
-
-        tiles.addElement(tile);
-    }
+    FileMapLoader loader{filename};
+    tiles = loader.load();
     updateRotations(tiles);
     return;
 }
 
 void CaveMap::save(const std::string &filename)
 {
-    std::ofstream outfile(filename);
-    outfile << tiles.getWidth() << " ";
-    outfile << tiles.getHeight() << " ";
-
-    for (const auto &tile : tiles)
-    {
-        outfile << tile.getType() << " ";
-        outfile << tile.discovered << " ";
-        outfile << tile.reachable << " ";
-    }
-    return;
+    FileMapLoader loader{filename};
+    loader.save(tiles);
 }
 
 bool CaveMap::isVisible(int x, int y) const
