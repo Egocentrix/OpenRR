@@ -6,16 +6,23 @@
 #include "MapRenderer.hpp"
 
 CaveMap::CaveMap(int width, int height, ResourceManager<sf::Texture> &texturepack)
-    : tiles{width, height},
+    : maploader{std::make_unique<DefaultMapLoader>(width, height)},
       tileset{texturepack}
 {
-    for (int i = 0; i < width * height; i++)
-    {
-        tiles.addElement(Tile(TileType::Wall));
-    }
-    GridCoordinate center{width / 2, height / 2};
-    tiles.getElement(center) = Tile(TileType::Floor);
-    recursiveDiscover(tiles, center);
+    tiles = maploader->load();
+    updateRotations(tiles);
+}
+
+CaveMap::CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Texture> &texturepack)
+    : maploader{std::move(loader)}, tileset{texturepack}
+{
+    tiles = maploader->load();
+    updateRotations(tiles);
+}
+
+CaveMap::~CaveMap()
+{
+    maploader->save(tiles);
 }
 
 void CaveMap::load(const std::string &filename)

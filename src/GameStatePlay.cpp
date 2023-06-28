@@ -1,17 +1,16 @@
+#include "CaveMapLoader.hpp"
 #include "GameStatePlay.hpp"
 #include "Game.hpp"
 
 GameStatePlay::GameStatePlay(Game *parent)
-    : map{10, 10, *(parent->texmgr)},
+    : map{std::make_unique<FileMapLoader>("testmap.dat"), *(parent->texmgr)},
       view{parent->window.getView()}
 {
     this->game = parent;
-    map.load("testmap.dat");
 }
 
 GameStatePlay::~GameStatePlay()
 {
-    map.save("testmap.dat");
 }
 
 void GameStatePlay::draw()
