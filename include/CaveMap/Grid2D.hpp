@@ -32,8 +32,12 @@ public:
     const T &getElement(GridCoordinate coord) const;
 
     // Enable range based for loops by forwarding the iterators
-    typename std::vector<T>::iterator begin() { return elements.begin(); }
-    typename std::vector<T>::iterator end() { return elements.end(); }
+    using iterator = typename std::vector<T>::iterator;
+    using const_iterator = typename std::vector<T>::const_iterator;
+    iterator begin() { return elements.begin(); }
+    iterator end() { return elements.end(); }
+    const_iterator begin() const { return elements.cbegin(); }
+    const_iterator end() const { return elements.cend(); }
 
     std::vector<GridCoordinate> neighbourCoordinates(int x, int y, bool includeDiagonals = true, bool includeInvalid = false) const;
     std::vector<GridCoordinate> neighbourCoordinates(GridCoordinate coord, bool includeDiagonals = true, bool includeInvalid = false) const;
