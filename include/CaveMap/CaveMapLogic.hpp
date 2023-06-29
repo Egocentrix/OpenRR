@@ -19,6 +19,7 @@ void updateRotations(TileGrid &tiles);
 void recursiveDiscover(TileGrid &tiles, GridCoordinate start);
 void recursiveCollapse(TileGrid &tiles, GridCoordinate start);
 
+bool canCollapse(const TileGrid &tiles, GridCoordinate coord);
 bool shouldCollapse(const TileGrid &tiles, GridCoordinate coord);
 
 std::vector<bool> neighbourIsOfType(const TileGrid &tiles,

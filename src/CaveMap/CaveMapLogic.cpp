@@ -118,11 +118,30 @@ void recursiveDiscover(TileGrid &tiles, GridCoordinate start)
     }
 }
 
+void recursiveCollapse(TileGrid &tiles, GridCoordinate start)
+{
+    if (!shouldCollapse(tiles, start))
+    {
+        return;
+    }
+
+    tiles.getElement(start) = Tile(TileType::Floor);
+    for (auto tc : tiles.neighbourCoordinates(start, false))
+    {
+        recursiveCollapse(tiles, tc);
+    }
+}
+
+bool canCollapse(const TileGrid &tiles, GridCoordinate coord)
+{
+    return !(tiles.isEdgeElement(coord) || tiles.getElement(coord).getType() == TileType::Floor);
+}
+
 bool shouldCollapse(const TileGrid &tiles, GridCoordinate coord)
 {
-    if (tiles.isEdgeElement(coord) || tiles.getElement(coord).getType() == TileType::Floor)
+    if (!canCollapse(tiles, coord))
     {
-        return true;
+        return false;
     }
 
     std::vector<bool> isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);

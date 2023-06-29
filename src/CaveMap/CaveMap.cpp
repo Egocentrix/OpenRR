@@ -26,30 +26,15 @@ void CaveMap::drill(int x, int y)
 
 void CaveMap::drill(GridCoordinate coord)
 {
-    if (tiles.isEdgeElement(coord))
+    if(!tiles.getElement(coord).reachable || !canCollapse(tiles, coord))
     {
         return;
     }
 
-    Tile &tile = tiles.getElement(coord);
-
-    if (!tile.reachable)
-    {
-        return;
-    }
-
-    if (tile.getType() != TileType::Wall)
-    {
-        return;
-    }
-
-    tile = Tile(TileType::Floor); // Visibility defaults to false
+    tiles.getElement(coord) = Tile(TileType::Floor); // Visibility defaults to false
     for (auto tc : tiles.neighbourCoordinates(coord, false))
     {
-        if (shouldCollapse(tiles, tc))
-        {
-            drill(tc);
-        }
+        recursiveCollapse(tiles, tc);
     }
     recursiveDiscover(tiles, coord);
     updateRotations(tiles);
