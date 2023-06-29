@@ -7,7 +7,6 @@ CaveMap::CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Text
     : maploader{std::move(loader)}, tileset{texturepack}
 {
     tiles = maploader->load();
-    updateRotations(tiles);
 }
 
 CaveMap::~CaveMap()

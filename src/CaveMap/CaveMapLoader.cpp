@@ -17,17 +17,29 @@ Grid2D<Tile> CaveMapLoader::generateDefaultMap(int width, int height)
     return tiles;
 }
 
+Grid2D<Tile> CaveMapLoader::load()
+{
+    Grid2D<Tile> tiles = loadMap();
+    updateRotations(tiles);
+    return tiles;
+}
+
+void CaveMapLoader::save(const Grid2D<Tile> &tiles)
+{
+    saveMap(tiles);
+}
+
 DefaultMapLoader::DefaultMapLoader(int width, int height)
     : width_{width}, height_{height}
 {
 }
 
-Grid2D<Tile> DefaultMapLoader::load()
+Grid2D<Tile> DefaultMapLoader::loadMap()
 {
     return generateDefaultMap(width_, height_);
 }
 
-void DefaultMapLoader::save(const Grid2D<Tile> &)
+void DefaultMapLoader::saveMap(const Grid2D<Tile> &)
 {
 }
 
@@ -36,7 +48,7 @@ FileMapLoader::FileMapLoader(const std::string &filename)
 {
 }
 
-Grid2D<Tile> FileMapLoader::load()
+Grid2D<Tile> FileMapLoader::loadMap()
 {
     std::ifstream infile(filename_);
     if (!infile.is_open())
@@ -62,7 +74,7 @@ Grid2D<Tile> FileMapLoader::load()
     return tiles;
 }
 
-void FileMapLoader::save(const Grid2D<Tile> &tiles)
+void FileMapLoader::saveMap(const Grid2D<Tile> &tiles)
 {
     std::ofstream outfile(filename_);
     outfile << tiles.getWidth() << " ";
