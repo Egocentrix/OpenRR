@@ -5,29 +5,33 @@
 
 void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
 {
-    std::string texturename;
-    if (tile.getType() == TileType::Floor)
+    struct TextureNameBuilder
     {
-        texturename = "floor";
-    }
-    if (tile.getType() == TileType::Wall)
-    {
-        switch (tile.variant)
+        std::string operator()(const FloorDetails &)
         {
-        case WallVariant::Flat:
-            texturename = "wall";
-            break;
-        case WallVariant::InnerCorner:
-            texturename = "wall_incorner";
-            break;
-        case WallVariant::OuterCorner:
-            texturename = "wall_outcorner";
-            break;
-
-        default:
-            break;
+            return "floor";
         }
-    }
+
+        std::string operator()(const WallDetails &details)
+        {
+            std::string texturename{};
+            switch (details.wallvariant)
+            {
+            case WallVariant::Flat:
+                texturename += "wall";
+                break;
+            case WallVariant::InnerCorner:
+                texturename += "wall_incorner";
+                break;
+            case WallVariant::OuterCorner:
+                texturename += "wall_outcorner";
+                break;
+            }
+            return texturename;
+        }
+    };
+
+    std::string texturename = std::visit(TextureNameBuilder{}, tile.details);
     tile.texture = textures.getResource(texturename);
     tile.textureneedsupdate = false;
 }
@@ -53,25 +57,26 @@ void updateRotation(TileGrid &tiles, GridCoordinate coord)
     }
     else if (current.getType() == TileType::Wall)
     {
+        WallDetails &details = std::get<WallDetails>(current.details);
         auto isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);
         int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
 
         if (numFloorNeighbours == 0)
         {
-            current.variant = WallVariant::InnerCorner;
+            details.wallvariant = WallVariant::InnerCorner;
             isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, true);
             int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
             current.rotation = (index / 2 + 3) % 4;
         }
         else if (numFloorNeighbours == 1)
         {
-            current.variant = WallVariant::Flat;
+            details.wallvariant = WallVariant::Flat;
             int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
             current.rotation = (index + 2) % 4;
         }
         else if (numFloorNeighbours == 2)
         {
-            current.variant = WallVariant::OuterCorner;
+            details.wallvariant = WallVariant::OuterCorner;
             int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
             if (isFloor[0] && isFloor[3])
             {
