@@ -3,7 +3,7 @@
 #include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
 
-CaveMap::CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Texture> &texturepack)
+CaveMap::CaveMap(std::unique_ptr<MapLoadStrategy> loader, ResourceManager<sf::Texture> &texturepack)
     : maploader{std::move(loader)}, tileset{texturepack}
 {
     tiles = maploader->load();

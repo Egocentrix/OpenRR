@@ -14,7 +14,7 @@ class CaveMap
 public:
     static constexpr float TILESIZE = 50.f;
 
-    CaveMap(std::unique_ptr<CaveMapLoader> loader, ResourceManager<sf::Texture> &texturepack);
+    CaveMap(std::unique_ptr<MapLoadStrategy> loader, ResourceManager<sf::Texture> &texturepack);
 
     ~CaveMap();
 
@@ -30,6 +30,6 @@ private:
     using TileGrid = Grid2D<Tile>;
     TileGrid tiles;
 
-    std::unique_ptr<CaveMapLoader> maploader;
+    std::unique_ptr<MapLoadStrategy> maploader;
     ResourceManager<sf::Texture> &tileset;
 };

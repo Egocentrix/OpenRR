@@ -5,10 +5,10 @@
 #include "Grid2D.hpp"
 #include "Tile.hpp"
 
-class CaveMapLoader
+class MapLoadStrategy
 {
 public:
-    virtual ~CaveMapLoader() = default;
+    virtual ~MapLoadStrategy() = default;
     
     Grid2D<Tile> load();
     void save(const Grid2D<Tile> &tiles);
@@ -21,7 +21,7 @@ private:
     virtual void saveMap(const Grid2D<Tile> &tiles) = 0;
 };
 
-class DefaultMapLoader : public CaveMapLoader
+class DefaultMapLoader : public MapLoadStrategy
 {
 public:
     DefaultMapLoader() = default;
@@ -34,7 +34,7 @@ private:
     int width_{10}, height_{10};
 };
 
-class FileMapLoader : public CaveMapLoader
+class FileMapLoader : public MapLoadStrategy
 {
 public:
     FileMapLoader(const std::string &filename);

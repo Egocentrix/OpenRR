@@ -4,7 +4,7 @@
 #include "CaveMapLoader.hpp"
 #include "CaveMapLogic.hpp"
 
-Grid2D<Tile> CaveMapLoader::generateDefaultMap(int width, int height)
+Grid2D<Tile> MapLoadStrategy::generateDefaultMap(int width, int height)
 {
     Grid2D<Tile> tiles{width, height};
     for (int i = 0; i < width * height; i++)
@@ -17,14 +17,14 @@ Grid2D<Tile> CaveMapLoader::generateDefaultMap(int width, int height)
     return tiles;
 }
 
-Grid2D<Tile> CaveMapLoader::load()
+Grid2D<Tile> MapLoadStrategy::load()
 {
     Grid2D<Tile> tiles = loadMap();
     updateRotations(tiles);
     return tiles;
 }
 
-void CaveMapLoader::save(const Grid2D<Tile> &tiles)
+void MapLoadStrategy::save(const Grid2D<Tile> &tiles)
 {
     saveMap(tiles);
 }
