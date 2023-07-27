@@ -1,4 +1,5 @@
 #include "CaveMapLoader.hpp"
+#include "MapCommands.hpp"
 #include "GameStatePlay.hpp"
 #include "Game.hpp"
 
@@ -40,10 +41,11 @@ void GameStatePlay::handleInput(float dt)
             e.mouseButton.button == sf::Mouse::Left)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
-            auto tile{game->window.mapPixelToCoords(mouseposition) / CaveMap::TILESIZE};
-            if (map.isVisible(tile.x, tile.y))
+            auto worldposition{game->window.mapPixelToCoords(mouseposition, view) / CaveMap::TILESIZE};
+            GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
+            if (map.isVisible(coord))
             {
-                map.drill(tile.x, tile.y);
+                CaveMapController::executeCommand(DrillCommand(map, coord));
             }
         }
     }

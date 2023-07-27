@@ -2,6 +2,7 @@ add_library(CaveMap STATIC
             CaveMap.cpp
             CaveMapLoader.cpp
             CaveMapLogic.cpp
+            MapCommands.cpp
             MapRenderer.cpp
             Tile.cpp)
 
