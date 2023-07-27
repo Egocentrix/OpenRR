@@ -19,6 +19,7 @@ public:
     ~CaveMap();
 
     bool isVisible(int x, int y) const;
+    bool isVisible(GridCoordinate coord) const;
 
     void drill(int x, int y);
     void drill(GridCoordinate coord);

@@ -16,7 +16,12 @@ CaveMap::~CaveMap()
 
 bool CaveMap::isVisible(int x, int y) const
 {
-    return tiles.getElement(x, y).discovered;
+    return isVisible(GridCoordinate{x, y});
+}
+
+bool CaveMap::isVisible(GridCoordinate coord) const
+{
+    return tiles.getElement(coord).discovered;
 }
 
 void CaveMap::drill(int x, int y)
@@ -26,7 +31,7 @@ void CaveMap::drill(int x, int y)
 
 void CaveMap::drill(GridCoordinate coord)
 {
-    if(!tiles.getElement(coord).reachable || !canCollapse(tiles, coord))
+    if (!tiles.getElement(coord).reachable || !canCollapse(tiles, coord))
     {
         return;
     }
