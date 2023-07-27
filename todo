@@ -1,7 +1,7 @@
 - stringMapLoader
-- Rename maploaders to strategy, be more clear about design pattern
+- Centralise default map size. 
+- (maybe) rename maploaders.
 
 - Proper camera control
 - proper tests
 - implement 'split' wallvariant and texture
-- Command pattern for map operations
