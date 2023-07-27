@@ -82,7 +82,7 @@ void FileMapLoader::saveMap(const Grid2D<Tile> &tiles)
 
     for (const auto &tile : tiles)
     {
-        outfile << tile.getType() << " ";
+        outfile << static_cast<int>(tile.getType()) << " ";
         outfile << tile.discovered << " ";
         outfile << tile.reachable << " ";
     }

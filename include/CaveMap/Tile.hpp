@@ -3,13 +3,13 @@
 #include <memory>
 #include <SFML/Graphics/Texture.hpp>
 
-enum TileType
+enum class TileType
 {
     Floor,
     Wall
 };
 
-enum WallVariant
+enum class WallVariant
 {
     Flat,
     InnerCorner,
