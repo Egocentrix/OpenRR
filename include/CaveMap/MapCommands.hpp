@@ -10,6 +10,12 @@ public:
     virtual ~MapCommand() = default;
 
     virtual void execute() const = 0;
+
+protected: 
+    MapCommand(CaveMap &map, const GridCoordinate &coord);
+
+    CaveMap &map_;
+    const GridCoordinate &coord_;
 };
 
 class CaveMapController
@@ -28,8 +34,4 @@ public:
     DrillCommand(CaveMap &map, const GridCoordinate &coord);
 
     void execute() const override;
-
-private:
-    CaveMap &map_;
-    const GridCoordinate &coord_;
 };

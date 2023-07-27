@@ -1,8 +1,13 @@
 #include "MapCommands.hpp"
 #include "CaveMap.hpp"
 
-DrillCommand::DrillCommand(CaveMap &map, const GridCoordinate &coord)
+MapCommand::MapCommand(CaveMap &map, const GridCoordinate &coord)
     : map_{map}, coord_{coord}
+{
+}
+
+DrillCommand::DrillCommand(CaveMap &map, const GridCoordinate &coord)
+    : MapCommand{map, coord}
 {
 }
 
