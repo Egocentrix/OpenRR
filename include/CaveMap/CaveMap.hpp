@@ -7,6 +7,7 @@
 #include "Grid2D.hpp"
 #include "ResourceManager.hpp"
 #include "Tile.hpp"
+#include "MapCommands.hpp"
 
 // Container for tile objects, and functions for manipulating them.
 class CaveMap
@@ -20,6 +21,9 @@ public:
 
     bool isVisible(int x, int y) const;
     bool isVisible(GridCoordinate coord) const;
+
+    using ActionList = std::vector<std::unique_ptr<MapCommand>>;
+    ActionList availableCommands(GridCoordinate coord);
 
     void drill(int x, int y);
     void drill(GridCoordinate coord);

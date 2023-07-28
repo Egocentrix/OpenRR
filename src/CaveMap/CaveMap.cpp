@@ -24,6 +24,21 @@ bool CaveMap::isVisible(GridCoordinate coord) const
     return tiles.getElement(coord).discovered;
 }
 
+CaveMap::ActionList CaveMap::availableCommands(GridCoordinate coord)
+{
+    ActionList commands{};
+    if (true)
+    {
+        commands.emplace_back(std::make_unique<EmptyCommand>(*this, coord));
+    }
+    if (tiles.getElement(coord).reachable && canCollapse(tiles, coord))
+    {
+        commands.emplace_back(std::make_unique<DrillCommand>(*this, coord));
+    }
+
+    return commands;
+}
+
 void CaveMap::drill(int x, int y)
 {
     drill(GridCoordinate{x, y});

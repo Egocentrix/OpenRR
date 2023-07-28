@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "CaveMapCommon.hpp"
 class CaveMap;
 
@@ -9,6 +10,7 @@ class MapCommand
 public:
     virtual ~MapCommand() = default;
 
+    virtual std::string describe() const = 0;
     virtual void execute() const = 0;
 
 protected:
@@ -33,5 +35,15 @@ class DrillCommand : public MapCommand
 public:
     DrillCommand(CaveMap &map, const GridCoordinate &coord);
 
+    std::string describe() const override { return "Drill"; }
     void execute() const override;
+};
+
+class EmptyCommand : public MapCommand
+{
+public:
+    EmptyCommand(CaveMap &map, const GridCoordinate &coord) : MapCommand{map, coord} {}
+
+    std::string describe() const override { return "Nothing"; }
+    void execute() const override {}
 };
