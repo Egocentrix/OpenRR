@@ -1,7 +1,7 @@
 #pragma once
 
+#include "CaveMapCommon.hpp"
 class CaveMap;
-class GridCoordinate;
 
 // Base classes for Command pattern
 class MapCommand
@@ -11,11 +11,11 @@ public:
 
     virtual void execute() const = 0;
 
-protected: 
+protected:
     MapCommand(CaveMap &map, const GridCoordinate &coord);
 
     CaveMap &map_;
-    const GridCoordinate &coord_;
+    const GridCoordinate coord_;
 };
 
 class CaveMapController

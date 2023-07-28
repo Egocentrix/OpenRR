@@ -2,11 +2,7 @@
 
 #include <vector>
 
-struct GridCoordinate
-{
-    int x;
-    int y;
-};
+#include "CaveMapCommon.hpp"
 
 template <class T>
 class Grid2D
