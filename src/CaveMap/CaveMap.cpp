@@ -24,6 +24,21 @@ bool CaveMap::isVisible(GridCoordinate coord) const
     return tiles.getElement(coord).discovered;
 }
 
+std::string CaveMap::tileDescription(GridCoordinate coord)
+{
+    std::string description{};
+    switch (tiles.getElement(coord).getType())
+    {
+    case TileType::Floor:
+        description += "Floor";
+        break;
+    case TileType::Wall:
+        description += "Wall";
+        break;
+    }
+    return description;
+}
+
 CaveMap::ActionList CaveMap::availableCommands(GridCoordinate coord)
 {
     ActionList commands{};
