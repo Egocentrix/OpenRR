@@ -30,7 +30,6 @@ public:
     ActionList availableCommands(GridCoordinate coord) override;
 
     // Other functions
-    bool isVisible(GridCoordinate coord) const;
     void drill(GridCoordinate coord);
 
 private:

@@ -14,13 +14,13 @@ CaveMap::~CaveMap()
     maploader->save(tiles);
 }
 
-bool CaveMap::isVisible(GridCoordinate coord) const
-{
-    return tiles.getElement(coord).discovered;
-}
-
 std::string CaveMap::describeTile(GridCoordinate coord) const
 {
+    if (!tiles.getElement(coord).discovered)
+    {
+        return "Undiscovered";
+    }
+
     std::string description{};
     switch (tiles.getElement(coord).getType())
     {
