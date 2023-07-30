@@ -14,11 +14,6 @@ CaveMap::~CaveMap()
     maploader->save(tiles);
 }
 
-bool CaveMap::isVisible(int x, int y) const
-{
-    return isVisible(GridCoordinate{x, y});
-}
-
 bool CaveMap::isVisible(GridCoordinate coord) const
 {
     return tiles.getElement(coord).discovered;
@@ -52,11 +47,6 @@ CaveMap::ActionList CaveMap::availableCommands(GridCoordinate coord)
     }
 
     return commands;
-}
-
-void CaveMap::drill(int x, int y)
-{
-    drill(GridCoordinate{x, y});
 }
 
 void CaveMap::drill(GridCoordinate coord)

@@ -19,7 +19,6 @@ public:
 
     ~CaveMap();
 
-    bool isVisible(int x, int y) const;
     bool isVisible(GridCoordinate coord) const;
 
     std::string tileDescription(GridCoordinate coord);
@@ -27,7 +26,6 @@ public:
     using ActionList = std::vector<std::unique_ptr<MapCommand>>;
     ActionList availableCommands(GridCoordinate coord);
 
-    void drill(int x, int y);
     void drill(GridCoordinate coord);
 
     void draw(sf::RenderTarget &target);
