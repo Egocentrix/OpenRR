@@ -21,8 +21,8 @@ public:
 
     bool isVisible(GridCoordinate coord) const;
 
-    std::string tileDescription(GridCoordinate coord);
-    
+    std::string describeTile(GridCoordinate coord) const;
+
     using ActionList = std::vector<std::unique_ptr<MapCommand>>;
     ActionList availableCommands(GridCoordinate coord);
 

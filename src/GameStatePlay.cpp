@@ -47,7 +47,7 @@ void GameStatePlay::handleInput(float dt)
             auto worldposition{game->window.mapPixelToCoords(mouseposition, view) / CaveMap::TILESIZE};
             GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
 
-            std::cout << map.tileDescription(coord) << ",\tavailable Commands:";
+            std::cout << map.describeTile(coord) << ",\tavailable Commands:";
             for (auto&& c : map.availableCommands(coord))
             {
                 std::cout << " " << c->describe() << ",";
