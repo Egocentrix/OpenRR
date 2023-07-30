@@ -1,6 +1,8 @@
 #pragma once
 
-#include "CaveMap.hpp"
+#include <memory>
+
+#include "CaveMapInterface.hpp"
 #include "GameState.hpp"
 
 // The main state where the game is played
@@ -14,6 +16,6 @@ public:
     virtual void handleInput(float dt) override;
 
 private:
-    CaveMap map;
+    std::unique_ptr<CaveMapInterface> map;
     sf::View view;
 };

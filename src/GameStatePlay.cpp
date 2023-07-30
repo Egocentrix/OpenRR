@@ -1,13 +1,15 @@
 #include <iostream>
 #include <memory>
 
-#include "CaveMapLoader.hpp"
+#include "CaveMap.hpp"
 #include "MapCommands.hpp"
 #include "GameStatePlay.hpp"
 #include "Game.hpp"
 
 GameStatePlay::GameStatePlay(Game *parent)
-    : map{std::make_unique<FileMapLoader>("testmap.dat"), *(parent->texmgr)},
+    : map{std::make_unique<CaveMap>(
+          std::make_unique<FileMapLoader>("testmap.dat"),
+          *(parent->texmgr))},
       view{parent->window.getView()}
 {
     this->game = parent;
@@ -21,7 +23,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
-    map.draw(game->window);
+    map->draw(game->window);
     game->window.display();
 }
 
@@ -47,17 +49,17 @@ void GameStatePlay::handleInput(float dt)
             auto worldposition{game->window.mapPixelToCoords(mouseposition, view) / CaveMap::TILESIZE};
             GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
 
-            std::cout << map.describeTile(coord) << ",\tavailable Commands:";
-            for (auto&& c : map.availableCommands(coord))
+            std::cout << map->describeTile(coord) << ",\tavailable Commands:";
+            for (auto &&c : map->availableCommands(coord))
             {
                 std::cout << " " << c->describe() << ",";
+                if (c->describe() == "Drill")
+                {
+                   c->execute();
+                }
+                
             }
             std::cout << std::endl;
-            
-            if (map.isVisible(coord))
-            {
-                CaveMapController::executeCommand(DrillCommand(map, coord));
-            }
         }
     }
 

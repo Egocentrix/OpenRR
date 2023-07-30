@@ -3,6 +3,8 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "CaveMapInterface.hpp"
+
 #include "CaveMapLoader.hpp"
 #include "Grid2D.hpp"
 #include "ResourceManager.hpp"
@@ -10,7 +12,7 @@
 #include "MapCommands.hpp"
 
 // Container for tile objects, and functions for manipulating them.
-class CaveMap
+class CaveMap : public CaveMapInterface
 {
 public:
     static constexpr float TILESIZE = 50.f;
@@ -19,16 +21,16 @@ public:
 
     ~CaveMap();
 
+    // Implement CaveMapInterface
+    void draw(sf::RenderTarget &target) override;
+
+    std::string describeTile(GridCoordinate coord) const override;
+
+    ActionList availableCommands(GridCoordinate coord) override;
+
+    // Other functions
     bool isVisible(GridCoordinate coord) const;
-
-    std::string describeTile(GridCoordinate coord) const;
-
-    using ActionList = std::vector<std::unique_ptr<MapCommand>>;
-    ActionList availableCommands(GridCoordinate coord);
-
     void drill(GridCoordinate coord);
-
-    void draw(sf::RenderTarget &target);
 
 private:
     using TileGrid = Grid2D<Tile>;

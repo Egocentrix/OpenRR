@@ -34,7 +34,7 @@ std::string CaveMap::describeTile(GridCoordinate coord) const
     return description;
 }
 
-CaveMap::ActionList CaveMap::availableCommands(GridCoordinate coord)
+CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)
 {
     ActionList commands{};
     if (true)
