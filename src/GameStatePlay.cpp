@@ -23,6 +23,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
+    map->update();
     map->draw(game->window);
     game->window.display();
 }
@@ -55,9 +56,8 @@ void GameStatePlay::handleInput(float dt)
                 std::cout << " " << c->describe() << ",";
                 if (c->describe() == "Drill")
                 {
-                   c->execute();
+                    c->execute();
                 }
-                
             }
             std::cout << std::endl;
         }

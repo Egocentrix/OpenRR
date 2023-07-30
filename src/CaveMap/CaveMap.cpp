@@ -66,10 +66,14 @@ void CaveMap::drill(GridCoordinate coord)
     return;
 }
 
-void CaveMap::draw(sf::RenderTarget &target)
+void CaveMap::draw(sf::RenderTarget &target) const
 {
-    updateTextures(tiles, tileset, false);
     MapRenderer mr{target};
     mr.drawTiles(tiles);
     return;
+}
+
+void CaveMap::update()
+{
+    updateTextures(tiles, tileset, false);
 }

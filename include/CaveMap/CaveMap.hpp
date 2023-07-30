@@ -22,7 +22,8 @@ public:
     ~CaveMap();
 
     // Implement CaveMapInterface
-    void draw(sf::RenderTarget &target) override;
+    void draw(sf::RenderTarget &target) const override;
+    void update() override;
 
     std::string describeTile(GridCoordinate coord) const override;
 

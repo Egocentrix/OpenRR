@@ -12,7 +12,8 @@ class CaveMapInterface
 public:
     virtual ~CaveMapInterface() = default;
 
-    virtual void draw(sf::RenderTarget &target) = 0;
+    virtual void draw(sf::RenderTarget &target) const = 0;
+    virtual void update() = 0;
 
     virtual std::string describeTile(GridCoordinate coord) const = 0;
 
