@@ -1,7 +1,9 @@
 - stringMapLoader
-- Centralise default map size. 
+- Centralise default map size. And Tile-/Texturesize.
 - (maybe) rename maploaders.
 
 - Proper camera control
 - proper tests
 - implement 'split' wallvariant and texture
+
+- Gui: populate menu from actionlist
