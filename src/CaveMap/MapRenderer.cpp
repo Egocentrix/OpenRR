@@ -8,9 +8,12 @@ MapRenderer::MapRenderer(sf::RenderTarget &target)
 
 void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
 {
+    // Assume all textures are of the same size
+    const auto texturesize = sf::Vector2f(tiles.getElement(0, 0).texture->getSize());
+
     sf::Sprite sprite;
-    sprite.setOrigin(TEXSIZE / 2, TEXSIZE / 2);
-    sprite.setScale(CaveMap::TILESIZE / TEXSIZE, CaveMap::TILESIZE / TEXSIZE);
+    sprite.setOrigin(texturesize * 0.5f);
+    sprite.setScale(CaveMap::TILESIZE / texturesize.x, CaveMap::TILESIZE / texturesize.y);
 
     for (int x = 0; x < tiles.getWidth(); x++)
     {

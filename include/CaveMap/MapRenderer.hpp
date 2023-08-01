@@ -11,9 +11,6 @@ public:
 
     void drawTiles(const Grid2D<Tile> &tiles);
 
-    static constexpr float TEXSIZE = 128.f;
-
-
 private:
     sf::RenderTarget &target_;
 };
