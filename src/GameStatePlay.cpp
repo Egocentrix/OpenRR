@@ -41,15 +41,15 @@ void GameStatePlay::handleInput(float dt)
             game->window.close();
         }
 
-        if (e.type == sf::Event::Resized)
+        else if (e.type == sf::Event::Resized)
         {
             float ratio = static_cast<float>(e.size.width) / e.size.height;
             auto currentsize = view.getSize();
             view.setSize(currentsize.x, currentsize.x / ratio);
         }
 
-        if (e.type == sf::Event::MouseButtonPressed &&
-            e.mouseButton.button == sf::Mouse::Left)
+        else if (e.type == sf::Event::MouseButtonPressed &&
+                 e.mouseButton.button == sf::Mouse::Left)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
             auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
@@ -66,22 +66,37 @@ void GameStatePlay::handleInput(float dt)
             }
             std::cout << std::endl;
         }
+
+        else if (e.type == sf::Event::MouseWheelScrolled)
+        {
+            const float zoomfactor = 1.2;
+            if (e.mouseWheelScroll.delta > 0) // scroll up
+            {
+                view.zoom(1 / zoomfactor);
+                zoomlevel *= zoomfactor;
+            }
+            else
+            {
+                view.zoom(zoomfactor);
+                zoomlevel /= zoomfactor;
+            }
+        }
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        view.move(0, -100.f * dt);
+        view.move(0, -10.f * dt / zoomlevel);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        view.move(0, 100.f * dt);
+        view.move(0, 10.f * dt / zoomlevel);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        view.move(-100.f * dt, 0);
+        view.move(-10.f * dt / zoomlevel, 0);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        view.move(100.f * dt, 0);
+        view.move(10.f * dt / zoomlevel, 0);
     }
 }

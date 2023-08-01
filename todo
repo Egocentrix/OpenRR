@@ -2,7 +2,6 @@
 - Centralise default map size. 
 - (maybe) rename maploaders.
 
-- Proper camera control
 - proper tests
 - implement 'split' wallvariant and texture
 

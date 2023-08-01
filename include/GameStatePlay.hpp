@@ -18,4 +18,5 @@ public:
 private:
     std::unique_ptr<CaveMapInterface> map;
     sf::View view;
+    float zoomlevel{1};
 };
