@@ -38,7 +38,7 @@ void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
     sf::RectangleShape border(sf::Vector2f(tiles.getWidth(), tiles.getHeight()));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
-    border.setOutlineThickness(-0.5f);
+    border.setOutlineThickness(0.5f);
     target_.draw(border);
     return;
 }
