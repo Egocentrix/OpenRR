@@ -34,6 +34,7 @@ void Game::play()
         fpscounter.tick();
 
         states.top()->handleInput(dt);
+        states.top()->update();
         states.top()->draw();
     }
 }

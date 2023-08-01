@@ -26,9 +26,13 @@ void GameStatePlay::draw()
 {
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
-    map->update();
     map->draw(game->window);
     game->window.display();
+}
+
+void GameStatePlay::update()
+{
+    map->update();
 }
 
 void GameStatePlay::handleInput(float dt)
