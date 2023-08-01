@@ -13,7 +13,7 @@ void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
 
     sf::Sprite sprite;
     sprite.setOrigin(texturesize * 0.5f);
-    sprite.setScale(CaveMap::TILESIZE / texturesize.x, CaveMap::TILESIZE / texturesize.y);
+    sprite.setScale(1 / texturesize.x, 1 / texturesize.y);
 
     for (int x = 0; x < tiles.getWidth(); x++)
     {
@@ -30,15 +30,15 @@ void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
             {
                 sprite.setTexture(*current.texture);
             }
-            sprite.setPosition(CaveMap::TILESIZE * (x + 0.5), CaveMap::TILESIZE * (y + 0.5));
+            sprite.setPosition(x + 0.5, y + 0.5);
             sprite.setRotation(current.rotation * 90);
             target_.draw(sprite);
         }
     }
-    sf::RectangleShape border(sf::Vector2f(CaveMap::TILESIZE * tiles.getWidth(), CaveMap::TILESIZE * tiles.getHeight()));
+    sf::RectangleShape border(sf::Vector2f(tiles.getWidth(), tiles.getHeight()));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
-    border.setOutlineThickness(-1.f);
+    border.setOutlineThickness(-0.5f);
     target_.draw(border);
     return;
 }

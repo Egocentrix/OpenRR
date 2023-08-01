@@ -13,6 +13,9 @@ GameStatePlay::GameStatePlay(Game *parent)
       view{parent->window.getView()}
 {
     this->game = parent;
+    GridCoordinate center = map->getCenter();
+    view.setCenter(center.x, center.y);
+    view.setSize(15, 15);
 }
 
 GameStatePlay::~GameStatePlay()
@@ -40,14 +43,16 @@ void GameStatePlay::handleInput(float dt)
 
         if (e.type == sf::Event::Resized)
         {
-            view.setSize(e.size.width, e.size.height);
+            float ratio = static_cast<float>(e.size.width) / e.size.height;
+            auto currentsize = view.getSize();
+            view.setSize(currentsize.x, currentsize.x / ratio);
         }
 
         if (e.type == sf::Event::MouseButtonPressed &&
             e.mouseButton.button == sf::Mouse::Left)
         {
             auto mouseposition{sf::Mouse::getPosition(game->window)};
-            auto worldposition{game->window.mapPixelToCoords(mouseposition, view) / CaveMap::TILESIZE};
+            auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
             GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
 
             std::cout << map->describeTile(coord) << ",\tavailable Commands:";

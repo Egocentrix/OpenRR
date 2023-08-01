@@ -15,6 +15,8 @@ public:
     virtual void draw(sf::RenderTarget &target) const = 0;
     virtual void update() = 0;
 
+    virtual GridCoordinate getCenter() const = 0;
+
     virtual std::string describeTile(GridCoordinate coord) const = 0;
 
     using ActionList = std::vector<std::unique_ptr<MapCommand>>;

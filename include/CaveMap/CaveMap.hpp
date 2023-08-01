@@ -15,8 +15,6 @@
 class CaveMap : public CaveMapInterface
 {
 public:
-    static constexpr float TILESIZE = 50.f;
-
     CaveMap(std::unique_ptr<MapLoadStrategy> loader, ResourceManager<sf::Texture> &texturepack);
 
     ~CaveMap();
@@ -24,6 +22,8 @@ public:
     // Implement CaveMapInterface
     void draw(sf::RenderTarget &target) const override;
     void update() override;
+
+    GridCoordinate getCenter() const override;
 
     std::string describeTile(GridCoordinate coord) const override;
 

@@ -1,5 +1,5 @@
 - stringMapLoader
-- Centralise default map size. And Tile-/Texturesize.
+- Centralise default map size. 
 - (maybe) rename maploaders.
 
 - Proper camera control

@@ -14,6 +14,11 @@ CaveMap::~CaveMap()
     maploader->save(tiles);
 }
 
+GridCoordinate CaveMap::getCenter() const
+{
+    return GridCoordinate{tiles.getWidth() / 2, tiles.getHeight() / 2};
+}
+
 std::string CaveMap::describeTile(GridCoordinate coord) const
 {
     if (!tiles.getElement(coord).discovered)
