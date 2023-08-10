@@ -23,13 +23,22 @@ void Menu::setLocation(float x, float y)
     y_ = y;
 }
 
+void Menu::setActions(std::vector<std::unique_ptr<Command>>& actionlist)
+{
+    items.clear();
+    for (auto&& action : actionlist)
+    {
+        addItem(action->describe());
+    }
+}
+
 void Menu::draw(sf::RenderTarget &target)
 {
     if (!visible)
     {
         return;
     }
-        
+
     sf::RectangleShape border(sf::Vector2f(200, 50 * items.size()));
     border.setFillColor(sf::Color(150, 150, 150));
     border.setPosition(x_, y_);

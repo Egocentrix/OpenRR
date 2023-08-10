@@ -77,10 +77,12 @@ void GameStatePlay::handleInput(float dt)
             else if (e.mouseButton.button == sf::Mouse::Right)
             {
                 menu.setLocation(mouseposition.x, mouseposition.y);
+                auto actions = map->availableCommands(coord);
+                menu.setActions(actions);
                 menu.visible = true;
 
                 std::cout << map->describeTile(coord) << ",\tavailable Commands:";
-                for (auto &&c : map->availableCommands(coord))
+                for (auto &&c : actions)
                 {
                     std::cout << " " << c->describe() << ",";
                 }
