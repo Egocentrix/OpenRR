@@ -7,6 +7,18 @@
 
 #include "Command.hpp"
 
+class MenuItem
+{
+public:
+    MenuItem(std::string itemtitle, std::unique_ptr<Command> itemaction)
+        : title{itemtitle}, action{std::move(itemaction)}
+    {
+    }
+
+    std::string title{};
+    std::unique_ptr<Command> action{};
+};
+
 class Menu
 {
 public:
