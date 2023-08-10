@@ -1,11 +1,12 @@
 #pragma once
 
 #include <string>
+#include "Command.hpp"
 #include "CaveMapCommon.hpp"
 class CaveMap;
 
 // Base classes for Command pattern
-class MapCommand
+class MapCommand : public Command
 {
 public:
     virtual ~MapCommand() = default;

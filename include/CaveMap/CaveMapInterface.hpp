@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "CaveMapCommon.hpp"
-#include "MapCommands.hpp"
+#include "Command.hpp"
 
 class CaveMapInterface
 {
@@ -19,6 +19,6 @@ public:
 
     virtual std::string describeTile(GridCoordinate coord) const = 0;
 
-    using ActionList = std::vector<std::unique_ptr<MapCommand>>;
+    using ActionList = std::vector<std::unique_ptr<Command>>;
     virtual ActionList availableCommands(GridCoordinate coord) = 0;
 };
