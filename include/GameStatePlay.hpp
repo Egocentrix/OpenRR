@@ -21,5 +21,6 @@ private:
     std::unique_ptr<CaveMapInterface> map;
     Menu menu;
     sf::View view;
+    sf::View guiview;
     float zoomlevel{1};
 };

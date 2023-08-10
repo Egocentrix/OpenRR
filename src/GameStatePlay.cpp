@@ -10,7 +10,8 @@ GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(
           std::make_unique<FileMapLoader>("testmap.dat"),
           *(parent->texmgr))},
-      view{parent->window.getView()}
+      view{parent->window.getView()},
+      guiview{parent->window.getDefaultView()}
 {
     this->game = parent;
     GridCoordinate center = map->getCenter();
@@ -27,6 +28,7 @@ void GameStatePlay::draw()
     game->window.setView(view);
     game->window.clear(sf::Color::Black);
     map->draw(game->window);
+    game->window.setView(guiview);
     menu.draw(game->window);
     game->window.display();
 }
