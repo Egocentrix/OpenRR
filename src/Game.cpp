@@ -1,10 +1,9 @@
 #include <iostream>
 
 #include "Game.hpp"
-#include "TextureManager.hpp"
 
 Game::Game()
-    : texmgr{std::make_unique<TextureManager>()},
+    : texmgr{std::make_unique<ResourceManager<sf::Texture>>()},
       window{sf::VideoMode(800, 600), "Hello, world!"}
 {    
     texmgr->registerResource("floor", "wad/rr0/World/WorldTextures/RockSplit/ROCK00.BMP");
