@@ -118,15 +118,18 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
     else if (e.mouseButton.button == sf::Mouse::Right)
     {
         menu.setLocation(mouseposition.x, mouseposition.y);
+
+        auto tilename = map->describeTile(coord);
         auto actions = map->availableCommands(coord);
 
-        std::cout << map->describeTile(coord) << ",\tavailable Commands:";
+        std::cout << tilename << ",\tavailable Commands:";
         for (auto &&action : actions)
         {
             std::cout << " " << action->describe() << ",";
         }
         std::cout << std::endl;
 
+        menu.setTitle(tilename);
         menu.setActions(actions);
         menu.visible = true;
     }

@@ -30,11 +30,13 @@ public:
     void addItem(const std::string &name, std::unique_ptr<Command> action);
     void setLocation(float x, float y);
     void setActions(std::vector<std::unique_ptr<Command>>& actionlist);
+    void setTitle(const std::string &title);
 
     void draw(sf::RenderTarget &target);
 
 private:
-    std::vector<MenuItem> items;
+    std::string title_;
+    std::vector<MenuItem> items_;
     float x_, y_;
     const sf::Font& font_;
 };
