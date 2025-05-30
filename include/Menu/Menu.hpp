@@ -32,6 +32,7 @@ public:
     void setActions(std::vector<std::unique_ptr<Command>>& actionlist);
     void setTitle(const std::string &title);
 
+    bool handleClickEvent(sf::Vector2i mouseposition);
     void draw(sf::RenderTarget &target);
 
 private:

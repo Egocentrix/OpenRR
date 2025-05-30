@@ -104,6 +104,7 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
     {
         if (menu.visible)
         {
+            menu.handleClickEvent(mouseposition);
             menu.visible = false;
         }
         else
@@ -122,7 +123,7 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         auto tilename = map->describeTile(coord);
         auto actions = map->availableCommands(coord);
 
-        std::cout << tilename << ",\tavailable Commands:";
+        std::cout << tilename << ",\tAvailable commands:";
         for (auto &&action : actions)
         {
             std::cout << " " << action->describe() << ",";
