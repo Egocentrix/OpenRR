@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Game.hpp"
 #include "TextureManager.hpp"
 
@@ -9,6 +11,11 @@ Game::Game()
     texmgr->registerResource("wall_incorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK35.BMP");
     texmgr->registerResource("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
     texmgr->registerResource("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
+
+    if (!font.loadFromFile("OpenSans-Regular.ttf"))
+    {
+        std::cout << "Error loading font" << std::endl;
+    }
     
     states.push(std::make_unique<GameStatePlay>(this));
 }

@@ -18,6 +18,7 @@ public:
 
     std::unique_ptr<ResourceManager<sf::Texture>> texmgr;
     sf::RenderWindow window;
+    sf::Font font;
 
 private:
     void popState();

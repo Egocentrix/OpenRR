@@ -22,7 +22,7 @@ public:
 class Menu
 {
 public:
-    Menu();
+    Menu(const sf::Font&);
     ~Menu();
 
     bool visible;
@@ -36,4 +36,5 @@ public:
 private:
     std::vector<MenuItem> items;
     float x_, y_;
+    const sf::Font& font_;
 };

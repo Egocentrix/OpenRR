@@ -10,6 +10,7 @@ GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(
           std::make_unique<FileMapLoader>("testmap.dat"),
           *(parent->texmgr))},
+      menu{parent->font},
       view{parent->window.getView()},
       guiview{parent->window.getDefaultView()}
 {

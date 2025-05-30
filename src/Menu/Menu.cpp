@@ -1,6 +1,7 @@
 #include "Menu.hpp"
 
-Menu::Menu(/* args */)
+Menu::Menu(const sf::Font& font)
+: font_{font}
 {
     setLocation(0, 0);
     visible = false;
@@ -42,4 +43,12 @@ void Menu::draw(sf::RenderTarget &target)
     border.setFillColor(sf::Color(150, 150, 150));
     border.setPosition(x_, y_);
     target.draw(border);
+
+    sf::Text itemlabel("placeholder", font_, 30);
+    for (size_t i = 0; i < items.size(); ++i)
+    {
+        itemlabel.setString(items[i].title);
+        itemlabel.setPosition(x_, y_ + (50*i));
+        target.draw(itemlabel);
+    }
 }
