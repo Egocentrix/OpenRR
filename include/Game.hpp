@@ -16,9 +16,9 @@ public:
 
     void play();
 
-    std::unique_ptr<ResourceManager<sf::Texture>> texmgr;
+    ResourceManager<sf::Texture> texureManager;
+    ResourceManager<sf::Font> fontManager;
     sf::RenderWindow window;
-    sf::Font font;
 
 private:
     void popState();

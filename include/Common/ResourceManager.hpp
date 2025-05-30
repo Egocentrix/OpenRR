@@ -3,6 +3,7 @@
 #include <memory>
 #include <unordered_map>
 
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
 // Generic class for resource managers, e.g. Textures
@@ -24,7 +25,18 @@ private:
 };
 
 // loadFromFile specializations here
-template<>
+template <>
+inline std::shared_ptr<sf::Font> ResourceManager<sf::Font>::loadFromFile(const std::string &filename)
+{
+    auto font = std::make_shared<sf::Font>();
+    if (font->loadFromFile(filename))
+    {
+        return font;
+    }
+    return nullptr;
+}
+
+template <>
 inline std::shared_ptr<sf::Texture> ResourceManager<sf::Texture>::loadFromFile(const std::string &filename)
 {
     auto tex = std::make_unique<sf::Texture>();

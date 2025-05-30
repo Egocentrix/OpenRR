@@ -5,7 +5,7 @@
 const int DefaultMenuWidth = 200;
 const int DefaultMenuHeight = 50;;
 
-Menu::Menu(const sf::Font& font)
+Menu::Menu(std::shared_ptr<sf::Font> font)
 : font_{font}
 {
     setLocation(0, 0);
@@ -78,11 +78,11 @@ void Menu::draw(sf::RenderTarget &target)
     border.setPosition(x_, y_);
     target.draw(border);
 
-    sf::Text title(title_, font_, 30);
+    sf::Text title(title_, *font_, 30);
     title.setPosition(x_ + 5, y_);
     target.draw(title);
 
-    sf::Text itemlabel("", font_, 30);
+    sf::Text itemlabel("", *font_, 30);
     for (size_t i = 0; i < items_.size(); ++i)
     {
         itemlabel.setString(items_[i].title);

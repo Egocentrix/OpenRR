@@ -32,15 +32,8 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
     }
     else
     {
-        std::cout << "Failed to load file. " << filename << std::endl;
+        std::cout << "Failed to load file: " << filename << std::endl;
     }
    
     return resource;
-}
-
-template <typename T>
-std::shared_ptr<T> ResourceManager<T>::loadFromFile(const std::string&)
-{
-    std::cout << "Unsupported resource type" << std::endl;
-    return nullptr;
 }

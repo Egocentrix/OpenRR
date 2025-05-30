@@ -22,7 +22,7 @@ public:
 class Menu
 {
 public:
-    Menu(const sf::Font&);
+    Menu(std::shared_ptr<sf::Font>);
     ~Menu();
 
     bool visible;
@@ -39,5 +39,5 @@ private:
     std::string title_;
     std::vector<MenuItem> items_;
     float x_, y_;
-    const sf::Font& font_;
+    std::shared_ptr<sf::Font> font_;
 };
