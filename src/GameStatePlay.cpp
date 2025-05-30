@@ -57,37 +57,7 @@ void GameStatePlay::handleInput(float dt)
 
         else if (e.type == sf::Event::MouseButtonPressed)
         {
-            auto mouseposition{sf::Mouse::getPosition(game->window)};
-            auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
-            GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
-            if (e.mouseButton.button == sf::Mouse::Left)
-            {
-                if (menu.visible)
-                {
-                    menu.visible = false;
-                }
-                else
-                {
-                    for (auto &&c : map->availableCommands(coord))
-                    {
-                        if (c->describe() == "Drill") c->execute();
-                    }
-                }
-            }
-            else if (e.mouseButton.button == sf::Mouse::Right)
-            {
-                menu.setLocation(mouseposition.x, mouseposition.y);
-                auto actions = map->availableCommands(coord);
-                menu.setActions(actions);
-                menu.visible = true;
-
-                std::cout << map->describeTile(coord) << ",\tavailable Commands:";
-                for (auto &&c : actions)
-                {
-                    std::cout << " " << c->describe() << ",";
-                }
-                std::cout << std::endl;
-            }
+            handleClickEvent(e);
         }
 
         else if (e.type == sf::Event::MouseWheelScrolled)
@@ -121,5 +91,42 @@ void GameStatePlay::handleInput(float dt)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         view.move(10.f * dt / zoomlevel, 0);
+    }
+}
+
+void GameStatePlay::handleClickEvent(const sf::Event &e)
+{
+    auto mouseposition{sf::Mouse::getPosition(game->window)};
+    auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
+    GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
+    if (e.mouseButton.button == sf::Mouse::Left)
+    {
+        if (menu.visible)
+        {
+            menu.visible = false;
+        }
+        else
+        {
+            for (auto &&c : map->availableCommands(coord))
+            {
+                if (c->describe() == "Drill")
+                    c->execute();
+            }
+        }
+    }
+    else if (e.mouseButton.button == sf::Mouse::Right)
+    {
+        menu.setLocation(mouseposition.x, mouseposition.y);
+        auto actions = map->availableCommands(coord);
+
+        std::cout << map->describeTile(coord) << ",\tavailable Commands:";
+        for (auto &&action : actions)
+        {
+            std::cout << " " << action->describe() << ",";
+        }
+        std::cout << std::endl;
+
+        menu.setActions(actions);
+        menu.visible = true;
     }
 }

@@ -27,13 +27,13 @@ public:
 
     bool visible;
 
-    void addItem(const std::string &name);
+    void addItem(const std::string &name, std::unique_ptr<Command> action);
     void setLocation(float x, float y);
     void setActions(std::vector<std::unique_ptr<Command>>& actionlist);
 
     void draw(sf::RenderTarget &target);
 
 private:
-    std::vector<std::string> items;
+    std::vector<MenuItem> items;
     float x_, y_;
 };

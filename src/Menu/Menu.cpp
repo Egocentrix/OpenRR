@@ -2,8 +2,6 @@
 
 Menu::Menu(/* args */)
 {
-    addItem("Test1");
-    addItem("test2");
     setLocation(0, 0);
     visible = false;
 }
@@ -12,9 +10,9 @@ Menu::~Menu()
 {
 }
 
-void Menu::addItem(const std::string &name)
+void Menu::addItem(const std::string &name, std::unique_ptr<Command> action)
 {
-    items.push_back(name);
+    items.push_back(MenuItem(name, std::move(action)));
 }
 
 void Menu::setLocation(float x, float y)
@@ -28,7 +26,8 @@ void Menu::setActions(std::vector<std::unique_ptr<Command>>& actionlist)
     items.clear();
     for (auto&& action : actionlist)
     {
-        addItem(action->describe());
+        const std::string name = action->describe();
+        addItem(name, std::move(action));
     }
 }
 

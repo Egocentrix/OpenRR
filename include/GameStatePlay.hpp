@@ -23,4 +23,6 @@ private:
     sf::View view;
     sf::View guiview;
     float zoomlevel{1};
+
+    void handleClickEvent(const sf::Event &e);
 };
