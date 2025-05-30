@@ -45,16 +45,17 @@ void Menu::setTitle(const std::string &title)
 bool Menu::handleClickEvent(sf::Vector2i mouseposition)
 {
     auto localCoordinates = mouseposition - sf::Vector2i(x_, y_);
+    int itemcount = items_.size();
     if (localCoordinates.x < 0 || 
         localCoordinates.y < 0 ||
         localCoordinates.x > DefaultMenuWidth || 
-        localCoordinates.y > DefaultMenuHeight * (items_.size() + 1))
+        localCoordinates.y > DefaultMenuHeight * (itemcount + 1))
     {
         return false;
     }
     
     auto itemindex = localCoordinates.y / DefaultMenuHeight - 1;
-    if (itemindex < 0 || itemindex >= items_.size())
+    if (itemindex < 0 || itemindex >= itemcount)
     {
         return false;
     }
