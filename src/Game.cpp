@@ -1,12 +1,18 @@
 #include "Game.hpp"
 
+#include <format>
+
 Game::Game()
     : window{sf::VideoMode(800, 600), "Hello, world!"}
-{    
+{
     LoadTextures();
-    LoadFonts();    
-    
+    LoadFonts();
+
     states.push(std::make_unique<GameStatePlay>(this));
+
+    fpsdisplay.setFont(*fontManager.getResource("contextmenufont"));
+    fpsdisplay.setFillColor(sf::Color::Green);
+    fpsdisplay.setCharacterSize(10);
 }
 
 Game::~Game()
@@ -42,9 +48,30 @@ void Game::play()
     {
         float dt = clock.restart().asSeconds();
         fpscounter.tick();
+        fpsdisplay.setString(std::format("FPS: {}", fpscounter.getLastValue()));
 
-        states.top()->handleInput(dt);
-        states.top()->update();
-        states.top()->draw();
+        handleInput(dt);
+        update(dt);
+        draw();
     }
+}
+
+void Game::handleInput(float dt)
+{
+    states.top()->handleInput(dt);
+}
+
+void Game::update(float dt)
+{
+    states.top()->update();
+}
+
+void Game::draw()
+{
+    window.clear(sf::Color::Black);
+
+    states.top()->draw();
+
+    window.draw(fpsdisplay);
+    window.display();
 }

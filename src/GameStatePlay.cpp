@@ -26,11 +26,10 @@ GameStatePlay::~GameStatePlay()
 void GameStatePlay::draw()
 {
     game->window.setView(view);
-    game->window.clear(sf::Color::Black);
     map->draw(game->window);
+
     game->window.setView(guiview);
     menu.draw(game->window);
-    game->window.display();
 }
 
 void GameStatePlay::update()

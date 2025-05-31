@@ -26,7 +26,12 @@ private:
     void LoadTextures();
     void LoadFonts();
 
+    void handleInput(float dt);
+    void update(float dt);
+    void draw();
+
     sf::Clock clock{};
-    FrameCounter fpscounter{3.f};
+    FrameCounter fpscounter{1.f, false};
+    sf::Text fpsdisplay;
     std::stack<std::unique_ptr<GameState>> states{};
 };
