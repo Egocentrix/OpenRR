@@ -23,6 +23,9 @@ public:
 private:
     void popState();
 
+    void LoadTextures();
+    void LoadFonts();
+
     sf::Clock clock{};
     FrameCounter fpscounter{3.f};
     std::stack<std::unique_ptr<GameState>> states{};
