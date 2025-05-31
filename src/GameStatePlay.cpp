@@ -52,6 +52,9 @@ void GameStatePlay::handleInput(float dt)
             float ratio = static_cast<float>(e.size.width) / e.size.height;
             auto currentsize = view.getSize();
             view.setSize(currentsize.x, currentsize.x / ratio);
+
+            // Do not scale the GUI size
+            guiview.reset(sf::FloatRect(0, 0, e.size.width, e.size.height));
         }
 
         else if (e.type == sf::Event::MouseButtonPressed)
