@@ -21,6 +21,7 @@ enum class WallVariant
     Flat,
     InnerCorner,
     OuterCorner,
+    Split,
 };
 
 enum class RockType

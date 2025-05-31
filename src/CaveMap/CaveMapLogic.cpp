@@ -26,6 +26,9 @@ void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
             case WallVariant::OuterCorner:
                 texturename += "wall_outcorner";
                 break;
+            case WallVariant::Split:
+                texturename += "wall_split";
+                break;
             }
             return texturename;
         }
@@ -63,10 +66,21 @@ void updateRotation(TileGrid &tiles, GridCoordinate coord)
 
         if (numFloorNeighbours == 0)
         {
-            details.wallvariant = WallVariant::InnerCorner;
+            // Now include diagonals
             isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, true);
+            numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
             int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            current.rotation = (index / 2 + 3) % 4;
+
+            if (numFloorNeighbours == 1)
+            {
+                details.wallvariant = WallVariant::InnerCorner;
+                current.rotation = (index / 2 + 3) % 4;
+            }
+            else if (numFloorNeighbours == 2)
+            {
+                details.wallvariant = WallVariant::Split;
+                current.rotation = (index / 2 + 2) % 4;
+            }
         }
         else if (numFloorNeighbours == 1)
         {
