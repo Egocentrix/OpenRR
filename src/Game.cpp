@@ -8,7 +8,7 @@ Game::Game()
     texureManager.registerResource("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
     texureManager.registerResource("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
 
-    fontManager.registerResource("contextmenu", "OpenSans-Regular.ttf");
+    fontManager.registerResource("contextmenufont", "OpenSans-Regular.ttf");
     
     states.push(std::make_unique<GameStatePlay>(this));
 }

@@ -22,7 +22,7 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
 
     // Otherwise, load from disk
     auto filename = filenames.at(key);
-    Logger::Log(LogLevel::Info, "ResourceManager", "Loading resource from file: " + filename);
+    Logger::Log(LogLevel::Info, "ResourceManager", "Loading resource with id '" + key + "' from file: " + filename);
 
     std::shared_ptr<T> resource = loadFromFile(filename);
     

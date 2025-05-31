@@ -9,7 +9,7 @@ GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(
           std::make_unique<FileMapLoader>("testmap.dat"),
           parent->texureManager)},
-      menu{parent->fontManager.getResource("contextmenu")},
+      menu{parent->fontManager.getResource("contextmenufont")},
       view{parent->window.getView()},
       guiview{parent->window.getDefaultView()}
 {
