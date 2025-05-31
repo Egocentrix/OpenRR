@@ -1,8 +1,8 @@
 #include <fstream>
-#include <iostream>
 
 #include "CaveMapLoader.hpp"
 #include "CaveMapLogic.hpp"
+#include "Logging.hpp"
 
 Grid2D<Tile> MapLoadStrategy::generateDefaultMap(int width, int height)
 {
@@ -53,7 +53,7 @@ Grid2D<Tile> FileMapLoader::loadMap()
     std::ifstream infile(filename_);
     if (!infile.is_open())
     {
-        std::cerr << "could not open file: " << filename_ << std::endl;
+        Logger::Log("CaveMapLoader", "Could not open file: " + filename_);
         return generateDefaultMap();
     }
 

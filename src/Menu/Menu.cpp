@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include "Menu.hpp"
+
+#include "Logging.hpp"
 
 const int DefaultMenuWidth = 200;
 const int DefaultMenuHeight = 50;;
@@ -60,7 +60,7 @@ bool Menu::handleClickEvent(sf::Vector2i mouseposition)
         return false;
     }
     
-    std::cout << "Selected item: " << items_[itemindex].title << std::endl;
+    Logger::Log("ContextMenu", "Selected item: " + items_[itemindex].title);
     items_[itemindex].action->execute();
 
     return true;

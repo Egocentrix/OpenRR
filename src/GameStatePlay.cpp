@@ -1,4 +1,3 @@
-#include <iostream>
 #include <memory>
 
 #include "CaveMap.hpp"
@@ -122,13 +121,6 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
 
         auto tilename = map->describeTile(coord);
         auto actions = map->availableCommands(coord);
-
-        std::cout << tilename << ",\tAvailable commands:";
-        for (auto &&action : actions)
-        {
-            std::cout << " " << action->describe() << ",";
-        }
-        std::cout << std::endl;
 
         menu.setTitle(tilename);
         menu.setActions(actions);
