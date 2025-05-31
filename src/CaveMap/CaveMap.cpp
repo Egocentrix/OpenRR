@@ -42,10 +42,6 @@ std::string CaveMap::describeTile(GridCoordinate coord) const
 CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)
 {
     ActionList commands{};
-    if (true)
-    {
-        commands.emplace_back(std::make_unique<EmptyCommand>(*this, coord));
-    }
     if (tiles.getElement(coord).reachable && canCollapse(tiles, coord))
     {
         commands.emplace_back(std::make_unique<DrillCommand>(*this, coord));

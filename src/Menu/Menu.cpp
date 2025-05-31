@@ -2,9 +2,6 @@
 
 #include "Logging.hpp"
 
-const int DefaultMenuWidth = 200;
-const int DefaultMenuHeight = 50;;
-
 Menu::Menu(std::shared_ptr<sf::Font> font)
 : font_{font}
 {
@@ -42,19 +39,24 @@ void Menu::setTitle(const std::string &title)
     title_ = title;
 }
 
+void Menu::setStyle(const MenuStyle &style)
+{
+    style_ = style;
+}
+
 bool Menu::handleClickEvent(sf::Vector2i mouseposition)
 {
     auto localCoordinates = mouseposition - sf::Vector2i(x_, y_);
     int itemcount = items_.size();
     if (localCoordinates.x < 0 || 
         localCoordinates.y < 0 ||
-        localCoordinates.x > DefaultMenuWidth || 
-        localCoordinates.y > DefaultMenuHeight * (itemcount + 1))
+        localCoordinates.x > style_.MenuWidth || 
+        localCoordinates.y > style_.MenuItemHeight * (itemcount + 1))
     {
         return false;
     }
     
-    auto itemindex = localCoordinates.y / DefaultMenuHeight - 1;
+    auto itemindex = localCoordinates.y / style_.MenuItemHeight - 1;
     if (itemindex < 0 || itemindex >= itemcount)
     {
         return false;
@@ -73,20 +75,22 @@ void Menu::draw(sf::RenderTarget &target)
         return;
     }
 
-    sf::RectangleShape border(sf::Vector2f(DefaultMenuWidth, DefaultMenuHeight * (items_.size() + 1)));
-    border.setFillColor(sf::Color(150, 150, 150));
+    sf::RectangleShape border(sf::Vector2f(style_.MenuWidth, style_.MenuItemHeight * (items_.size() + 1)));
+    border.setFillColor(style_.backgroundColor);
     border.setPosition(x_, y_);
     target.draw(border);
 
-    sf::Text title(title_, *font_, 30);
+    sf::Text title(title_, *font_, style_.fontSize);
+    title.setFillColor(style_.titleTextColor);
     title.setPosition(x_ + 5, y_ + 5);
     target.draw(title);
 
-    sf::Text itemlabel("", *font_, 30);
+    sf::Text itemlabel("", *font_, style_.fontSize);
+    itemlabel.setFillColor(style_.itemTextColor);
     for (size_t i = 0; i < items_.size(); ++i)
     {
         itemlabel.setString(items_[i].title);
-        itemlabel.setPosition(x_ + 20, y_ + 5 + (DefaultMenuHeight * (i+1)));
+        itemlabel.setPosition(x_ + 20, y_ + 5 + (style_.MenuItemHeight * (i+1)));
         target.draw(itemlabel);
     }
 }
