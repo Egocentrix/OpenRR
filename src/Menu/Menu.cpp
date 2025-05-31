@@ -79,14 +79,14 @@ void Menu::draw(sf::RenderTarget &target)
     target.draw(border);
 
     sf::Text title(title_, *font_, 30);
-    title.setPosition(x_ + 5, y_);
+    title.setPosition(x_ + 5, y_ + 5);
     target.draw(title);
 
     sf::Text itemlabel("", *font_, 30);
     for (size_t i = 0; i < items_.size(); ++i)
     {
         itemlabel.setString(items_[i].title);
-        itemlabel.setPosition(x_ + 10, y_ + (DefaultMenuHeight * (i+1)));
+        itemlabel.setPosition(x_ + 20, y_ + 5 + (DefaultMenuHeight * (i+1)));
         target.draw(itemlabel);
     }
 }
