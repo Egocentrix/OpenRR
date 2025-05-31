@@ -22,7 +22,7 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
 
     // Otherwise, load from disk
     auto filename = filenames.at(key);
-    Logger::Log("ResourceManager", "Loading resource from file: " + filename);
+    Logger::Log(LogLevel::Info, "ResourceManager", "Loading resource from file: " + filename);
 
     std::shared_ptr<T> resource = loadFromFile(filename);
     
@@ -32,7 +32,7 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
     }
     else
     {
-        Logger::Log("ResourceManager", "Failed to load file: " + filename);
+        Logger::Log(LogLevel::Error, "ResourceManager", "Failed to load file: " + filename);
     }
    
     return resource;

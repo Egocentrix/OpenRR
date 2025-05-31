@@ -53,9 +53,11 @@ Grid2D<Tile> FileMapLoader::loadMap()
     std::ifstream infile(filename_);
     if (!infile.is_open())
     {
-        Logger::Log("CaveMapLoader", "Could not open file: " + filename_);
+        Logger::Log(LogLevel::Error, "CaveMapLoader", "Could not open file: " + filename_);
         return generateDefaultMap();
     }
+
+    Logger::Log(LogLevel::Info, "CaveMapLoader", "Loading map from file: " + filename_);
 
     int width, height;
     infile >> width >> height;
