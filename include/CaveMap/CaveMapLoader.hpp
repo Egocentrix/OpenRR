@@ -5,6 +5,8 @@
 #include "Grid2D.hpp"
 #include "Tile.hpp"
 
+#include "Logging.hpp"
+
 class MapLoadStrategy
 {
 public:
@@ -44,4 +46,6 @@ private:
     void saveMap(const Grid2D<Tile> &tiles) override;
 
     std::string filename_{};
+    Logger logger_{Logger::create("FileMapLoader")};
+
 };

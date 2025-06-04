@@ -1,7 +1,6 @@
 #include <format>
 
 #include "Helpers.hpp"
-#include "Logging.hpp"
 
 FrameCounter::FrameCounter(float updateInterval, bool enableLogging)
     : updateIntervalSeconds{updateInterval},
@@ -20,7 +19,7 @@ void FrameCounter::tick()
 
         if (enableLogging_)
         {
-            Logger::Log("FrameCounter", std::format("FPS: {}\tFrametime: {} ms", fps, frametimeMilliseconds));
+            logger_.Log(std::format("FPS: {}\tFrametime: {} ms", fps, frametimeMilliseconds));
         }
 
         clock_.restart();

@@ -6,6 +6,8 @@
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+#include "Logging.hpp"
+
 // Generic class for resource managers, e.g. Textures
 template <typename T>
 class ResourceManager
@@ -19,6 +21,8 @@ public:
 private:
     std::unordered_map<std::string, std::string> filenames;
     std::unordered_map<std::string, std::weak_ptr<T>> resources;
+
+    Logger logger_{Logger::create("ResourceManager")};
 
     // This function needs to be implemented for each class specialization
     static std::shared_ptr<T> loadFromFile(const std::string &filename);

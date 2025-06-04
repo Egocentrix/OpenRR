@@ -1,7 +1,5 @@
 #include "ResourceManager.hpp"
 
-#include "Logging.hpp"
-
 template <typename T>
 void ResourceManager<T>::registerResource(const std::string &key, const std::string &filename)
 {
@@ -22,7 +20,7 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
 
     // Otherwise, load from disk
     auto filename = filenames.at(key);
-    Logger::Log(LogLevel::Info, "ResourceManager", "Loading resource with id '" + key + "' from file: " + filename);
+    logger_.Log(LogLevel::Info, "Loading resource with id '" + key + "' from file: " + filename);
 
     std::shared_ptr<T> resource = loadFromFile(filename);
     
@@ -32,7 +30,7 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
     }
     else
     {
-        Logger::Log(LogLevel::Error, "ResourceManager", "Failed to load file: " + filename);
+        logger_.Log(LogLevel::Error, "Failed to load file: " + filename);
     }
    
     return resource;

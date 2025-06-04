@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Command.hpp"
+#include "Logging.hpp"
 
 struct MenuStyle
 {
@@ -54,4 +55,5 @@ private:
     std::shared_ptr<sf::Font> font_;
 
     MenuStyle style_;
+    Logger logger_{Logger::create("ContextMenu")};
 };

@@ -1,7 +1,5 @@
 #include "Menu.hpp"
 
-#include "Logging.hpp"
-
 Menu::Menu(std::shared_ptr<sf::Font> font)
 : font_{font}
 {
@@ -62,7 +60,7 @@ bool Menu::handleClickEvent(sf::Vector2i mouseposition)
         return false;
     }
     
-    Logger::Log("ContextMenu", "Selected item: " + items_[itemindex].title);
+    logger_.Log("Selected item: " + items_[itemindex].title);
     items_[itemindex].action->execute();
 
     return true;

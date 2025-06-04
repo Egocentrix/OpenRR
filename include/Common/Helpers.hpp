@@ -2,6 +2,8 @@
 
 #include <SFML/System/Clock.hpp>
 
+#include "Logging.hpp"
+
 class FrameCounter
 {
 public:
@@ -17,4 +19,6 @@ private:
     float updateIntervalSeconds{3};
     bool enableLogging_{true};
     int lastvalue_;
+
+    Logger logger_{Logger::create("FrameCounter")};
 };
