@@ -21,22 +21,13 @@ GridCoordinate CaveMap::getCenter() const
 
 std::string CaveMap::describeTile(GridCoordinate coord) const
 {
-    if (!tiles.getElement(coord).discovered)
+    auto tile = tiles.getElement(coord);
+    if (!tile.discovered)
     {
         return "Undiscovered";
     }
 
-    std::string description{};
-    switch (tiles.getElement(coord).getType())
-    {
-    case TileType::Floor:
-        description += "Floor";
-        break;
-    case TileType::Wall:
-        description += "Wall";
-        break;
-    }
-    return description;
+    return tileTypeToString(tile.getType()); 
 }
 
 CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)

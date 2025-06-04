@@ -10,6 +10,8 @@ enum class TileType
     Wall,
 };
 
+std::string tileTypeToString(const TileType type);
+
 enum class FloorType
 {
     Floor,

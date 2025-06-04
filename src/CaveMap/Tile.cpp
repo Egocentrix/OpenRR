@@ -1,5 +1,20 @@
 #include "Tile.hpp"
 
+std::string tileTypeToString(const TileType type)
+{
+    switch (type)
+    {
+    case TileType::Floor:
+        return "Floor";
+        break;
+    case TileType::Wall:
+        return "Wall";
+        break;
+    default:
+        return "Undefined";
+    }
+}
+
 Tile::Tile(TileType type)
 {
     switch (type)
