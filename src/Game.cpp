@@ -2,9 +2,13 @@
 
 #include <format>
 
+#include "Logging.hpp"
+
 Game::Game()
     : window{sf::VideoMode(800, 600), "Hello, world!"}
 {
+    Logger::create("OpenRR").Log(" -------- <  STARTUP  > -------- ");
+    
     LoadTextures();
     LoadFonts();
 
