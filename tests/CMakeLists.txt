@@ -11,5 +11,5 @@ target_include_directories(tests PRIVATE ${OPENRR_INCLUDE_DIR}
                                          ${OPENRR_INCLUDE_DIR}/Common
                                          ${OPENRR_INCLUDE_DIR}/Menu)
 
-target_link_libraries(tests PRIVATE Catch2::Catch2WithMain
-                                    CaveMap)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(tests PRIVATE CaveMap OpenRR-Common)
