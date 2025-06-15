@@ -2,4 +2,4 @@
 - Centralise default map size. 
 - (maybe) rename maploaders.
 
-- proper tests
+- Move texture logic out of CaveMap, let maprenderer handle it?
