@@ -2,25 +2,31 @@
 
 #include "ResourceManager.hpp"
 
-TEST_CASE("Resource Manager")
+SCENARIO("Registering and loading resources")
 {
-    ResourceManager<sf::Font> rm;
-
-    SECTION("A registered resource can be loaded")
+    GIVEN("A resource Manager")
     {
-        REQUIRE_NOTHROW(rm.registerResource("resource-id", "../../OpenSans-Regular.ttf"));
+        ResourceManager<sf::Font> rm;
 
-        auto resource = rm.getResource("resource-id");
-        CHECK(resource != nullptr);
-    }
+        WHEN("I register a resource")
+        {
+            REQUIRE_NOTHROW(rm.registerResource("resource-id", "../../OpenSans-Regular.ttf"));
 
-    SECTION("Loading an unregistered resource will give error")
-    {
-        REQUIRE_THROWS(rm.getResource("unregistered-name"));
-    }
+            THEN("I can retrieve the registered resource")
+            {
+                auto resource = rm.getResource("resource-id");
+                CHECK(resource != nullptr);
+            }
+        }
 
-    SECTION("Attempting to register a non-existing file will give an error")
-    {
-        REQUIRE_THROWS(rm.registerResource("resource-id", "non-existing.filename"));
+        THEN("Loading an unregistered resource will give an error")
+        {
+            REQUIRE_THROWS(rm.getResource("unregistered-name"));
+        }
+
+        THEN("Attempting to register a non-existing file will give an error")
+        {
+            REQUIRE_THROWS(rm.registerResource("resource-id", "non-existing.filename"));
+        }
     }
 }
