@@ -6,9 +6,7 @@
 #include "Game.hpp"
 
 GameStatePlay::GameStatePlay(Game *parent)
-    : map{std::make_unique<CaveMap>(
-          std::make_unique<FileMapLoader>("testmap.dat"),
-          parent->texureManager)},
+    : map{std::make_unique<CaveMap>(std::make_unique<FileMapLoader>("testmap.dat"))},
       menu{parent->fontManager.getResource("contextmenufont")},
       view{parent->window.getView()},
       guiview{parent->window.getDefaultView()}
@@ -34,7 +32,7 @@ void GameStatePlay::draw()
 
 void GameStatePlay::update()
 {
-    map->update();
+    map->update(game->texureManager);
 }
 
 void GameStatePlay::handleInput(float dt)

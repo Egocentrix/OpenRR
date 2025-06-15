@@ -3,8 +3,8 @@
 #include "CaveMapLogic.hpp"
 #include "MapRenderer.hpp"
 
-CaveMap::CaveMap(std::unique_ptr<MapLoadStrategy> loader, ResourceManager<sf::Texture> &texturepack)
-    : maploader{std::move(loader)}, tileset{texturepack}
+CaveMap::CaveMap(std::unique_ptr<MapLoadStrategy> loader)
+    : maploader{std::move(loader)}
 {
     tiles = maploader->load();
 }
@@ -27,7 +27,7 @@ std::string CaveMap::describeTile(GridCoordinate coord) const
         return "Undiscovered";
     }
 
-    return tileTypeToString(tile.getType()); 
+    return tileTypeToString(tile.getType());
 }
 
 CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)
@@ -65,7 +65,7 @@ void CaveMap::draw(sf::RenderTarget &target) const
     return;
 }
 
-void CaveMap::update()
+void CaveMap::update(ResourceManager<sf::Texture> &tileset)
 {
     updateTextures(tiles, tileset, false);
 }

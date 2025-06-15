@@ -47,8 +47,7 @@ TEST_CASE("Loading a new default map")
 
 TEST_CASE("Drilling walls")
 {
-    ResourceManager<sf::Texture> empty_rm{};
-    CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5), empty_rm};
+    CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
 
     GridCoordinate top{0, 2};
     GridCoordinate center{2, 2};

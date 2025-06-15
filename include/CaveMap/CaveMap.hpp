@@ -15,13 +15,13 @@
 class CaveMap : public CaveMapInterface
 {
 public:
-    CaveMap(std::unique_ptr<MapLoadStrategy> loader, ResourceManager<sf::Texture> &texturepack);
+    CaveMap(std::unique_ptr<MapLoadStrategy> loader);
 
     ~CaveMap();
 
     // Implement CaveMapInterface
     void draw(sf::RenderTarget &target) const override;
-    void update() override;
+    void update(ResourceManager<sf::Texture> &tileset) override;
 
     GridCoordinate getCenter() const override;
 
@@ -37,5 +37,4 @@ private:
     TileGrid tiles;
 
     std::unique_ptr<MapLoadStrategy> maploader;
-    ResourceManager<sf::Texture> &tileset;
 };
