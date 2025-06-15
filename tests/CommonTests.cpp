@@ -6,16 +6,21 @@ TEST_CASE("Resource Manager")
 {
     ResourceManager<sf::Font> rm;
 
+    SECTION("A registered resource can be loaded")
+    {
+        REQUIRE_NOTHROW(rm.registerResource("resource-id", "../../OpenSans-Regular.ttf"));
+
+        auto resource = rm.getResource("resource-id");
+        CHECK(resource != nullptr);
+    }
+
     SECTION("Loading an unregistered resource will give error")
     {
         REQUIRE_THROWS(rm.getResource("unregistered-name"));
     }
 
-    SECTION("A registered resource can be loaded")
+    SECTION("Attempting to register a non-existing file will give an error")
     {
-        rm.registerResource("resource-id", "../../OpenSans-Regular.ttf");
-        auto resource = rm.getResource("resource-id");
-        REQUIRE(resource != nullptr);
+        REQUIRE_THROWS(rm.registerResource("resource-id", "non-existing.filename"));
     }
-    
 }
