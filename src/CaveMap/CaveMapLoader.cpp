@@ -154,10 +154,14 @@ Grid2D<Tile> StringMapLoader::loadMap()
             tiles.addElement(Tile{TileType::Floor});
             break;
         }
-        
     }
 
-    int originIndex = mapstring_.find('o');
+    auto originIndex = mapstring_.find('o');
+    if (originIndex == std::string::npos)
+    {
+        // No explicit origin defined. Use first available floor tile
+        originIndex = mapstring_.find('-');
+    }
     int originX = originIndex % (width + 1);
     int originY = originIndex / (width + 1);
 
@@ -168,5 +172,23 @@ Grid2D<Tile> StringMapLoader::loadMap()
 
 void StringMapLoader::saveMap(const Grid2D<Tile> &tiles)
 {
+    std::string mapstring{};
 
+    int width = tiles.getWidth();
+    int index = 0;
+
+    const std::unordered_map<TileType, char> letters{
+        {TileType::Floor, 'f'},
+        {TileType::Wall, 'w'}};
+
+    for (const auto &tile : tiles)
+    {
+        mapstring += letters.at(tile.getType());
+        if (++index % width == 0)
+        {
+            mapstring += ROW_SEPARATOR_CHAR;
+        }
+    }
+
+    logger_.Log(LogLevel::Info, "Save this mapstring for later use: \n\"" + mapstring + "\"");
 }
