@@ -49,7 +49,7 @@ TEST_CASE("Loading a new default map")
     }
 }
 
-TEST_CASE("Checking a map string for validity")
+TEST_CASE("Checking a map string for validity", "[maploader]")
 {
     SECTION("A rectangular map string is classified valid")
     {
@@ -77,6 +77,47 @@ TEST_CASE("Checking a map string for validity")
         auto mapstring = mapstrings[index];
         bool valid = StringMapLoader::isValid(mapstring);
         CHECK(valid == false);
+    }
+}
+
+TEST_CASE("Loading a map from a mapstring", "[maploader]")
+{
+    std::string mapstring = "wwwwww,"
+                            "w---ww,"
+                            "w--o-w,"
+                            "w----w,"
+                            "wwwwww,";
+
+    auto tiles = StringMapLoader(mapstring).load();
+
+    SECTION("Map size is calculated correctly")
+    {
+        CHECK(tiles.getWidth() == 6);
+        CHECK(tiles.getHeight() == 5);
+    }
+
+    auto topleft = tiles.getElement(0, 0);
+    auto topright = tiles.getElement(5, 0);
+    auto toprightinner = tiles.getElement(4, 1);
+    auto center = tiles.getElement(3, 2);
+
+    SECTION("The correct tile types are added")
+    {
+        CHECK(topleft.getType() == TileType::Wall);
+        CHECK(topright.getType() == TileType::Wall);
+        CHECK(toprightinner.getType() == TileType::Wall);
+        CHECK(center.getType() == TileType::Floor);
+    }
+
+    SECTION("Map visibility was calculated after loading")
+    {
+        CHECK(topleft.discovered == true);
+        CHECK(topright.discovered == false);
+        CHECK(toprightinner.discovered == true);
+        CHECK(center.discovered == true);
+
+        CHECK(topleft.reachable == false);
+        CHECK(toprightinner.reachable == true);
     }
 }
 

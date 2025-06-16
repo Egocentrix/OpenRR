@@ -98,7 +98,7 @@ StringMapLoader::StringMapLoader(const std::string &mapstring)
 bool StringMapLoader::isValid(const std::string &mapstring)
 {
     // Check if all rows are the same length
-    auto width = mapstring.find(StringMapLoader::ROW_SEPARATOR_CHAR);
+    int width = mapstring.find(StringMapLoader::ROW_SEPARATOR_CHAR);
     for (size_t i = width; i < mapstring.size(); i += width + 1)
     {
         if (mapstring[i] != StringMapLoader::ROW_SEPARATOR_CHAR)
@@ -108,15 +108,15 @@ bool StringMapLoader::isValid(const std::string &mapstring)
     }
 
     // Map should be rectangular
-    if(mapstring.size() % (width + 1) != 0)
+    if (mapstring.size() % (width + 1) != 0)
     {
         return false;
     }
 
     // One comma per row
-    auto height = mapstring.size() / (width + 1);
-    auto separatorcount = std::count(mapstring.begin(), mapstring.end(), StringMapLoader::ROW_SEPARATOR_CHAR);
-    if(separatorcount != height)
+    int height = mapstring.size() / (width + 1);
+    int separatorcount = std::count(mapstring.begin(), mapstring.end(), StringMapLoader::ROW_SEPARATOR_CHAR);
+    if (separatorcount != height)
     {
         return false;
     }
@@ -126,9 +126,47 @@ bool StringMapLoader::isValid(const std::string &mapstring)
 
 Grid2D<Tile> StringMapLoader::loadMap()
 {
-    return Grid2D<Tile>{};
+    if (!isValid(mapstring_))
+    {
+        logger_.Log(LogLevel::Error, "Mapstring is not rectangular");
+        return Grid2D<Tile>{};
+    }
+
+    int width = mapstring_.find(StringMapLoader::ROW_SEPARATOR_CHAR);
+    int height = mapstring_.size() / (width + 1);
+
+    Grid2D<Tile> tiles{width, height};
+
+    for (char tilechar : mapstring_)
+    {
+        switch (tilechar)
+        {
+        case ROW_SEPARATOR_CHAR:
+            // Do nothing
+            break;
+        case 'w':
+            tiles.addElement(Tile{TileType::Wall});
+            break;
+        case 'o':
+        case '-':
+            // Floor. Fallthrough intentional
+        default:
+            tiles.addElement(Tile{TileType::Floor});
+            break;
+        }
+        
+    }
+
+    int originIndex = mapstring_.find('o');
+    int originX = originIndex % (width + 1);
+    int originY = originIndex / (width + 1);
+
+    recursiveDiscover(tiles, GridCoordinate{originX, originY});
+
+    return tiles;
 }
 
 void StringMapLoader::saveMap(const Grid2D<Tile> &tiles)
 {
+
 }
