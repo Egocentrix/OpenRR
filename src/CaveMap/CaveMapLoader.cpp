@@ -89,3 +89,46 @@ void FileMapLoader::saveMap(const Grid2D<Tile> &tiles)
     }
     return;
 }
+
+StringMapLoader::StringMapLoader(const std::string &mapstring)
+    : mapstring_{mapstring}
+{
+}
+
+bool StringMapLoader::isValid(const std::string &mapstring)
+{
+    // Check if all rows are the same length
+    auto width = mapstring.find(StringMapLoader::ROW_SEPARATOR_CHAR);
+    for (size_t i = width; i < mapstring.size(); i += width + 1)
+    {
+        if (mapstring[i] != StringMapLoader::ROW_SEPARATOR_CHAR)
+        {
+            return false;
+        }
+    }
+
+    // Map should be rectangular
+    if(mapstring.size() % (width + 1) != 0)
+    {
+        return false;
+    }
+
+    // One comma per row
+    auto height = mapstring.size() / (width + 1);
+    auto separatorcount = std::count(mapstring.begin(), mapstring.end(), StringMapLoader::ROW_SEPARATOR_CHAR);
+    if(separatorcount != height)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+Grid2D<Tile> StringMapLoader::loadMap()
+{
+    return Grid2D<Tile>{};
+}
+
+void StringMapLoader::saveMap(const Grid2D<Tile> &tiles)
+{
+}

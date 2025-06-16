@@ -45,7 +45,38 @@ TEST_CASE("Loading a new default map")
     }
 }
 
-TEST_CASE("Drilling walls")
+TEST_CASE("Checking a map string for validity")
+{
+    SECTION("A rectangular map string is classified valid")
+    {
+        std::string mapstring = "xxxxx,"
+                                "yyyyy,"
+                                "zzzzz,";
+        bool valid = StringMapLoader::isValid(mapstring);
+        CHECK(valid == true);
+    }
+
+    GIVEN("A non-rectangular map string")
+    {
+        std::vector<std::string> mapstrings = {"xxxxxx,"
+                                               "yyyyyy,"
+                                               "zzzzz,",
+
+                                               "xxxxxx,"
+                                               "yyyyy,"
+                                               "zzzzzx,",
+
+                                               "xxxxxx,"
+                                               "yyyyy,,"
+                                               "zzzzzx,"};
+        int index = GENERATE(0, 1);
+        auto mapstring = mapstrings[index];
+        bool valid = StringMapLoader::isValid(mapstring);
+        CHECK(valid == false);
+    }
+}
+
+SCENARIO("Drilling walls")
 {
     CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
 

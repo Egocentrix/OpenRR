@@ -11,7 +11,7 @@ class MapLoadStrategy
 {
 public:
     virtual ~MapLoadStrategy() = default;
-    
+
     Grid2D<Tile> load();
     void save(const Grid2D<Tile> &tiles);
 
@@ -47,5 +47,20 @@ private:
 
     std::string filename_{};
     Logger logger_{Logger::create("FileMapLoader")};
+};
 
+class StringMapLoader : public MapLoadStrategy
+{
+public:
+    StringMapLoader(const std::string &mapstring);
+
+    static bool isValid(const std::string &mapstring);
+    static constexpr char ROW_SEPARATOR_CHAR = ',';
+
+private:
+    Grid2D<Tile> loadMap() override;
+    void saveMap(const Grid2D<Tile> &tiles) override;
+
+    const std::string mapstring_{};
+    Logger logger_{Logger::create("StringMapLoader")};
 };
