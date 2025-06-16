@@ -41,6 +41,10 @@ TEST_CASE("Loading a new default map")
     {
         REQUIRE(tiles.getElement(0, height / 2).getType() == TileType::Wall);
         REQUIRE(tiles.getElement(width - 1, height - 1).getType() == TileType::Wall);
+    }
+
+    SECTION("The center tile is a floor tile")
+    {
         REQUIRE(tiles.getElement(width / 2, height / 2).getType() == TileType::Floor);
     }
 }
@@ -78,35 +82,49 @@ TEST_CASE("Checking a map string for validity")
 
 SCENARIO("Drilling walls")
 {
-    CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
-
-    GridCoordinate top{0, 2};
-    GridCoordinate center{2, 2};
-    GridCoordinate tileToDrill{1, 2};
-
-    SECTION("Edge tile can not be drilled")
+    GIVEN("A default cave map")
     {
-        REQUIRE(cavemap.describeTile(top) == "Undiscovered");
-        REQUIRE(cavemap.availableCommands(top).empty());
-    }
-    SECTION("Discovered tiles can be drilled")
-    {
-        REQUIRE(cavemap.describeTile(center) == "Floor");
-        REQUIRE(cavemap.describeTile(tileToDrill) == "Wall");
+        CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
 
-        auto actions = cavemap.availableCommands(tileToDrill);
-        CHECK(actions.size() == 1);
-        CHECK(actions[0]->describe() == "Drill");
-    }
+        GridCoordinate top{0, 2};
+        GridCoordinate center{2, 2};
+        GridCoordinate tileToDrill{1, 2};
 
-    SECTION("Drilling a tile expands the cave")
-    {
-        REQUIRE(cavemap.describeTile(tileToDrill) == "Wall");
-        DrillCommand(cavemap, tileToDrill).execute();
-        CHECK(cavemap.describeTile(tileToDrill) == "Floor");
+        THEN("An edge tile is not visible and can not be drilled")
+        {
+            REQUIRE(cavemap.describeTile(top) == "Undiscovered");
+            CHECK(cavemap.availableCommands(top).empty());
+        }
 
-        // Edge tile is now discovered but can still not be drilled.
-        CHECK(cavemap.describeTile(top) == "Wall"); 
-        CHECK(cavemap.availableCommands(top).empty());
+        WHEN("I check a wall tile next to a floor tile")
+        {
+            REQUIRE(cavemap.describeTile(center) == "Floor");
+            REQUIRE(cavemap.describeTile(tileToDrill) == "Wall");
+
+            auto actions = cavemap.availableCommands(tileToDrill);
+
+            THEN("That tile can be drilled")
+            {
+                CHECK(actions.size() == 1);
+                CHECK(actions[0]->describe() == "Drill");
+            }
+        }
+
+        WHEN("I drill a wall")
+        {
+            REQUIRE(cavemap.describeTile(tileToDrill) == "Wall");
+            DrillCommand(cavemap, tileToDrill).execute();
+
+            THEN("The drilled wall becomes a floor tile")
+            {
+                CHECK(cavemap.describeTile(tileToDrill) == "Floor");
+            }
+
+            THEN("The edge tile behind it is now discovered but can still not be drilled")
+            {
+                CHECK(cavemap.describeTile(top) == "Wall");
+                CHECK(cavemap.availableCommands(top).empty());
+            }
+        }
     }
 }
