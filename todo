@@ -1,5 +1,3 @@
-- stringMapLoader
 - Centralise default map size. 
-- (maybe) rename maploaders.
 
 - Move texture logic out of CaveMap, let maprenderer handle it?
