@@ -98,10 +98,10 @@ StringMapLoader::StringMapLoader(const std::string &mapstring)
 bool StringMapLoader::isValid(const std::string &mapstring)
 {
     // Check if all rows are the same length
-    int width = mapstring.find(StringMapLoader::ROW_SEPARATOR_CHAR);
+    int width = mapstring.find(ROW_SEPARATOR_CHAR);
     for (size_t i = width; i < mapstring.size(); i += width + 1)
     {
-        if (mapstring[i] != StringMapLoader::ROW_SEPARATOR_CHAR)
+        if (mapstring[i] != ROW_SEPARATOR_CHAR)
         {
             return false;
         }
@@ -115,7 +115,7 @@ bool StringMapLoader::isValid(const std::string &mapstring)
 
     // One comma per row
     int height = mapstring.size() / (width + 1);
-    int separatorcount = std::count(mapstring.begin(), mapstring.end(), StringMapLoader::ROW_SEPARATOR_CHAR);
+    int separatorcount = std::count(mapstring.begin(), mapstring.end(), ROW_SEPARATOR_CHAR);
     if (separatorcount != height)
     {
         return false;
@@ -132,7 +132,7 @@ Grid2D<Tile> StringMapLoader::loadMap()
         return Grid2D<Tile>{};
     }
 
-    int width = mapstring_.find(StringMapLoader::ROW_SEPARATOR_CHAR);
+    int width = mapstring_.find(ROW_SEPARATOR_CHAR);
     int height = mapstring_.size() / (width + 1);
 
     Grid2D<Tile> tiles{width, height};
@@ -156,16 +156,16 @@ Grid2D<Tile> StringMapLoader::loadMap()
         }
     }
 
-    auto originIndex = mapstring_.find('o');
-    if (originIndex == std::string::npos)
+    for (size_t i = 0; i < mapstring_.size(); ++i)
     {
-        // No explicit origin defined. Use first available floor tile
-        originIndex = mapstring_.find('-');
-    }
-    int originX = originIndex % (width + 1);
-    int originY = originIndex / (width + 1);
+        if (mapstring_[i] == 'o')
+        {
+            int originX = i % (width + 1);
+            int originY = i / (width + 1);
 
-    recursiveDiscover(tiles, GridCoordinate{originX, originY});
+            recursiveDiscover(tiles, GridCoordinate{originX, originY});
+        }
+    }
 
     return tiles;
 }
@@ -178,7 +178,7 @@ void StringMapLoader::saveMap(const Grid2D<Tile> &tiles)
     int index = 0;
 
     const std::unordered_map<TileType, char> letters{
-        {TileType::Floor, 'f'},
+        {TileType::Floor, '-'},
         {TileType::Wall, 'w'}};
 
     for (const auto &tile : tiles)

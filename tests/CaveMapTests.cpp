@@ -60,7 +60,7 @@ TEST_CASE("Checking a map string for validity", "[maploader]")
         CHECK(valid == true);
     }
 
-    GIVEN("A non-rectangular map string")
+    SECTION("A non-rectangular map string is classified invalid")
     {
         std::vector<std::string> mapstrings = {"xxxxxx,"
                                                "yyyyyy,"
@@ -119,6 +119,20 @@ TEST_CASE("Loading a map from a mapstring", "[maploader]")
         CHECK(topleft.reachable == false);
         CHECK(toprightinner.reachable == true);
     }
+}
+
+TEST_CASE("Loading a map with two origins")
+{
+    std::string mapstring = "wwwww,"
+                            "w-w-w,"
+                            "w-w-w,"
+                            "wowow,"
+                            "wwwww,";
+
+    auto tiles = StringMapLoader(mapstring).load();
+
+    CHECK(tiles.getElement(1,1).discovered == true);
+    CHECK(tiles.getElement(3,1).discovered == true);
 }
 
 SCENARIO("Drilling walls")
