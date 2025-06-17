@@ -131,8 +131,8 @@ TEST_CASE("Loading a map with two origins")
 
     auto tiles = StringMapLoader(mapstring).load();
 
-    CHECK(tiles.getElement(1,1).discovered == true);
-    CHECK(tiles.getElement(3,1).discovered == true);
+    CHECK(tiles.getElement(1, 1).discovered == true);
+    CHECK(tiles.getElement(3, 1).discovered == true);
 }
 
 SCENARIO("Drilling walls")
@@ -179,6 +179,37 @@ SCENARIO("Drilling walls")
             {
                 CHECK(cavemap.describeTile(top) == "Wall");
                 CHECK(cavemap.availableCommands(top).empty());
+            }
+        }
+    }
+}
+
+SCENARIO("Cave discovery")
+{
+    GIVEN("A cave map with an unreachable cave")
+    {
+        std::string mapstring = "wwwwww,"
+                                "w-ww-w,"
+                                "w-ww-w,"
+                                "woww-w,"
+                                "wwwwww,";
+
+        CaveMap cavemap{std::make_unique<StringMapLoader>(mapstring)};
+        GridCoordinate hiddencave{4, 2};
+
+        THEN("The cave is undiscovered")
+        {
+            REQUIRE(cavemap.describeTile(hiddencave) == "Undiscovered");
+        }
+
+        WHEN("I drill the wall between the caves")
+        {
+            GridCoordinate wall{2, 3};
+            DrillCommand{cavemap, wall}.execute();
+
+            THEN("A new cave is discovered")
+            {
+                CHECK(cavemap.describeTile(hiddencave) == "Floor");
             }
         }
     }

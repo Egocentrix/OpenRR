@@ -1,3 +1,2 @@
-- Centralise default map size. 
 
 - Move texture logic out of CaveMap, let maprenderer handle it?
