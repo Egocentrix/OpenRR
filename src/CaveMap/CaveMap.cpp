@@ -30,7 +30,7 @@ std::string CaveMap::describeTile(GridCoordinate coord) const
     return tileTypeToString(tile.getType());
 }
 
-CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)
+CaveMapInterface::ActionList CaveMap::getAvailableCommands(GridCoordinate coord)
 {
     if (tiles.isEdgeElement(coord) || !tiles.getElement(coord).reachable)
     {

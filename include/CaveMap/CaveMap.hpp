@@ -27,7 +27,7 @@ public:
 
     std::string describeTile(GridCoordinate coord) const override;
 
-    ActionList availableCommands(GridCoordinate coord) override;
+    ActionList getAvailableCommands(GridCoordinate coord) override;
 
     // Other functions
     void drill(GridCoordinate coord);

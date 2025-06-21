@@ -108,7 +108,7 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         }
         else
         {
-            for (auto &&c : map->availableCommands(coord))
+            for (auto &&c : map->getAvailableCommands(coord))
             {
                 if (c->describe() == "Drill")
                     c->execute();
@@ -120,7 +120,7 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         menu.setLocation(mouseposition.x, mouseposition.y);
 
         auto tilename = map->describeTile(coord);
-        auto actions = map->availableCommands(coord);
+        auto actions = map->getAvailableCommands(coord);
 
         menu.setTitle(tilename);
         menu.setActions(actions);

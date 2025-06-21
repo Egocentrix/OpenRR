@@ -148,7 +148,7 @@ SCENARIO("Drilling walls")
         THEN("An edge tile is not visible and can not be drilled")
         {
             REQUIRE(cavemap.describeTile(top) == "Undiscovered");
-            CHECK(cavemap.availableCommands(top).empty());
+            CHECK(cavemap.getAvailableCommands(top).empty());
         }
 
         WHEN("I check a wall tile next to a floor tile")
@@ -156,7 +156,7 @@ SCENARIO("Drilling walls")
             REQUIRE(cavemap.describeTile(center) == "Floor");
             REQUIRE(cavemap.describeTile(tileToDrill) == "Wall");
 
-            auto actions = cavemap.availableCommands(tileToDrill);
+            auto actions = cavemap.getAvailableCommands(tileToDrill);
 
             THEN("That tile can be drilled")
             {
@@ -178,7 +178,7 @@ SCENARIO("Drilling walls")
             THEN("The edge tile behind it is now discovered but can still not be drilled")
             {
                 CHECK(cavemap.describeTile(top) == "Wall");
-                CHECK(cavemap.availableCommands(top).empty());
+                CHECK(cavemap.getAvailableCommands(top).empty());
             }
         }
     }
