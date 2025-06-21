@@ -39,3 +39,23 @@ TileType Tile::getType() const
 
     return std::visit(TileTypeFromDetails{}, details);
 }
+
+std::vector<TileAction> Tile::getAvailableActions() const
+{
+    struct TileActionsFromDetails
+    {
+        std::vector<TileAction> operator()(const WallDetails &) const
+        {
+            std::vector<TileAction> actions;
+            actions.push_back(TileAction::Drill);
+            return actions;
+        }
+
+        std::vector<TileAction> operator()(const FloorDetails &) const
+        {
+            return std::vector<TileAction>{};
+        }
+    };
+    
+    return std::visit(TileActionsFromDetails{}, details);
+}

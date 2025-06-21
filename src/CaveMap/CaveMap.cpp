@@ -32,12 +32,21 @@ std::string CaveMap::describeTile(GridCoordinate coord) const
 
 CaveMapInterface::ActionList CaveMap::availableCommands(GridCoordinate coord)
 {
-    ActionList commands{};
-    if (tiles.getElement(coord).reachable && canCollapse(tiles, coord))
+    if (tiles.isEdgeElement(coord) || !tiles.getElement(coord).reachable)
     {
-        commands.emplace_back(std::make_unique<DrillCommand>(*this, coord));
+        // No actions possible
+        return ActionList{};
     }
 
+    auto actions = tiles.getElement(coord).getAvailableActions();
+
+    MapCommandFactory cf(*this);
+    ActionList commands{};
+    for (auto action : actions)
+    {
+        commands.emplace_back(cf.createCommand(coord, action));
+    }
+    
     return commands;
 }
 

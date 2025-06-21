@@ -31,6 +31,12 @@ enum class RockType
     Solid,
 };
 
+enum class TileAction
+{
+    Drill,
+    // Clear rubble, reinforce, build
+};
+
 struct FloorDetails
 {
     FloorType floortype;
@@ -50,6 +56,7 @@ public:
     Tile(TileType type);
 
     TileType getType() const;
+    std::vector<TileAction> getAvailableActions() const;
 
     bool discovered{false};
     bool reachable{false};

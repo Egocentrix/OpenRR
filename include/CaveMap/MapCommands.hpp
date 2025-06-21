@@ -1,8 +1,10 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include "Command.hpp"
 #include "CaveMapCommon.hpp"
+#include "Tile.hpp"
 class CaveMap;
 
 // Base classes for Command pattern
@@ -21,13 +23,14 @@ protected:
     const GridCoordinate coord_;
 };
 
-class CaveMapController
+class MapCommandFactory
 {
-public:
-    static void executeCommand(const MapCommand &command)
-    {
-        command.execute();
-    }
+    public:
+    MapCommandFactory(CaveMap& map);
+    std::unique_ptr<MapCommand> createCommand(GridCoordinate coord, TileAction action);
+
+    private:
+    CaveMap& map_;
 };
 
 // Specific commands from here
