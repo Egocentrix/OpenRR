@@ -4,6 +4,7 @@
 
 #include "CaveMapInterface.hpp"
 #include "GameState.hpp"
+#include "KeyboardEventHandler.hpp"
 #include "Menu.hpp"
 
 // The main state where the game is played
@@ -23,6 +24,7 @@ private:
     sf::View view;
     sf::View guiview;
     float zoomlevel{1};
+    KeyboardEventHandler keyboardEventHandler;
 
     void handleClickEvent(const sf::Event &e);
 };

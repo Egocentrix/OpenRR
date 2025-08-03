@@ -1,5 +1,6 @@
 add_library(OpenRR-Common STATIC
             Helpers.cpp
+            KeyboardEventHandler.cpp
             Logging.cpp
             )       
 

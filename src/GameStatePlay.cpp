@@ -15,6 +15,9 @@ GameStatePlay::GameStatePlay(Game *parent)
     GridCoordinate center = map->getCenter();
     view.setCenter(center.x, center.y);
     view.setSize(15, 15);
+
+    keyboardEventHandler.registerEvent(sf::Keyboard::Escape, [this]()
+                                       { game->window.close(); });
 }
 
 GameStatePlay::~GameStatePlay()
@@ -73,6 +76,11 @@ void GameStatePlay::handleInput(float dt)
                 view.zoom(zoomfactor);
                 zoomlevel /= zoomfactor;
             }
+        }
+
+        else if (e.type == sf::Event::KeyPressed)
+        {
+            keyboardEventHandler.handleKeyEvents(e.key.code);
         }
     }
 
