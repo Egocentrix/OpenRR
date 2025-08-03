@@ -67,7 +67,7 @@ void Game::handleInput(float dt)
 
 void Game::update(float dt)
 {
-    states.top()->update();
+    states.top()->update(dt);
 }
 
 void Game::draw()

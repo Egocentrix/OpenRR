@@ -16,7 +16,7 @@ public:
     ~GameStatePlay();
 
     virtual void draw() override;
-    virtual void update() override;
+    virtual void update(float dt) override;
     virtual void handleInput(float dt) override;
 
 private:

@@ -31,12 +31,13 @@ void GameStatePlay::draw()
     menu.draw(game->window);
 }
 
-void GameStatePlay::update()
+void GameStatePlay::update(float dt)
 {
+    camera.update(dt);
     map->update(game->texureManager);
 }
 
-void GameStatePlay::handleInput(float dt)
+void GameStatePlay::handleInput(float)
 {
     sf::Event e;
     while (game->window.pollEvent(e))
@@ -69,8 +70,6 @@ void GameStatePlay::handleInput(float dt)
             keyboardEventHandler.handleKeyEvents(e.key.code);
         }
     }
-
-    camera.update(dt);
 }
 
 void GameStatePlay::handleClickEvent(const sf::Event &e)
