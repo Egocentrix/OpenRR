@@ -1,4 +1,5 @@
 add_library(CaveMap STATIC
+            Camera.cpp            
             CaveMap.cpp
             CaveMapLoader.cpp
             CaveMapLogic.cpp

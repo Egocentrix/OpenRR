@@ -8,13 +8,11 @@
 GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(std::make_unique<FileMapLoader>("testmap.dat"))},
       menu{parent->fontManager.getResource("contextmenufont")},
-      view{parent->window.getView()},
       guiview{parent->window.getDefaultView()}
 {
     this->game = parent;
-    GridCoordinate center = map->getCenter();
-    view.setCenter(center.x, center.y);
-    view.setSize(15, 15);
+    auto center = map->getCenter();
+    camera.reset(sf::Vector2f(15, 15), sf::Vector2f(center.x, center.y));
 
     keyboardEventHandler.registerEvent(sf::Keyboard::Escape, [this]()
                                        { game->window.close(); });
@@ -26,7 +24,7 @@ GameStatePlay::~GameStatePlay()
 
 void GameStatePlay::draw()
 {
-    game->window.setView(view);
+    game->window.setView(camera.getView());
     map->draw(game->window);
 
     game->window.setView(guiview);
@@ -50,9 +48,7 @@ void GameStatePlay::handleInput(float dt)
 
         else if (e.type == sf::Event::Resized)
         {
-            float ratio = static_cast<float>(e.size.width) / e.size.height;
-            auto currentsize = view.getSize();
-            view.setSize(currentsize.x, currentsize.x / ratio);
+            camera.resize(e.size.width, e.size.height);
 
             // Do not scale the GUI size
             guiview.reset(sf::FloatRect(0, 0, e.size.width, e.size.height));
@@ -65,17 +61,7 @@ void GameStatePlay::handleInput(float dt)
 
         else if (e.type == sf::Event::MouseWheelScrolled)
         {
-            const float zoomfactor = 1.2;
-            if (e.mouseWheelScroll.delta > 0) // scroll up
-            {
-                view.zoom(1 / zoomfactor);
-                zoomlevel *= zoomfactor;
-            }
-            else
-            {
-                view.zoom(zoomfactor);
-                zoomlevel /= zoomfactor;
-            }
+            e.mouseWheelScroll.delta > 0 ? camera.zoomIn() : camera.zoomOut();
         }
 
         else if (e.type == sf::Event::KeyPressed)
@@ -84,28 +70,13 @@ void GameStatePlay::handleInput(float dt)
         }
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-    {
-        view.move(0, -10.f * dt / zoomlevel);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        view.move(0, 10.f * dt / zoomlevel);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-    {
-        view.move(-10.f * dt / zoomlevel, 0);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-    {
-        view.move(10.f * dt / zoomlevel, 0);
-    }
+    camera.update(dt);
 }
 
 void GameStatePlay::handleClickEvent(const sf::Event &e)
 {
     auto mouseposition{sf::Mouse::getPosition(game->window)};
-    auto worldposition{game->window.mapPixelToCoords(mouseposition, view)};
+    auto worldposition{game->window.mapPixelToCoords(mouseposition, camera.getView())};
     GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
     if (e.mouseButton.button == sf::Mouse::Left)
     {

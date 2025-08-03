@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Camera.hpp"
 #include "CaveMapInterface.hpp"
 #include "GameState.hpp"
 #include "KeyboardEventHandler.hpp"
@@ -20,10 +21,9 @@ public:
 
 private:
     std::unique_ptr<CaveMapInterface> map;
+    Camera camera;
     Menu menu;
-    sf::View view;
     sf::View guiview;
-    float zoomlevel{1};
     KeyboardEventHandler keyboardEventHandler;
 
     void handleClickEvent(const sf::Event &e);
