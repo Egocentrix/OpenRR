@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 #include <variant>
 #include <SFML/Graphics/Texture.hpp>
 
@@ -57,6 +58,8 @@ public:
 
     TileType getType() const;
     std::vector<TileAction> getAvailableActions() const;
+
+    void updateRotation(std::span<bool, 8> neighbourIsFloor);
 
     bool discovered{false};
     bool reachable{false};

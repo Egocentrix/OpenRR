@@ -1,4 +1,3 @@
-#include <numeric>
 #include <string>
 
 #include "CaveMapLogic.hpp"
@@ -53,54 +52,10 @@ void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, boo
 void updateRotation(TileGrid &tiles, GridCoordinate coord)
 {
     Tile &current = tiles.getElement(coord);
-
-    if (current.getType() == TileType::Floor)
-    {
-        current.rotation = 0;
-    }
-    else if (current.getType() == TileType::Wall)
-    {
-        WallDetails &details = std::get<WallDetails>(current.details);
-        auto isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, false);
-        int numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
-
-        if (numFloorNeighbours == 0)
-        {
-            // Now include diagonals
-            isFloor = neighbourIsOfType(tiles, coord, TileType::Floor, true);
-            numFloorNeighbours = std::accumulate(isFloor.begin(), isFloor.end(), 0);
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-
-            if (numFloorNeighbours == 1)
-            {
-                details.wallvariant = WallVariant::InnerCorner;
-                current.rotation = (index / 2 + 3) % 4;
-            }
-            else if (numFloorNeighbours == 2)
-            {
-                details.wallvariant = WallVariant::Split;
-                current.rotation = (index / 2) % 4;
-            }
-        }
-        else if (numFloorNeighbours == 1)
-        {
-            details.wallvariant = WallVariant::Flat;
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            current.rotation = (index + 2) % 4;
-        }
-        else if (numFloorNeighbours == 2)
-        {
-            details.wallvariant = WallVariant::OuterCorner;
-            int index = std::distance(isFloor.begin(), std::find(isFloor.begin(), isFloor.end(), true));
-            if (isFloor[0] && isFloor[3])
-            {
-                index = 3;
-            }
-            current.rotation = (index + 3) % 4;
-        }
-        // 3+ floor neighbours means unstable, no need to calculate texture
-    }
-    current.textureneedsupdate = true;
+    auto neighbours = tiles.neighboursOf(coord, true, true);
+    bool isfloor[8];
+    std::transform(neighbours.begin(), neighbours.end(), isfloor, [](Tile* t){ return t->getType() == TileType::Floor;});
+    current.updateRotation(isfloor);    
 }
 
 void updateRotations(TileGrid &tiles)

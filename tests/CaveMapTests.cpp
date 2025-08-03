@@ -263,6 +263,8 @@ SCENARIO("Tile rotation")
 
             THEN("The wall type and rotation are calculated")
             {
+                CHECK(tiles.getElement(center).textureneedsupdate == true);
+                
                 WallDetails details = std::get<WallDetails>(tiles.getElement(center).details);
 
                 REQUIRE(tiles.getElement(center).rotation == expectedRotation);
