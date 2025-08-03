@@ -79,7 +79,7 @@ void updateRotation(TileGrid &tiles, GridCoordinate coord)
             else if (numFloorNeighbours == 2)
             {
                 details.wallvariant = WallVariant::Split;
-                current.rotation = (index / 2 + 2) % 4;
+                current.rotation = (index / 2) % 4;
             }
         }
         else if (numFloorNeighbours == 1)

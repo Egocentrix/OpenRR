@@ -3,6 +3,7 @@
 
 #include "CaveMap.hpp"
 #include "CaveMapLoader.hpp"
+#include "CaveMapLogic.hpp"
 #include "Tile.hpp"
 
 TEST_CASE("Creating a new tile")
@@ -210,6 +211,62 @@ SCENARIO("Cave discovery")
             THEN("A new cave is discovered")
             {
                 CHECK(cavemap.describeTile(hiddencave) == "Floor");
+            }
+        }
+    }
+}
+
+SCENARIO("Tile rotation")
+{
+    auto [mapstring, expectedRotation, expectedVariant] = GENERATE(table<std::string, int, WallVariant>({
+        {"ww-,"
+         "ww-,"
+         "ww-,",
+         3, WallVariant::Flat},
+        {"-ww,"
+         "-ww,"
+         "---,",
+         1, WallVariant::OuterCorner},
+        {"---,"
+         "-ww,"
+         "-ww,",
+         2, WallVariant::OuterCorner},
+
+        {"www,"
+         "www,"
+         "-ww,",
+         1, WallVariant::InnerCorner},
+        {"www,"
+         "www,"
+         "ww-,",
+         0, WallVariant::InnerCorner},
+
+        {"ww-,"
+         "www,"
+         "-ww,",
+         0, WallVariant::Split},
+        {"-ww,"
+         "www,"
+         "ww-,",
+         1, WallVariant::Split},
+    }));
+
+    GIVEN("A set of tiles")
+    {
+        CAPTURE(mapstring);
+        auto tiles = StringMapLoader(mapstring).load();
+
+        WHEN("I calculate the rotation")
+        {
+            GridCoordinate center{1, 1};
+            updateRotation(tiles, center);
+
+            THEN("The wall type and rotation are calculated")
+            {
+                WallDetails details = std::get<WallDetails>(tiles.getElement(center).details);
+
+                REQUIRE(tiles.getElement(center).rotation == expectedRotation);
+                REQUIRE(details.wallvariant == expectedVariant);
             }
         }
     }
