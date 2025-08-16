@@ -26,6 +26,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(camera.getView());
     map->draw(game->window);
+    worker.draw(game->window);
 
     game->window.setView(guiview);
     menu.draw(game->window);
@@ -35,6 +36,7 @@ void GameStatePlay::update(float dt)
 {
     camera.update(dt);
     map->update(game->texureManager);
+    worker.update(dt);
 }
 
 void GameStatePlay::handleInput(float)
