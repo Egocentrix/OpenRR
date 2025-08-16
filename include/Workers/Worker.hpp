@@ -7,6 +7,8 @@ class Worker
 public:
     Worker(/* args */);
 
+    void setTarget(sf::Vector2f position);
+
     void update(float dt);
     void draw(sf::RenderTarget &target);
 

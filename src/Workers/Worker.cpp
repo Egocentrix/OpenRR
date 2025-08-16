@@ -6,10 +6,21 @@ Worker::Worker()
 {
 }
 
+void Worker::setTarget(sf::Vector2f position)
+{
+    targetPositon_ = position;
+}
+
 void Worker::update(float dt)
 {
     auto dir = targetPositon_ - currentPosition_;
-    dir = dir / std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    auto dist = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    if (dist < 0.1)
+    {
+        return;
+    }
+    
+    dir = dir / dist;
     currentPosition_ = currentPosition_ + (dir * dt);
 }
 

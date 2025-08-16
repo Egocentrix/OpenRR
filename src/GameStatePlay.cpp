@@ -105,5 +105,8 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         menu.setTitle(tilename);
         menu.setActions(actions);
         menu.visible = true;
+
+        // For testing
+        worker.setTarget({worldposition.x, worldposition.y});
     }
 }
