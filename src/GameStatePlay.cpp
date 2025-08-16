@@ -26,7 +26,7 @@ void GameStatePlay::draw()
 {
     game->window.setView(camera.getView());
     map->draw(game->window);
-    worker.draw(game->window);
+    workers.draw(game->window);
 
     game->window.setView(guiview);
     menu.draw(game->window);
@@ -36,7 +36,7 @@ void GameStatePlay::update(float dt)
 {
     camera.update(dt);
     map->update(game->texureManager);
-    worker.update(dt);
+    workers.update(dt);
 }
 
 void GameStatePlay::handleInput(float)
@@ -107,6 +107,6 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         menu.visible = true;
 
         // For testing
-        worker.addDestination({worldposition.x, worldposition.y});
+        workers.addDestination({worldposition.x, worldposition.y});
     }
 }

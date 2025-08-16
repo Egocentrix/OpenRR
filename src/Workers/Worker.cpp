@@ -2,7 +2,8 @@
 
 #include "Worker.hpp"
 
-Worker::Worker()
+Worker::Worker(sf::Vector2f initialPosition)
+: currentPosition_{initialPosition}
 {
 }
 

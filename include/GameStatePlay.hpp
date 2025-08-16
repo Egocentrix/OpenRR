@@ -7,7 +7,7 @@
 #include "GameState.hpp"
 #include "KeyboardEventHandler.hpp"
 #include "Menu.hpp"
-#include "Worker.hpp"
+#include "WorkerSystem.hpp"
 
 // The main state where the game is played
 class GameStatePlay : public GameState
@@ -27,7 +27,7 @@ private:
     sf::View guiview;
     KeyboardEventHandler keyboardEventHandler;
 
-    Worker worker;
+    WorkerSystem workers;
 
     void handleClickEvent(const sf::Event &e);
 };

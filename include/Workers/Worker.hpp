@@ -6,7 +6,7 @@
 class Worker
 {
 public:
-    Worker(/* args */);
+    Worker(sf::Vector2f initialPosition);
 
     void addDestination(sf::Vector2f position);
 
@@ -14,6 +14,6 @@ public:
     void draw(sf::RenderTarget &target);
 
 private:
-    sf::Vector2f currentPosition_{5, 5};
+    sf::Vector2f currentPosition_;
     std::queue<sf::Vector2f> path_;
 };
