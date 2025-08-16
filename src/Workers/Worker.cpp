@@ -6,17 +6,23 @@ Worker::Worker()
 {
 }
 
-void Worker::setTarget(sf::Vector2f position)
+void Worker::addDestination(sf::Vector2f position)
 {
-    targetPositon_ = position;
+    path_.push(position);
 }
 
 void Worker::update(float dt)
 {
-    auto dir = targetPositon_ - currentPosition_;
+    if (path_.empty())
+    {
+        return;
+    }
+    
+    auto dir = path_.front() - currentPosition_;
     auto dist = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     if (dist < 0.1)
     {
+        path_.pop();
         return;
     }
     

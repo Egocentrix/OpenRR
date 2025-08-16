@@ -107,6 +107,6 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         menu.visible = true;
 
         // For testing
-        worker.setTarget({worldposition.x, worldposition.y});
+        worker.addDestination({worldposition.x, worldposition.y});
     }
 }
