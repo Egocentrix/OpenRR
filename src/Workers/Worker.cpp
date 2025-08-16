@@ -17,6 +17,11 @@ bool Worker::isBusy()
     return !path_.empty();
 }
 
+sf::Vector2f Worker::getCurrentPosition()
+{
+    return currentPosition_;
+}
+
 void Worker::update(float dt)
 {
     if (path_.empty())

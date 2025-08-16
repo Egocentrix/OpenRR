@@ -3,12 +3,13 @@
 #include <vector>
 #include <queue>
 
+#include "PathGenerator.hpp"
 #include "Worker.hpp"
 
 class WorkerSystem
 {
 public:
-    WorkerSystem();
+    WorkerSystem(PathGenerator& pathGenerator);
 
     void addWorker(sf::Vector2f position);
     void addDestination(sf::Vector2f destination);
@@ -19,4 +20,6 @@ public:
 private:
     std::vector<Worker> workers_;
     std::queue<sf::Vector2f> destinations_;
+
+    PathGenerator& pathGenerator_;
 };

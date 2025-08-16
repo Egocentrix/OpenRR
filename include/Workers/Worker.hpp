@@ -11,6 +11,7 @@ public:
     void addDestination(sf::Vector2f position);
 
     bool isBusy();
+    sf::Vector2f getCurrentPosition();
 
     void update(float dt);
     void draw(sf::RenderTarget &target);

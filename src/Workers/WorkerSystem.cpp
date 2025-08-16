@@ -1,6 +1,7 @@
 #include "WorkerSystem.hpp"
 
-WorkerSystem::WorkerSystem(/* args */)
+WorkerSystem::WorkerSystem(PathGenerator &pathGenerator)
+    : pathGenerator_{pathGenerator}
 {
     addWorker({0, 0});
     addWorker({0, 0});
@@ -30,7 +31,11 @@ void WorkerSystem::update(float dt)
                                    { return w.isBusy(); });
         if (it != workers_.end())
         {
-            it->addDestination(destinations_.front());
+            auto path = pathGenerator_.findRoute(it->getCurrentPosition(), destinations_.front());
+            for (auto &&node : path)
+            {
+                it->addDestination(node);
+            }
             destinations_.pop();
         }
     }

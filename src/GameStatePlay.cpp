@@ -8,7 +8,8 @@
 GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(std::make_unique<FileMapLoader>("testmap.dat"))},
       menu{parent->fontManager.getResource("contextmenufont")},
-      guiview{parent->window.getDefaultView()}
+      guiview{parent->window.getDefaultView()},
+      workers{map->getPathGenerator()}
 {
     this->game = parent;
     auto center = map->getCenter();
