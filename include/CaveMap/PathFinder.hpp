@@ -18,5 +18,6 @@ public:
     virtual std::vector<Coordinate> findRoute(Coordinate start, Coordinate destination) override;
 
 private:
+    std::vector<GridCoordinate> calculatePath(const Grid2D<int> &distances, GridCoordinate start);
     const Grid2D<Tile> &tiles_;
 };

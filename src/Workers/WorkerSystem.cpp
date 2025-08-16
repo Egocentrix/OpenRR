@@ -3,9 +3,9 @@
 WorkerSystem::WorkerSystem(PathGenerator &pathGenerator)
     : pathGenerator_{pathGenerator}
 {
-    addWorker({0, 0});
-    addWorker({0, 0});
-    addWorker({0, 0});
+    addWorker({3, 3});
+    addWorker({3, 3});
+    addWorker({3, 3});
 }
 
 void WorkerSystem::addWorker(sf::Vector2f position)

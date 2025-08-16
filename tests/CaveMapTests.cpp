@@ -4,6 +4,7 @@
 #include "CaveMap.hpp"
 #include "CaveMapLoader.hpp"
 #include "CaveMapLogic.hpp"
+#include "PathFinder.hpp"
 #include "Tile.hpp"
 
 TEST_CASE("Creating a new tile")
@@ -264,11 +265,55 @@ SCENARIO("Tile rotation")
             THEN("The wall type and rotation are calculated")
             {
                 CHECK(tiles.getElement(center).textureneedsupdate == true);
-                
+
                 WallDetails details = std::get<WallDetails>(tiles.getElement(center).details);
 
                 REQUIRE(tiles.getElement(center).rotation == expectedRotation);
                 REQUIRE(details.wallvariant == expectedVariant);
+            }
+        }
+    }
+}
+
+SCENARIO("Path finding")
+{
+    GIVEN("A cave map")
+    {
+        std::string mapstring = "wwwwww,"
+                                "w----w,"
+                                "wo-www,"
+                                "w----w,"
+                                "wwwwww,";
+        auto tiles = StringMapLoader(mapstring).load();
+        PathFinder pf(tiles);
+
+        WHEN("I calculate a short route")
+        {
+            auto route = pf.findRoute(GridCoordinate{1,1}, GridCoordinate{2,1});
+            
+            THEN("The route is short")
+            {
+                REQUIRE(route.size() == 2);
+            }
+        }
+
+        WHEN("I calculate a long route")
+        {
+            auto route = pf.findRoute(GridCoordinate{1,1}, GridCoordinate{4,1});
+            
+            THEN("The route is long")
+            {
+                REQUIRE(route.size() == 4);
+            }
+        }
+
+        WHEN("I calculate a route around an obstacle")
+        {
+            auto route = pf.findRoute(GridCoordinate{4,1}, GridCoordinate{4,3});
+            
+            THEN("The route goes around the obstacle")
+            {
+                REQUIRE(route.size() == 7);
             }
         }
     }
