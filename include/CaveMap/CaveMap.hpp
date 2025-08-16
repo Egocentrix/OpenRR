@@ -7,9 +7,10 @@
 
 #include "CaveMapLoader.hpp"
 #include "Grid2D.hpp"
+#include "MapCommands.hpp"
+#include "PathFinder.hpp"
 #include "ResourceManager.hpp"
 #include "Tile.hpp"
-#include "MapCommands.hpp"
 
 // Container for tile objects, and functions for manipulating them.
 class CaveMap : public CaveMapInterface
@@ -29,6 +30,8 @@ public:
 
     ActionList getAvailableCommands(GridCoordinate coord) override;
 
+    PathGenerator& getPathGenerator() override;
+
     // Other functions
     void drill(GridCoordinate coord);
 
@@ -37,4 +40,5 @@ private:
     TileGrid tiles;
 
     std::unique_ptr<MapLoadStrategy> maploader;
+    std::unique_ptr<PathFinder> pathfinder;
 };

@@ -6,6 +6,7 @@
 
 #include "CaveMapCommon.hpp"
 #include "Command.hpp"
+#include "PathGenerator.hpp"
 #include "ResourceManager.hpp"
 
 class CaveMapInterface
@@ -22,4 +23,6 @@ public:
 
     using ActionList = std::vector<std::unique_ptr<Command>>;
     virtual ActionList getAvailableCommands(GridCoordinate coord) = 0;
+
+    virtual PathGenerator& getPathGenerator() = 0;
 };

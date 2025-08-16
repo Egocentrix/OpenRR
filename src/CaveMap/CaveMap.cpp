@@ -50,6 +50,15 @@ CaveMapInterface::ActionList CaveMap::getAvailableCommands(GridCoordinate coord)
     return commands;
 }
 
+PathGenerator &CaveMap::getPathGenerator()
+{
+    if(!pathfinder)
+    {
+        pathfinder = std::make_unique<PathFinder>(tiles);
+    }
+    return *pathfinder;
+}
+
 void CaveMap::drill(GridCoordinate coord)
 {
     if (!tiles.getElement(coord).reachable || !canCollapse(tiles, coord))

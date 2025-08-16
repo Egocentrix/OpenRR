@@ -5,6 +5,7 @@ add_library(CaveMap STATIC
             CaveMapLogic.cpp
             MapCommands.cpp
             MapRenderer.cpp
+            PathFinder.cpp
             Tile.cpp)
 
 target_include_directories(CaveMap PRIVATE ${OPENRR_INCLUDE_DIR}/CaveMap
