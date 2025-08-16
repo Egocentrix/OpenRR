@@ -15,17 +15,20 @@ std::vector<GridCoordinate> PathFinder::findRoute(GridCoordinate start, GridCoor
     {
         distances.addElement(INT_MAX);
     }
+    distances.getElement(destination) = 0;
 
+    bool found = false;
     std::queue<GridCoordinate> queue;
     queue.push(destination);
-    distances.getElement(destination) = 0;
     while (!queue.empty())
     {
         auto current = queue.front();
         queue.pop();
         if (current.x == start.x && current.y == start.y)
+        {
+            found = true;
             break;
-
+        }
         auto currentDistance = distances.getElement(current);
 
         for (auto &&node : tiles_.neighbourCoordinates(current, false, false))
@@ -38,7 +41,7 @@ std::vector<GridCoordinate> PathFinder::findRoute(GridCoordinate start, GridCoor
         }
     }
 
-    return calculatePath(distances, start);
+    return found ? calculatePath(distances, start) : std::vector<GridCoordinate>{};
 }
 
 using Coordinate = PathGenerator::Coordinate;
@@ -51,13 +54,18 @@ std::vector<Coordinate> PathFinder::findRoute(Coordinate start, Coordinate desti
     {
         path.push_back(Coordinate{c.x + 0.5f, c.y + 0.5f});
     }
-    path.push_back(destination);
+    
+    if (!path.empty())
+    {
+        path.push_back(destination);
+    }
 
     return path;
 }
 
 std::vector<GridCoordinate> PathFinder::calculatePath(const Grid2D<int> &distances, GridCoordinate start)
 {
+
     std::vector<GridCoordinate> path{start};
     GridCoordinate current = start;
     while (distances.getElement(current) != 0)
