@@ -10,6 +10,8 @@ public:
 
     void addDestination(sf::Vector2f position);
 
+    bool isBusy();
+
     void update(float dt);
     void draw(sf::RenderTarget &target);
 

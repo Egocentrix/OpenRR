@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <queue>
 
 #include "Worker.hpp"
 
@@ -17,4 +18,5 @@ public:
 
 private:
     std::vector<Worker> workers_;
+    std::queue<sf::Vector2f> destinations_;
 };

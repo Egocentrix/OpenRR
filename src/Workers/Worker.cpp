@@ -12,6 +12,11 @@ void Worker::addDestination(sf::Vector2f position)
     path_.push(position);
 }
 
+bool Worker::isBusy()
+{
+    return !path_.empty();
+}
+
 void Worker::update(float dt)
 {
     if (path_.empty())
