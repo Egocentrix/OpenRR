@@ -3,9 +3,9 @@
 WorkerSystem::WorkerSystem(PathGenerator &pathGenerator)
     : pathGenerator_{pathGenerator}
 {
-    addWorker({3, 3});
-    addWorker({3, 3});
-    addWorker({3, 3});
+    addWorker({5, 5});
+    addWorker({5, 5});
+    addWorker({5, 5});
 }
 
 void WorkerSystem::addWorker(sf::Vector2f position)
@@ -13,31 +13,17 @@ void WorkerSystem::addWorker(sf::Vector2f position)
     workers_.emplace_back(position);
 }
 
-void WorkerSystem::addDestination(sf::Vector2f position)
+void WorkerSystem::addTask(Task task)
 {
-    destinations_.push(position);
+    taskQueue_.push(std::move(task));
 }
 
 void WorkerSystem::update(float dt)
 {
+    dispatchTasks();
     for (auto &&worker : workers_)
     {
         worker.update(dt);
-    }
-
-    if (!destinations_.empty())
-    {
-        auto it = std::find_if_not(workers_.begin(), workers_.end(), [](Worker &w)
-                                   { return w.isBusy(); });
-        if (it != workers_.end())
-        {
-            auto path = pathGenerator_.findRoute(it->getCurrentPosition(), destinations_.front());
-            for (auto &&node : path)
-            {
-                it->addDestination(node);
-            }
-            destinations_.pop();
-        }
     }
 }
 
@@ -46,5 +32,20 @@ void WorkerSystem::draw(sf::RenderTarget &target)
     for (auto &&worker : workers_)
     {
         worker.draw(target);
+    }
+}
+
+void WorkerSystem::dispatchTasks()
+{
+    if (!taskQueue_.empty())
+    {
+        auto it = std::find_if_not(workers_.begin(), workers_.end(), [](Worker &w)
+                                   { return w.isBusy(); });
+        if (it != workers_.end())
+        {
+            auto path = pathGenerator_.findRoute(it->getCurrentPosition(), taskQueue_.front().location);
+            it->assignTask(std::move(taskQueue_.front()), path);
+            taskQueue_.pop();
+        }
     }
 }

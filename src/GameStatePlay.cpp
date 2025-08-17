@@ -92,7 +92,11 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
             for (auto &&c : map->getAvailableCommands(coord))
             {
                 if (c->describe() == "Drill")
-                    c->execute();
+                {
+                    // For testing
+                    Task task{{worldposition.x, worldposition.y}, std::move(c)};
+                    workers.addTask(std::move(task));
+                }
             }
         }
     }
@@ -106,8 +110,5 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
         menu.setTitle(tilename);
         menu.setActions(actions);
         menu.visible = true;
-
-        // For testing
-        workers.addDestination({worldposition.x, worldposition.y});
     }
 }

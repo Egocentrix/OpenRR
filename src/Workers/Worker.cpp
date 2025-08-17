@@ -3,18 +3,22 @@
 #include "Worker.hpp"
 
 Worker::Worker(sf::Vector2f initialPosition)
-: currentPosition_{initialPosition}
+    : currentPosition_{initialPosition}
 {
 }
 
-void Worker::addDestination(sf::Vector2f position)
+void Worker::assignTask(Task task, const std::vector<sf::Vector2f> &path)
 {
-    path_.push(position);
+    currentTask_ = std::move(task);
+    for (auto &&node : path)
+    {
+        path_.push(node);
+    }
 }
 
 bool Worker::isBusy()
 {
-    return !path_.empty();
+    return currentTask_.has_value();
 }
 
 sf::Vector2f Worker::getCurrentPosition()
@@ -26,9 +30,18 @@ void Worker::update(float dt)
 {
     if (path_.empty())
     {
+        if (currentTask_)
+        {
+            if (currentTask_->action)
+            {
+                currentTask_->action->execute();
+            }
+            currentTask_ = {};
+        }
+
         return;
     }
-    
+
     auto dir = path_.front() - currentPosition_;
     auto dist = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     if (dist < 0.1)
@@ -36,7 +49,7 @@ void Worker::update(float dt)
         path_.pop();
         return;
     }
-    
+
     dir = dir / dist;
     currentPosition_ = currentPosition_ + (dir * dt);
 }
