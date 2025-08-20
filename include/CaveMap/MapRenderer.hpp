@@ -16,10 +16,7 @@ struct TileRenderInfo
 class MapRenderer
 {
 public:
-    MapRenderer(sf::RenderTarget &target);
+    MapRenderer();
 
-    void drawTiles(const Grid2D<Tile> &tiles);
-
-private:
-    sf::RenderTarget &target_;
+    void drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target);
 };

@@ -78,8 +78,8 @@ void CaveMap::drill(GridCoordinate coord)
 
 void CaveMap::draw(sf::RenderTarget &target) const
 {
-    MapRenderer mr{target};
-    mr.drawTiles(tiles);
+    MapRenderer mr;
+    mr.drawTiles(tiles, target);
     return;
 }
 

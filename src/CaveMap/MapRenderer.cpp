@@ -1,12 +1,11 @@
 #include "MapRenderer.hpp"
 #include "CaveMap.hpp"
 
-MapRenderer::MapRenderer(sf::RenderTarget &target)
-    : target_{target}
+MapRenderer::MapRenderer()
 {
 }
 
-void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
+void MapRenderer::drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target)
 {
     // Assume all textures are of the same size
     const auto texturesize = sf::Vector2f(tiles.getElement(0, 0).texture->getSize());
@@ -32,13 +31,13 @@ void MapRenderer::drawTiles(const Grid2D<Tile> &tiles)
             }
             sprite.setPosition(x + 0.5, y + 0.5);
             sprite.setRotation(current.rotation * 90);
-            target_.draw(sprite);
+            target.draw(sprite);
         }
     }
     sf::RectangleShape border(sf::Vector2f(tiles.getWidth(), tiles.getHeight()));
     border.setOutlineColor(sf::Color::White);
     border.setFillColor(sf::Color::Transparent);
     border.setOutlineThickness(0.5f);
-    target_.draw(border);
+    target.draw(border);
     return;
 }
