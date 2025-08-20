@@ -46,13 +46,13 @@ CaveMapInterface::ActionList CaveMap::getAvailableCommands(GridCoordinate coord)
     {
         commands.emplace_back(cf.createCommand(coord, action));
     }
-    
+
     return commands;
 }
 
 PathGenerator &CaveMap::getPathGenerator()
 {
-    if(!pathfinder)
+    if (!pathfinder)
     {
         pathfinder = std::make_unique<PathFinder>(tiles);
     }
@@ -78,12 +78,11 @@ void CaveMap::drill(GridCoordinate coord)
 
 void CaveMap::draw(sf::RenderTarget &target) const
 {
-    MapRenderer mr;
-    mr.drawTiles(tiles, target);
+    maprenderer.drawTiles(tiles, target);
     return;
 }
 
 void CaveMap::update(ResourceManager<sf::Texture> &tileset)
 {
-    updateTextures(tiles, tileset, false);
+    maprenderer.update(tiles, tileset);
 }

@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Tile.hpp"
 #include "Grid2D.hpp"
+#include "ResourceManager.hpp"
 
 struct TileRenderInfo
 {
@@ -18,11 +19,14 @@ class MapRenderer
 public:
     MapRenderer();
 
-    void drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target);
+    void update(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures);
+    void drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target) const;
 
 private:
-    Grid2D<TileRenderInfo> calculateRenderInfo(const Grid2D<Tile> &tiles);
+    static Grid2D<TileRenderInfo> calculateRenderInfo(const Grid2D<Tile> &tiles);
 
-    void drawTilesInternal(const Grid2D<TileRenderInfo> &renderInfo, sf::RenderTarget &target);
-    void drawBorder(int width, int height, sf::RenderTarget &target);
+    void drawTilesInternal(const Grid2D<TileRenderInfo> &renderInfo, sf::RenderTarget &target) const;
+    void drawBorder(int width, int height, sf::RenderTarget &target) const;
+
+    Grid2D<TileRenderInfo> renderInfo_;
 };

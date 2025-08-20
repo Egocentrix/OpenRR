@@ -8,6 +8,7 @@
 #include "CaveMapLoader.hpp"
 #include "Grid2D.hpp"
 #include "MapCommands.hpp"
+#include "MapRenderer.hpp"
 #include "PathFinder.hpp"
 #include "ResourceManager.hpp"
 #include "Tile.hpp"
@@ -41,4 +42,5 @@ private:
 
     std::unique_ptr<MapLoadStrategy> maploader;
     std::unique_ptr<PathFinder> pathfinder;
+    MapRenderer maprenderer;
 };

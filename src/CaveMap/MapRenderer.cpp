@@ -1,14 +1,20 @@
 #include "MapRenderer.hpp"
 #include "CaveMap.hpp"
+#include "CaveMapLogic.hpp"
 
 MapRenderer::MapRenderer()
 {
 }
 
-void MapRenderer::drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target)
+void MapRenderer::update(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures)
 {
-    auto renderInfo = calculateRenderInfo(tiles);
-    drawTilesInternal(renderInfo, target);
+    updateTextures(tiles, textures, false);
+    renderInfo_ = calculateRenderInfo(tiles);
+}
+
+void MapRenderer::drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target) const
+{
+    drawTilesInternal(renderInfo_, target);
     drawBorder(tiles.getWidth(), tiles.getHeight(), target);
 
     return;
@@ -36,7 +42,7 @@ Grid2D<TileRenderInfo> MapRenderer::calculateRenderInfo(const Grid2D<Tile> &tile
     return renderInfo;
 }
 
-void MapRenderer::drawTilesInternal(const Grid2D<TileRenderInfo> &tiles, sf::RenderTarget &target)
+void MapRenderer::drawTilesInternal(const Grid2D<TileRenderInfo> &tiles, sf::RenderTarget &target) const
 {
     // Assume all textures are of the same size
     const auto texturesize = sf::Vector2f(tiles.getElement(0, 0).texture->getSize());
@@ -62,7 +68,7 @@ void MapRenderer::drawTilesInternal(const Grid2D<TileRenderInfo> &tiles, sf::Ren
     }
 }
 
-void MapRenderer::drawBorder(int width, int height, sf::RenderTarget &target)
+void MapRenderer::drawBorder(int width, int height, sf::RenderTarget &target) const
 {
     sf::RectangleShape border(sf::Vector2f(width, height));
     border.setOutlineColor(sf::Color::White);
