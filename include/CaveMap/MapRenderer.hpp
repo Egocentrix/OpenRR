@@ -23,7 +23,7 @@ public:
     void drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target) const;
 
 private:
-    static Grid2D<TileRenderInfo> calculateRenderInfo(const Grid2D<Tile> &tiles);
+    static TileRenderInfo calculateSingleRenderInfo(const Tile& tile, GridCoordinate coord, ResourceManager<sf::Texture> &textures);
 
     void drawTilesInternal(const Grid2D<TileRenderInfo> &renderInfo, sf::RenderTarget &target) const;
     void drawBorder(int width, int height, sf::RenderTarget &target) const;

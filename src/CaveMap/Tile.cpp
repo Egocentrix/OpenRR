@@ -113,3 +113,37 @@ void Tile::updateRotation(std::span<bool, 8> neighbourIsFloor)
     }
     textureneedsupdate = true;
 }
+
+std::string Tile::getTextureString() const
+{
+    struct TextureNameBuilder
+    {
+        std::string operator()(const FloorDetails &)
+        {
+            return "floor";
+        }
+
+        std::string operator()(const WallDetails &details)
+        {
+            std::string texturename{};
+            switch (details.wallvariant)
+            {
+            case WallVariant::Flat:
+                texturename += "wall";
+                break;
+            case WallVariant::InnerCorner:
+                texturename += "wall_incorner";
+                break;
+            case WallVariant::OuterCorner:
+                texturename += "wall_outcorner";
+                break;
+            case WallVariant::Split:
+                texturename += "wall_split";
+                break;
+            }
+            return texturename;
+        }
+    };
+
+    return std::visit(TextureNameBuilder{}, details);
+}

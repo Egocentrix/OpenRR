@@ -8,8 +8,28 @@ MapRenderer::MapRenderer()
 
 void MapRenderer::update(Grid2D<Tile> &tiles, ResourceManager<sf::Texture> &textures)
 {
-    updateTextures(tiles, textures, false);
-    renderInfo_ = calculateRenderInfo(tiles);
+    if(renderInfo_.getWidth() == 0 || renderInfo_.getHeight() == 0)
+    {
+        renderInfo_.resize(tiles.getWidth(), tiles.getHeight());
+        for (auto &&tile : tiles)
+        {
+            renderInfo_.addElement(TileRenderInfo{});
+        }
+    }
+
+    for (int x = 0; x < tiles.getWidth(); x++)
+    {
+        for (int y = 0; y < tiles.getHeight(); y++)
+        {
+            const Tile &current = tiles.getElement(x, y);
+            if(current.textureneedsupdate)
+            {
+                current.textureneedsupdate = false;
+                renderInfo_.getElement(x,y) = calculateSingleRenderInfo(current, {x,y}, textures);
+            }
+        }
+    }
+
 }
 
 void MapRenderer::drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target) const
@@ -20,26 +40,16 @@ void MapRenderer::drawTiles(const Grid2D<Tile> &tiles, sf::RenderTarget &target)
     return;
 }
 
-Grid2D<TileRenderInfo> MapRenderer::calculateRenderInfo(const Grid2D<Tile> &tiles)
+TileRenderInfo MapRenderer::calculateSingleRenderInfo(const Tile &tile, GridCoordinate coord, ResourceManager<sf::Texture> &textures)
 {
-    Grid2D<TileRenderInfo> renderInfo{tiles.getWidth(), tiles.getHeight()};
-
-    for (int x = 0; x < tiles.getWidth(); x++)
-    {
-        for (int y = 0; y < tiles.getHeight(); y++)
-        {
-            const Tile &current = tiles.getElement(x, y);
-
-            renderInfo.addElement(TileRenderInfo{
-                .position{static_cast<float>(x), static_cast<float>(y)},
-                .visible{current.discovered},
-                .texture{current.texture},
-                .rotation{current.rotation},
-            });
-        }
-    }
-
-    return renderInfo;
+    auto texture = textures.getResource(tile.getTextureString());
+    tile.textureneedsupdate = false;
+    
+    return TileRenderInfo{
+        .position{static_cast<float>(coord.x), static_cast<float>(coord.y)},
+        .visible{tile.discovered},
+        .texture{texture},
+        .rotation{tile.rotation}};
 }
 
 void MapRenderer::drawTilesInternal(const Grid2D<TileRenderInfo> &tiles, sf::RenderTarget &target) const

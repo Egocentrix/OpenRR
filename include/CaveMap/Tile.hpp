@@ -61,12 +61,13 @@ public:
 
     void updateRotation(std::span<bool, 8> neighbourIsFloor);
 
+    std::string getTextureString() const;
+
     bool discovered{false};
     bool reachable{false};
 
     int rotation{0};
-    std::shared_ptr<sf::Texture> texture;
-    bool textureneedsupdate{true};
+    mutable bool textureneedsupdate{true};
 
     std::variant<FloorDetails, WallDetails> details;
 };

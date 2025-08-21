@@ -9,9 +9,6 @@
 using TileGrid = Grid2D<Tile>;
 
 // Functions for updating tile appearance
-void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures);
-void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, bool reset = false);
-
 void updateRotation(TileGrid &tiles, GridCoordinate coord);
 void updateRotations(TileGrid &tiles);
 

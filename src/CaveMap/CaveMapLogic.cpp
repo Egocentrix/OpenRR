@@ -2,53 +2,6 @@
 
 #include "CaveMapLogic.hpp"
 
-void updateTexture(Tile &tile, ResourceManager<sf::Texture> &textures)
-{
-    struct TextureNameBuilder
-    {
-        std::string operator()(const FloorDetails &)
-        {
-            return "floor";
-        }
-
-        std::string operator()(const WallDetails &details)
-        {
-            std::string texturename{};
-            switch (details.wallvariant)
-            {
-            case WallVariant::Flat:
-                texturename += "wall";
-                break;
-            case WallVariant::InnerCorner:
-                texturename += "wall_incorner";
-                break;
-            case WallVariant::OuterCorner:
-                texturename += "wall_outcorner";
-                break;
-            case WallVariant::Split:
-                texturename += "wall_split";
-                break;
-            }
-            return texturename;
-        }
-    };
-
-    std::string texturename = std::visit(TextureNameBuilder{}, tile.details);
-    tile.texture = textures.getResource(texturename);
-    tile.textureneedsupdate = false;
-}
-
-void updateTextures(TileGrid &tiles, ResourceManager<sf::Texture> &textures, bool reset)
-{
-    for (Tile &current : tiles)
-    {
-        if (reset || current.textureneedsupdate)
-        {
-            updateTexture(current, textures);
-        }
-    }
-}
-
 void updateRotation(TileGrid &tiles, GridCoordinate coord)
 {
     Tile &current = tiles.getElement(coord);
