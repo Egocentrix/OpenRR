@@ -7,7 +7,7 @@
 
 GameStatePlay::GameStatePlay(Game *parent)
     : map{std::make_unique<CaveMap>(std::make_unique<FileMapLoader>("testmap.dat"))},
-      menu{parent->fontManager.getResource("contextmenufont")},
+      gui{parent->fontManager},
       guiview{parent->window.getDefaultView()},
       workers{map->getPathGenerator()}
 {
@@ -30,7 +30,7 @@ void GameStatePlay::draw()
     workers.draw(game->window);
 
     game->window.setView(guiview);
-    menu.draw(game->window);
+    gui.draw(game->window);
 }
 
 void GameStatePlay::update(float dt)
@@ -82,12 +82,7 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
     GridCoordinate coord{static_cast<int>(worldposition.x), static_cast<int>(worldposition.y)};
     if (e.mouseButton.button == sf::Mouse::Left)
     {
-        if (menu.visible)
-        {
-            menu.handleClickEvent(mouseposition);
-            menu.visible = false;
-        }
-        else
+        if (!gui.handleClickEvent(mouseposition))
         {
             for (auto &&c : map->getAvailableCommands(coord))
             {
@@ -102,13 +97,6 @@ void GameStatePlay::handleClickEvent(const sf::Event &e)
     }
     else if (e.mouseButton.button == sf::Mouse::Right)
     {
-        menu.setLocation(mouseposition.x, mouseposition.y);
-
-        auto tilename = map->describeTile(coord);
-        auto actions = map->getAvailableCommands(coord);
-
-        menu.setTitle(tilename);
-        menu.setActions(actions);
-        menu.visible = true;
+        gui.createContextMenu(mouseposition.x, mouseposition.y, map->describeTile(coord), map->getAvailableCommands(coord));
     }
 }
