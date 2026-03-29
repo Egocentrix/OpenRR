@@ -7,35 +7,13 @@
 
 #include "Command.hpp"
 #include "Logging.hpp"
+#include "MenuCommon.hpp"
 
-struct MenuStyle
-{
-    int MenuWidth{180};
-    int MenuItemHeight{40};
-
-    int fontSize{25};
-    sf::Color backgroundColor{sf::Color(100, 100, 100)};
-    sf::Color titleTextColor{sf::Color::Blue};
-    sf::Color itemTextColor{sf::Color::White};
-};
-
-class MenuItem
+class ContextMenu
 {
 public:
-    MenuItem(std::string itemtitle, std::unique_ptr<Command> itemaction)
-        : title{itemtitle}, action{std::move(itemaction)}
-    {
-    }
-
-    std::string title{};
-    std::unique_ptr<Command> action{};
-};
-
-class Menu
-{
-public:
-    Menu(std::shared_ptr<sf::Font>);
-    ~Menu();
+    ContextMenu(std::shared_ptr<sf::Font>);
+    ~ContextMenu();
 
     bool visible;
 

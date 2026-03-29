@@ -6,7 +6,7 @@
 #include "CaveMapInterface.hpp"
 #include "GameState.hpp"
 #include "KeyboardEventHandler.hpp"
-#include "Menu.hpp"
+#include "ContextMenu.hpp"
 #include "WorkerSystem.hpp"
 
 // The main state where the game is played
@@ -23,7 +23,7 @@ public:
 private:
     std::unique_ptr<CaveMapInterface> map;
     Camera camera;
-    Menu menu;
+    ContextMenu menu;
     sf::View guiview;
     KeyboardEventHandler keyboardEventHandler;
 

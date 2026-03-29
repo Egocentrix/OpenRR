@@ -1,28 +1,28 @@
-#include "Menu.hpp"
+#include "ContextMenu.hpp"
 
-Menu::Menu(std::shared_ptr<sf::Font> font)
+ContextMenu::ContextMenu(std::shared_ptr<sf::Font> font)
 : font_{font}
 {
     setLocation(0, 0);
     visible = false;
 }
 
-Menu::~Menu()
+ContextMenu::~ContextMenu()
 {
 }
 
-void Menu::addItem(const std::string &name, std::unique_ptr<Command> action)
+void ContextMenu::addItem(const std::string &name, std::unique_ptr<Command> action)
 {
     items_.push_back(MenuItem(name, std::move(action)));
 }
 
-void Menu::setLocation(float x, float y)
+void ContextMenu::setLocation(float x, float y)
 {
     x_ = x;
     y_ = y;
 }
 
-void Menu::setActions(std::vector<std::unique_ptr<Command>>& actionlist)
+void ContextMenu::setActions(std::vector<std::unique_ptr<Command>>& actionlist)
 {
     items_.clear();
     for (auto&& action : actionlist)
@@ -32,17 +32,17 @@ void Menu::setActions(std::vector<std::unique_ptr<Command>>& actionlist)
     }
 }
 
-void Menu::setTitle(const std::string &title)
+void ContextMenu::setTitle(const std::string &title)
 {
     title_ = title;
 }
 
-void Menu::setStyle(const MenuStyle &style)
+void ContextMenu::setStyle(const MenuStyle &style)
 {
     style_ = style;
 }
 
-bool Menu::handleClickEvent(sf::Vector2i mouseposition)
+bool ContextMenu::handleClickEvent(sf::Vector2i mouseposition)
 {
     auto localCoordinates = mouseposition - sf::Vector2i(x_, y_);
     int itemcount = items_.size();
@@ -66,7 +66,7 @@ bool Menu::handleClickEvent(sf::Vector2i mouseposition)
     return true;
 }
 
-void Menu::draw(sf::RenderTarget &target)
+void ContextMenu::draw(sf::RenderTarget &target)
 {
     if (!visible)
     {
