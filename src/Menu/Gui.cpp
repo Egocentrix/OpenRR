@@ -1,8 +1,10 @@
 #include "Gui.hpp"
 
+static const char* DefaultFontIdentifier = "defaultfont";
+
 Gui::Gui(ResourceManager<sf::Font> &fonts)
     : fonts_{fonts},
-      menu_{fonts.getResource("contextmenufont")}
+      menu_{fonts.getResource(DefaultFontIdentifier)}
 {
 }
 

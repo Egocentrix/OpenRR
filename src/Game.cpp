@@ -14,7 +14,7 @@ Game::Game()
 
     states.push(std::make_unique<GameStatePlay>(this));
 
-    fpsdisplay.setFont(*fontManager.getResource("contextmenufont"));
+    fpsdisplay.setFont(*fontManager.getResource("defaultfont"));
     fpsdisplay.setFillColor(sf::Color::Green);
     fpsdisplay.setCharacterSize(10);
 }
@@ -43,7 +43,7 @@ void Game::LoadTextures()
 
 void Game::LoadFonts()
 {
-    fontManager.registerResource("contextmenufont", "OpenSans-Regular.ttf");
+    fontManager.registerResource("defaultfont", "OpenSans-Regular.ttf");
 }
 
 void Game::play()

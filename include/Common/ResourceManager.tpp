@@ -26,6 +26,13 @@ std::shared_ptr<T> ResourceManager<T>::getResource(const std::string &key)
     }
 
     // Otherwise, load from disk
+    auto it = filenames.find(key);
+    if (it == filenames.end())
+    {
+        logger_.Log(LogLevel::Error, "Resource '" + key + "' not registered.");
+        throw std::runtime_error("Resource not registered: " + key);
+    }
+
     auto filename = filenames.at(key);
     logger_.Log(LogLevel::Info, "Loading resource with id '" + key + "' from file: " + filename);
 

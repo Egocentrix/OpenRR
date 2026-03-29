@@ -11,7 +11,7 @@ struct MenuStyle
     int MenuItemHeight{40};
 
     int fontSize{25};
-    std::shared_ptr<sf::Font> font_;
+
     sf::Color backgroundColor{sf::Color(100, 100, 100)};
     sf::Color titleTextColor{sf::Color::Blue};
     sf::Color itemTextColor{sf::Color::White};
