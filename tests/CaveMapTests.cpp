@@ -7,6 +7,16 @@
 #include "PathFinder.hpp"
 #include "Tile.hpp"
 
+template <typename T>
+bool listContainsType(const CaveMap::ActionList &list)
+{
+    auto matchesType = [&](const std::unique_ptr<Command> &a) -> bool
+    {
+        return dynamic_cast<T *>(a.get()) != nullptr;
+    };
+    return std::ranges::any_of(list, matchesType);
+}
+
 TEST_CASE("Creating a new tile")
 {
     TileType testType = GENERATE(TileType::Floor, TileType::Wall);
@@ -162,8 +172,7 @@ SCENARIO("Drilling walls")
 
             THEN("That tile can be drilled")
             {
-                auto isDrillCmd = [](const auto &a) { return a->describe() == "Drill"; };
-                CHECK(std::ranges::any_of(actions, isDrillCmd));
+                CHECK(listContainsType<DrillCommand>(actions));
             }
         }
 
@@ -190,24 +199,36 @@ SCENARIO("Reinforcing walls")
 {
     GIVEN("A cave map with walls")
     {
-        CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
-        GridCoordinate tileToReinforce{1, 2};
+        std::string mapstring = "wwwww,"
+                                "www-w,"
+                                "www-w,"
+                                "wo--w,"
+                                "wwwww,";
 
-        THEN("I can reinforce a wall")
+        CaveMap cavemap{std::make_unique<StringMapLoader>(mapstring)};
+        GridCoordinate flatWall{2, 1};
+        GridCoordinate cornerWall{2, 2};
+
+        THEN("I can reinforce a flat wall")
         {
-            auto actions = cavemap.getAvailableCommands(tileToReinforce);
-            auto isReinforceCmd = [](const auto &a) { return a->describe() == "Reinforce"; };
-            CHECK(std::ranges::any_of(actions, isReinforceCmd));
+            auto actions = cavemap.getAvailableCommands(flatWall);
+            CHECK(listContainsType<ReinforceCommand>(actions));
+        }
+
+        THEN("A corner wall cannot be reinforced")
+        {
+            auto actions = cavemap.getAvailableCommands(cornerWall);
+            CHECK(!listContainsType<ReinforceCommand>(actions));
         }
 
         WHEN("I reinforce a wall")
         {
-            REQUIRE(cavemap.describeTile(tileToReinforce) == "Wall");
-            cavemap.reinforce(tileToReinforce);
+            REQUIRE(cavemap.describeTile(flatWall) == "Wall");
+            cavemap.reinforce(flatWall);
 
             THEN("The wall is reinforced")
             {
-                CHECK(cavemap.describeTile(tileToReinforce) == "Reinforced Wall");
+                CHECK(cavemap.describeTile(flatWall) == "Reinforced Wall");
             }
         }
     }

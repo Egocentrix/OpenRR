@@ -36,7 +36,7 @@ std::vector<TileAction> Tile::getAvailableActions() const
         {
             std::vector<TileAction> actions;
             actions.push_back(TileAction::Drill);
-            if (!w.reinforced)
+            if (w.wallvariant == WallVariant::Flat && !w.reinforced)
             {
                 actions.push_back(TileAction::Reinforce);
             }
