@@ -36,7 +36,8 @@ std::vector<TileAction> Tile::getAvailableActions() const
         {
             std::vector<TileAction> actions;
             actions.push_back(TileAction::Drill);
-            if(!w.reinforced){
+            if (!w.reinforced)
+            {
                 actions.push_back(TileAction::Reinforce);
             }
             return actions;
@@ -66,6 +67,7 @@ void Tile::reinforce()
     };
 
     std::visit(Reinforce{}, details);
+    textureneedsupdate = true;
 }
 
 void Tile::updateRotation(std::span<bool, 8> neighbourIsFloor)
@@ -115,6 +117,11 @@ void Tile::updateRotation(std::span<bool, 8> neighbourIsFloor)
             rotation = (straightIndex + 3) % 4;
         }
         // 3+ floor neighbours means unstable, no need to calculate texture
+
+        if (walldetails.wallvariant != WallVariant::Flat)
+        {
+            walldetails.reinforced = false;
+        }
     }
     textureneedsupdate = true;
 }
@@ -139,11 +146,11 @@ std::string Tile::getDescription() const
             {
                 description += "Reinforced ";
             }
-            description +=  "Wall";
+            description += "Wall";
             return description;
         }
     };
-    
+
     return std::visit(Describe{}, details);
 }
 
@@ -163,6 +170,10 @@ std::string Tile::getTextureString() const
             {
             case WallVariant::Flat:
                 texturename += "wall";
+                if (details.reinforced)
+                {
+                    texturename += "_reinforced";
+                }
                 break;
             case WallVariant::InnerCorner:
                 texturename += "wall_incorner";

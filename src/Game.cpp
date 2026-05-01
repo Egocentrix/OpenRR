@@ -35,6 +35,7 @@ void Game::popState()
 void Game::LoadTextures()
 {
     texureManager.registerResource("floor", "wad/rr0/World/WorldTextures/RockSplit/ROCK00.BMP");
+    texureManager.registerResource("wall_reinforced", "wad/rr0/World/WorldTextures/RockSplit/rock25.bmp");
     texureManager.registerResource("wall_incorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK35.BMP");
     texureManager.registerResource("wall_outcorner", "wad/rr0/World/WorldTextures/RockSplit/ROCK55.BMP");
     texureManager.registerResource("wall", "wad/rr0/World/WorldTextures/RockSplit/ROCK05.BMP");
