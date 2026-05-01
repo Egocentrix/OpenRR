@@ -186,6 +186,26 @@ SCENARIO("Drilling walls")
     }
 }
 
+SCENARIO("Reinforcing walls")
+{
+    GIVEN("A cave map with walls")
+    {
+        CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
+        GridCoordinate tileToReinforce{1, 2};
+
+        WHEN("I reinforce a wall")
+        {
+            REQUIRE(cavemap.describeTile(tileToReinforce) == "Wall");
+            cavemap.reinforce(tileToReinforce);
+            
+            THEN("The wall is reinforced")
+            {
+                CHECK(cavemap.describeTile(tileToReinforce) == "Reinforced Wall");
+            }
+        }
+    }
+}
+
 SCENARIO("Cave discovery")
 {
     GIVEN("A cave map with an unreachable cave")

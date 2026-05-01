@@ -3,21 +3,6 @@
 
 #include "Tile.hpp"
 
-std::string tileTypeToString(const TileType type)
-{
-    switch (type)
-    {
-    case TileType::Floor:
-        return "Floor";
-        break;
-    case TileType::Wall:
-        return "Wall";
-        break;
-    default:
-        return "Undefined";
-    }
-}
-
 Tile::Tile(TileType type)
 {
     switch (type)
@@ -59,8 +44,25 @@ std::vector<TileAction> Tile::getAvailableActions() const
             return std::vector<TileAction>{};
         }
     };
-    
+
     return std::visit(TileActionsFromDetails{}, details);
+}
+
+void Tile::reinforce()
+{
+    struct Reinforce
+    {
+        void operator()(WallDetails &details)
+        {
+            details.reinforced = true;
+        }
+        void operator()(FloorDetails &)
+        {
+            // Do nothing
+        }
+    };
+
+    std::visit(Reinforce{}, details);
 }
 
 void Tile::updateRotation(std::span<bool, 8> neighbourIsFloor)
@@ -112,6 +114,34 @@ void Tile::updateRotation(std::span<bool, 8> neighbourIsFloor)
         // 3+ floor neighbours means unstable, no need to calculate texture
     }
     textureneedsupdate = true;
+}
+
+std::string Tile::getDescription() const
+{
+    if (!discovered)
+    {
+        return "Undiscovered";
+    }
+
+    struct Describe
+    {
+        std::string operator()(const FloorDetails &) const
+        {
+            return "Floor";
+        }
+        std::string operator()(const WallDetails &details) const
+        {
+            std::string description;
+            if (details.reinforced)
+            {
+                description += "Reinforced ";
+            }
+            description +=  "Wall";
+            return description;
+        }
+    };
+    
+    return std::visit(Describe{}, details);
 }
 
 std::string Tile::getTextureString() const

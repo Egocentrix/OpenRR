@@ -21,13 +21,7 @@ GridCoordinate CaveMap::getCenter() const
 
 std::string CaveMap::describeTile(GridCoordinate coord) const
 {
-    auto tile = tiles.getElement(coord);
-    if (!tile.discovered)
-    {
-        return "Undiscovered";
-    }
-
-    return tileTypeToString(tile.getType());
+    return tiles.getElement(coord).getDescription();
 }
 
 CaveMapInterface::ActionList CaveMap::getAvailableCommands(GridCoordinate coord)
@@ -74,6 +68,11 @@ void CaveMap::drill(GridCoordinate coord)
     recursiveDiscover(tiles, coord);
     updateRotations(tiles);
     return;
+}
+
+void CaveMap::reinforce(GridCoordinate coord)
+{
+    tiles.getElement(coord).reinforce();
 }
 
 void CaveMap::draw(sf::RenderTarget &target) const

@@ -35,6 +35,7 @@ public:
 
     // Other functions
     void drill(GridCoordinate coord);
+    void reinforce(GridCoordinate coord);
 
 private:
     using TileGrid = Grid2D<Tile>;

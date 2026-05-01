@@ -11,8 +11,6 @@ enum class TileType
     Wall,
 };
 
-std::string tileTypeToString(const TileType type);
-
 enum class FloorType
 {
     Floor,
@@ -48,7 +46,7 @@ struct WallDetails
 {
     WallVariant wallvariant;
     RockType rocktype;
-    // bool reinforced
+    bool reinforced;
 };
 
 class Tile
@@ -59,8 +57,11 @@ public:
     TileType getType() const;
     std::vector<TileAction> getAvailableActions() const;
 
+    void reinforce();
+
     void updateRotation(std::span<bool, 8> neighbourIsFloor);
 
+    std::string getDescription() const;
     std::string getTextureString() const;
 
     bool discovered{false};
@@ -68,6 +69,6 @@ public:
 
     int rotation{0};
     mutable bool textureneedsupdate{true};
-
+    
     std::variant<FloorDetails, WallDetails> details;
 };
