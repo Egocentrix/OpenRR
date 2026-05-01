@@ -16,6 +16,16 @@ void DrillCommand::execute() const
     map_.drill(coord_);
 }
 
+ReinforceCommand::ReinforceCommand(CaveMap &map, const GridCoordinate &coord)
+    : MapCommand{map, coord}
+{
+}
+
+void ReinforceCommand::execute() const
+{
+    map_.reinforce(coord_);
+}
+
 MapCommandFactory::MapCommandFactory(CaveMap &map)
     : map_{map}
 {
@@ -27,6 +37,10 @@ std::unique_ptr<MapCommand> MapCommandFactory::createCommand(GridCoordinate coor
     {
     case TileAction::Drill:
         return std::make_unique<DrillCommand>(map_, coord);
+        break;
+
+    case TileAction::Reinforce:
+        return std::make_unique<ReinforceCommand>(map_, coord);
         break;
 
     default:

@@ -33,6 +33,7 @@ enum class RockType
 enum class TileAction
 {
     Drill,
+    Reinforce,
     // Clear rubble, reinforce, build
 };
 

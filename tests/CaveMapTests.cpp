@@ -162,8 +162,8 @@ SCENARIO("Drilling walls")
 
             THEN("That tile can be drilled")
             {
-                CHECK(actions.size() == 1);
-                CHECK(actions[0]->describe() == "Drill");
+                auto isDrillCmd = [](const auto &a) { return a->describe() == "Drill"; };
+                CHECK(std::ranges::any_of(actions, isDrillCmd));
             }
         }
 
@@ -193,11 +193,18 @@ SCENARIO("Reinforcing walls")
         CaveMap cavemap{std::make_unique<DefaultMapLoader>(5, 5)};
         GridCoordinate tileToReinforce{1, 2};
 
+        THEN("I can reinforce a wall")
+        {
+            auto actions = cavemap.getAvailableCommands(tileToReinforce);
+            auto isReinforceCmd = [](const auto &a) { return a->describe() == "Reinforce"; };
+            CHECK(std::ranges::any_of(actions, isReinforceCmd));
+        }
+
         WHEN("I reinforce a wall")
         {
             REQUIRE(cavemap.describeTile(tileToReinforce) == "Wall");
             cavemap.reinforce(tileToReinforce);
-            
+
             THEN("The wall is reinforced")
             {
                 CHECK(cavemap.describeTile(tileToReinforce) == "Reinforced Wall");
@@ -310,7 +317,7 @@ SCENARIO("Path finding")
         WHEN("I calculate a short route")
         {
             auto route = pf.findRoute(GridCoordinate{1,1}, GridCoordinate{2,1});
-            
+
             THEN("The route is short")
             {
                 REQUIRE(route.size() == 2);
@@ -320,7 +327,7 @@ SCENARIO("Path finding")
         WHEN("I calculate a long route")
         {
             auto route = pf.findRoute(GridCoordinate{1,1}, GridCoordinate{4,1});
-            
+
             THEN("The route is long")
             {
                 REQUIRE(route.size() == 4);
@@ -330,7 +337,7 @@ SCENARIO("Path finding")
         WHEN("I calculate a route around an obstacle")
         {
             auto route = pf.findRoute(GridCoordinate{4,1}, GridCoordinate{4,3});
-            
+
             THEN("The route goes around the obstacle")
             {
                 REQUIRE(route.size() == 7);

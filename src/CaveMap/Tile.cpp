@@ -32,10 +32,13 @@ std::vector<TileAction> Tile::getAvailableActions() const
 {
     struct TileActionsFromDetails
     {
-        std::vector<TileAction> operator()(const WallDetails &) const
+        std::vector<TileAction> operator()(const WallDetails &w) const
         {
             std::vector<TileAction> actions;
             actions.push_back(TileAction::Drill);
+            if(!w.reinforced){
+                actions.push_back(TileAction::Reinforce);
+            }
             return actions;
         }
 

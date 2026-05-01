@@ -43,6 +43,15 @@ public:
     void execute() const override;
 };
 
+class ReinforceCommand : public MapCommand
+{
+public:
+    ReinforceCommand(CaveMap &map, const GridCoordinate &coord);
+
+    std::string describe() const override { return "Reinforce"; }
+    void execute() const override;
+};
+
 class EmptyCommand : public MapCommand
 {
 public:
