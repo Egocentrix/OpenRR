@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators.hpp>
+#include <catch2/matchers/catch_matchers_quantifiers.hpp>
 
 #include "CaveMap.hpp"
 #include "CaveMapLoader.hpp"
@@ -7,15 +8,30 @@
 #include "PathFinder.hpp"
 #include "Tile.hpp"
 
-template <typename T>
-bool listContainsType(const CaveMap::ActionList &list)
+std::ostream &operator<<(std::ostream &os, const std::unique_ptr<Command> &cmd)
 {
-    auto matchesType = [&](const std::unique_ptr<Command> &a) -> bool
-    {
-        return dynamic_cast<T *>(a.get()) != nullptr;
-    };
-    return std::ranges::any_of(list, matchesType);
+    return os << cmd->describe();
 }
+
+class IsCommandType : public Catch::Matchers::MatcherBase<std::unique_ptr<Command>>
+{
+public:
+    IsCommandType(const std::string &target) 
+    : target_{target} 
+    {}
+
+    bool match(const std::unique_ptr<Command> &cmd) const override
+    {
+        return cmd->describe() == target_;
+    }
+    std::string describe() const override
+    {
+        return std::format("command type: '{}'", target_);
+    }
+
+private:
+    std::string_view target_;
+};
 
 TEST_CASE("Creating a new tile")
 {
@@ -172,7 +188,7 @@ SCENARIO("Drilling walls")
 
             THEN("That tile can be drilled")
             {
-                CHECK(listContainsType<DrillCommand>(actions));
+                REQUIRE_THAT(actions, Catch::Matchers::AnyMatch(IsCommandType("Drill")));
             }
         }
 
@@ -212,13 +228,13 @@ SCENARIO("Reinforcing walls")
         THEN("I can reinforce a flat wall")
         {
             auto actions = cavemap.getAvailableCommands(flatWall);
-            CHECK(listContainsType<ReinforceCommand>(actions));
+            CHECK_THAT(actions, Catch::Matchers::AnyMatch(IsCommandType("Reinforce")));
         }
 
         THEN("A corner wall cannot be reinforced")
         {
             auto actions = cavemap.getAvailableCommands(cornerWall);
-            CHECK(!listContainsType<ReinforceCommand>(actions));
+            CHECK_THAT(actions, Catch::Matchers::NoneMatch(IsCommandType("Reinforce")));
         }
 
         WHEN("I reinforce a wall")
